@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>อามีน กับ อัลลีน — เรียนรู้และเล่นแบบอิสลามิค</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.294.0/lucide.min.js"></script>
+<style>
+  :root{
+    --cream:#FBF5EA;
+    --cream-2:#FFFDF8;
+    --green:#7FC9B3;
+    --green-light:#B7E4D6;
+    --green-dark:#3F8C77;
+    --green-deep:#2E6B58;
+    --gold:#EFCE86;
+    --gold-deep:#D9A93E;
+    --coral:#E9A98A;
+    --coral-deep:#D9825C;
+    --blue:#A9DDF0;
+    --blue-deep:#6FB8D6;
+    --purple:#D2BFA4;
+    --purple-deep:#B69A76;
+    --ink:#43554C;
+    --ink-soft:#7E8F86;
+    --ink-faint:#A9B6AE;
+    --white:#FFFFFF;
+    --line:rgba(63,140,119,.14);
+    --line-strong:rgba(63,140,119,.24);
+    --shadow-xs:0 2px 8px rgba(58,96,82,.08);
+    --shadow-sm:0 6px 16px rgba(58,96,82,.12);
+    --shadow-md:0 12px 28px rgba(58,96,82,.16);
+    --shadow-lg:0 20px 44px rgba(58,96,82,.20);
+    --shadow-press:0 3px 10px rgba(58,96,82,.14);
+    --shadow-gold:0 10px 24px rgba(217,169,62,.30);
+    --shadow-green:0 10px 24px rgba(63,140,119,.30);
+    --radius-sm:16px;
+    --radius-md:22px;
+    --radius-lg:28px;
+    --radius-xl:34px;
+    --radius-pill:999px;
+    --radius:28px;
+    --ease:cubic-bezier(.34,1.56,.64,1);
+    --ease-out:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Mali',sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    background-image:
+      radial-gradient(ellipse 900px 520px at 18% -12%, rgba(127,201,179,.16), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 105% 0%, rgba(239,206,134,.18), transparent 55%),
+      radial-gradient(ellipse 600px 460px at -5% 90%, rgba(169,221,240,.14), transparent 55%),
+      repeating-linear-gradient(45deg, rgba(63,140,119,.035) 0 1px, transparent 1px 34px),
+      repeating-linear-gradient(-45deg, rgba(63,140,119,.035) 0 1px, transparent 1px 34px);
+    background-attachment:fixed;
+    min-height:100vh;
+    -webkit-user-select:none;user-select:none;
+    overflow-x:hidden;
+  }
+  #app{max-width:520px;margin:0 auto;padding:0 16px 48px;position:relative;}
+  :focus-visible{outline:3px solid var(--gold-deep);outline-offset:3px;border-radius:8px;}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:20;
+    display:flex;align-items:center;gap:10px;
+    padding:14px 2px 14px;
+    background:linear-gradient(var(--cream) 65%, rgba(251,245,234,0));
+    backdrop-filter:blur(6px);
+  }
+  .back-btn{
+    border:1px solid var(--line);background:var(--white);color:var(--green-dark);
+    width:46px;height:46px;border-radius:var(--radius-sm);font-size:22px;
+    box-shadow:var(--shadow-sm);cursor:pointer;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;font-weight:700;
+    transition:transform .15s var(--ease-out), box-shadow .15s;
+  }
+  .back-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);}
+  .back-btn:active{transform:scale(.9);box-shadow:var(--shadow-press);}
+  .topbar h2{font-size:20px;margin:0;font-weight:700;color:var(--green-dark);letter-spacing:.2px;}
+  .topbar .spacer{flex:1;}
+  .score-pill{
+    background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:#5b4200;font-weight:700;
+    padding:9px 16px;border-radius:var(--radius-pill);font-size:15px;box-shadow:var(--shadow-gold);
+    display:inline-flex;align-items:center;gap:4px;
+  }
+
+  /* ---------- Home ---------- */
+  .home-head{text-align:center;padding:18px 0 6px;}
+  .bismillah{font-size:27px;color:var(--green-dark);font-weight:600;margin:0;direction:rtl;text-shadow:0 2px 10px rgba(63,140,119,.15);}
+  .bismillah-th{font-size:13px;color:var(--ink-soft);margin:3px 0 0;letter-spacing:.3px;}
+  .mascot{
+    width:120px;height:120px;margin:6px auto 2px;display:block;
+    animation:float 3.2s ease-in-out infinite;
+  }
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  .brand{
+    font-size:28px;font-weight:700;margin:6px 0 0;white-space:nowrap;
+    background:linear-gradient(135deg,var(--green-dark),var(--green-deep));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .tagline{color:var(--ink-soft);margin:4px 0 22px;font-size:15px;}
+
+  .menu{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .card{
+    border:1px solid var(--line);cursor:pointer;text-align:center;
+    background:linear-gradient(180deg,var(--cream-2),var(--white));border-radius:var(--radius-lg);
+    padding:26px 14px 20px;box-shadow:var(--shadow-md);
+    font-family:inherit;color:var(--ink);
+    transition:transform .2s var(--ease-out), box-shadow .2s var(--ease-out);
+    position:relative;overflow:hidden;
+    animation:cardIn .5s var(--ease-out) both;
+  }
+  .menu .card:nth-child(1){animation-delay:.05s;}
+  .menu .card:nth-child(2){animation-delay:.12s;}
+  .menu .card:nth-child(3){animation-delay:.19s;}
+  @keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+  .card:active{transform:scale(.96);box-shadow:var(--shadow-press);}
+  .card.big{grid-column:1 / -1;display:flex;align-items:center;gap:18px;text-align:left;padding:22px;}
+  .card .emoji{font-size:46px;display:block;line-height:1;}
+  .card.big .emoji{font-size:54px;flex:0 0 auto;}
+  .card .label{font-weight:700;font-size:18px;margin-top:12px;}
+  .card.big .label{margin-top:0;}
+  .card .sub{font-size:13px;color:var(--ink-soft);margin-top:3px;}
+  .card::before{content:"";position:absolute;top:0;left:0;right:0;height:60%;
+    background:linear-gradient(180deg,rgba(255,255,255,.55),transparent);pointer-events:none;}
+  .card::after{content:"";position:absolute;inset:0;border-radius:var(--radius-lg);border:2px solid transparent;transition:border-color .2s;}
+  .card:hover::after{border-color:rgba(217,169,62,.45);}
+  .tint{width:78px;height:78px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin:0 auto;box-shadow:inset 0 -3px 8px rgba(0,0,0,.05);position:relative;z-index:1;}
+
+  /* ---------- Generic screens ---------- */
+  .screen{display:none;animation:fadein .3s var(--ease-out);}
+  .screen.active{display:block;}
+  @keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  .hub-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;}
+  .hub-item{
+    border:1px solid var(--line);cursor:pointer;font-family:inherit;color:var(--ink);
+    background:linear-gradient(180deg,var(--cream-2),var(--white));border-radius:var(--radius-md);padding:20px 12px;
+    box-shadow:var(--shadow-sm);text-align:center;transition:transform .16s var(--ease-out), box-shadow .16s;
+  }
+  .hub-item:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+  .hub-item:active{transform:scale(.95);box-shadow:var(--shadow-press);}
+  .hub-item .ico{font-size:40px;}
+  .hub-item .t{font-weight:700;margin-top:9px;font-size:16px;}
+  .hub-item .d{font-size:12px;color:var(--ink-soft);margin-top:3px;}
+
+  /* ---------- Game shared ---------- */
+  .game-wrap{background:linear-gradient(180deg,var(--cream-2),var(--white));border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-md);margin-top:10px;border:1px solid var(--line);}
+  .prompt{text-align:center;font-size:19px;font-weight:600;margin:4px 0 18px;color:var(--green-dark);}
+  .noor-say{
+    display:flex;align-items:center;gap:10px;justify-content:center;
+    background:linear-gradient(135deg,rgba(127,201,179,.16),rgba(169,221,240,.14));
+    border-radius:var(--radius-md);padding:11px 16px;margin:16px 0 4px;
+    font-weight:600;color:var(--green-dark);font-size:16px;min-height:30px;
+    border:1px solid rgba(63,140,119,.14);
+  }
+  .noor-say img{flex:0 0 auto;}
+  .choices{display:grid;gap:12px;margin-top:8px;}
+  .choices.g2{grid-template-columns:1fr 1fr;}
+  .choices.g3{grid-template-columns:1fr 1fr 1fr;}
+  .opt{
+    border:2px solid var(--line-strong);background:var(--white);border-radius:var(--radius-md);
+    font-size:44px;padding:16px 8px;cursor:pointer;font-family:inherit;
+    transition:transform .12s var(--ease-out), border-color .15s, box-shadow .15s;
+    display:flex;align-items:center;justify-content:center;
+    min-height:80px;box-shadow:var(--shadow-xs);
+  }
+  .opt:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);}
+  .opt:active{transform:scale(.92);}
+  .opt.correct{border-color:var(--green);background:rgba(63,140,119,.12);box-shadow:var(--shadow-green);}
+  .opt.wrong{border-color:var(--coral-deep);background:rgba(233,169,138,.16);}
+  .opt.num{font-size:34px;font-weight:700;color:var(--green-dark);}
+  .seq{display:flex;gap:9px;justify-content:center;align-items:center;flex-wrap:wrap;font-size:40px;margin:10px 0 4px;}
+  .seq .q{background:linear-gradient(135deg,var(--gold),var(--gold-deep));border-radius:16px;width:56px;height:56px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#6b4f13;box-shadow:var(--shadow-gold);}
+  .count-box{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;background:var(--white);border-radius:var(--radius-md);padding:20px;margin-bottom:8px;font-size:40px;border:2px solid var(--line-strong);box-shadow:var(--shadow-xs);}
+  .shadow-target{font-size:70px;text-align:center;margin:4px 0 2px;}
+  .shadow-opt{filter:brightness(0) opacity(.82);}
+
+  .primary-btn{
+    display:block;width:100%;border:none;cursor:pointer;font-family:inherit;
+    background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;font-weight:700;font-size:18px;
+    padding:16px;border-radius:var(--radius-md);box-shadow:var(--shadow-green);margin-top:18px;
+    transition:transform .15s var(--ease-out), box-shadow .15s;
+  }
+  .primary-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
+  .primary-btn:active{transform:scale(.97);box-shadow:var(--shadow-press);}
+  .ghost-btn{
+    display:block;width:100%;border:2px solid var(--green-dark);cursor:pointer;font-family:inherit;
+    background:transparent;color:var(--green-dark);font-weight:700;font-size:16px;
+    padding:13px;border-radius:var(--radius-md);margin-top:11px;
+    transition:background .15s, transform .12s var(--ease-out);
+  }
+  .ghost-btn:hover{background:rgba(63,140,119,.08);}
+  .ghost-btn:active{transform:scale(.97);}
+  .progress-dots{display:flex;gap:6px;justify-content:center;margin:2px 0 12px;}
+  .dot{width:9px;height:9px;border-radius:var(--radius-pill);background:#e3d6ba;transition:all .25s var(--ease-out);}
+  .dot.on{background:var(--gold-deep);width:24px;}
+  .dot.done{background:var(--green);}
+
+  /* ---------- Memory ---------- */
+  .mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  .mcard{aspect-ratio:1/1;border-radius:var(--radius-sm);cursor:pointer;position:relative;
+    perspective:600px;background:transparent;border:none;padding:0;}
+  .mcard .inner{position:absolute;inset:0;transition:transform .45s var(--ease);transform-style:preserve-3d;}
+  .mcard.flip .inner{transform:rotateY(180deg);}
+  .mface{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    border-radius:var(--radius-sm);backface-visibility:hidden;font-size:34px;box-shadow:var(--shadow-sm);}
+  .mfront{background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;font-size:26px;}
+  .mback{background:var(--white);border:2px solid var(--gold);transform:rotateY(180deg);}
+  .mcard.matched .mback{border-color:var(--green);background:rgba(63,140,119,.12);box-shadow:var(--shadow-green);}
+
+  /* ---------- Coloring ---------- */
+  .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;}
+  .cat-card{
+    border:1px solid var(--line);cursor:pointer;text-align:center;font-family:inherit;color:var(--ink);
+    background:linear-gradient(180deg,var(--cream-2),var(--white));border-radius:var(--radius-lg);
+    padding:24px 10px 18px;box-shadow:var(--shadow-md);
+    transition:transform .16s var(--ease-out), box-shadow .16s;
+  }
+  .cat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
+  .cat-card:active{transform:scale(.96);box-shadow:var(--shadow-press);}
+  .cat-emoji{font-size:44px;}
+  .cat-name{font-weight:700;font-size:17px;margin-top:9px;}
+  .cat-count{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+
+  .color-editor{margin-top:2px;}
+  .color-stage{background:var(--white);border-radius:var(--radius-lg);padding:12px;box-shadow:var(--shadow-md);border:1px solid var(--line);position:relative;}
+  .color-stage svg{width:100%;height:auto;display:block;border-radius:var(--radius-md);overflow:hidden;}
+  .region{cursor:pointer;transition:fill .12s;}
+  #paintCanvas{position:absolute;inset:12px;width:calc(100% - 24px);height:calc(100% - 24px);border-radius:var(--radius-md);touch-action:none;}
+  .palette{display:flex;flex-wrap:wrap;gap:11px;justify-content:center;margin-top:16px;}
+  .swatch{width:40px;height:40px;border-radius:50%;border:3px solid var(--white);box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .15s var(--ease-out);}
+  .swatch:hover{transform:scale(1.08);}
+  .swatch:active{transform:scale(.85);}
+  .swatch.sel{outline:3px solid var(--ink);outline-offset:2px;transform:scale(1.14);}
+  .color-actions{display:flex;gap:10px;margin-top:14px;}
+  .color-actions button{flex:1;}
+  .pic-tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;margin:0 -4px;}
+  .pic-tab{flex:0 0 auto;border:1px solid var(--line);font-family:inherit;font-weight:600;font-size:14px;
+    background:var(--white);color:var(--ink);padding:9px 16px;border-radius:var(--radius-pill);box-shadow:var(--shadow-xs);cursor:pointer;transition:all .15s;}
+  .pic-tab.sel{background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;border-color:transparent;box-shadow:var(--shadow-green);}
+
+  .tool-row{display:flex;gap:8px;margin-top:14px;}
+  .tool-btn{flex:1;border:1px solid var(--line);background:var(--white);border-radius:var(--radius-md);
+    padding:10px 6px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;
+    box-shadow:var(--shadow-xs);transition:all .15s var(--ease-out);}
+  .tool-btn:active{transform:scale(.95);}
+  .tool-btn .tico{font-size:22px;}
+  .tool-btn .tlabel{font-size:12px;font-weight:700;color:var(--ink-soft);}
+  .tool-btn.sel{background:linear-gradient(135deg,var(--green),var(--green-dark));border-color:transparent;box-shadow:var(--shadow-green);}
+  .tool-btn.sel .tlabel{color:#fff;}
+  .size-row{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:12px;}
+  .size-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--white);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-xs);transition:all .15s var(--ease-out);}
+  .size-btn:active{transform:scale(.9);}
+  .size-btn .sdot{border-radius:50%;background:var(--ink-soft);display:block;}
+  .size-btn.sel{border-color:var(--gold-deep);background:rgba(239,206,134,.18);box-shadow:var(--shadow-gold);}
+  .size-btn.sel .sdot{background:var(--green-dark);}
+
+  /* ---------- Stories ---------- */
+  .story-card{
+    display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+    border:1px solid var(--line);cursor:pointer;font-family:inherit;color:var(--ink);
+    background:linear-gradient(180deg,var(--cream-2),var(--white));border-radius:var(--radius-md);padding:16px 40px 16px 16px;margin-bottom:12px;
+    box-shadow:var(--shadow-sm);transition:transform .15s var(--ease-out), box-shadow .15s;position:relative;
+  }
+  .story-card:hover{transform:translateX(2px);box-shadow:var(--shadow-md);}
+  .story-card:active{transform:scale(.97);}
+  .story-card .scene{font-size:38px;flex:0 0 auto;width:60px;height:60px;border-radius:var(--radius-sm);
+    display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(239,206,134,.38),rgba(239,206,134,.14));box-shadow:inset 0 -2px 6px rgba(0,0,0,.04);}
+  .story-card .st{font-weight:700;font-size:18px;}
+  .story-card .ss{font-size:13px;color:var(--ink-soft);margin-top:2px;}
+  .story-card::after{content:'\203A';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:24px;color:var(--ink-faint);font-weight:700;}
+  .reader{background:linear-gradient(180deg,var(--cream-2),var(--white));border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow-md);border:1px solid var(--line);}
+  .reader .hero{font-size:64px;text-align:center;margin-bottom:8px;}
+  .reader h3{text-align:center;color:var(--green-dark);margin:0 0 4px;font-size:24px;}
+  .reader .arabic{text-align:center;direction:rtl;color:var(--gold-deep);font-size:19px;margin-bottom:16px;font-weight:600;}
+  .reader p{font-family:'Sarabun',sans-serif;font-size:17px;line-height:1.9;color:var(--ink);margin:0 0 14px;}
+  .lesson{background:linear-gradient(135deg,rgba(63,140,119,.10),rgba(127,201,179,.08));border-radius:var(--radius-md);padding:16px 18px;margin-top:8px;border-left:4px solid var(--green);}
+  .lesson .lt{font-weight:700;color:var(--green-dark);margin-bottom:5px;}
+  .lesson p{margin:0;font-size:16px;}
+
+  /* ---------- Coding game ---------- */
+  .code-grid{display:grid;gap:6px;margin:10px auto 6px;justify-content:center;}
+  .tile{width:52px;height:52px;background:var(--white);border:2px solid var(--line-strong);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:var(--shadow-xs);}
+  .tile.goal{background:linear-gradient(135deg,rgba(239,206,134,.35),rgba(239,206,134,.15));border-color:var(--gold-deep);}
+  .tile.wall{background:#cdb98f;border-color:#a8946a;font-size:24px;}
+  .queue{min-height:46px;background:var(--white);border:2px dashed var(--line-strong);border-radius:var(--radius-md);padding:9px;margin:14px 0;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;}
+  .queue-empty{color:var(--ink-soft);font-size:14px;}
+  .qchip{background:rgba(63,140,119,.14);border-radius:10px;padding:4px 9px;font-size:20px;}
+  .arrow-pad{display:flex;flex-direction:column;align-items:center;gap:9px;margin:6px 0;}
+  .arrow-pad>div{display:flex;gap:9px;}
+  .apad{border:none;background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;width:58px;height:52px;border-radius:var(--radius-sm);font-size:26px;cursor:pointer;box-shadow:var(--shadow-green);transition:transform .12s var(--ease-out);}
+  .apad:hover{transform:translateY(-2px);}
+  .apad:active{transform:scale(.9);}
+  /* ---------- Sequence memory ---------- */
+  .seq-pads{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:270px;margin:14px auto;}
+  .spad{border:none;border-radius:var(--radius-lg);height:92px;font-size:42px;cursor:pointer;color:#fff;opacity:.55;transition:opacity .12s,transform .12s var(--ease-out),box-shadow .12s;box-shadow:var(--shadow-sm);}
+  .spad.flash{opacity:1;transform:scale(1.07);box-shadow:var(--shadow-lg);}
+  .spad:active{transform:scale(.95);}
+
+  svg.lucide{width:24px;height:24px;stroke-width:2.1;vertical-align:middle;}
+  .tint svg.lucide{width:34px;height:34px;}
+  .card.big .tint svg.lucide{width:36px;height:36px;}
+  .hub-item .ico{color:var(--green-dark);}
+  .ico svg.lucide{width:34px;height:34px;}
+  .back-btn svg.lucide{width:24px;height:24px;}
+  .hero-wrap{width:100%;max-width:330px;margin:4px auto 0;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 14px 20px rgba(63,140,119,.18));}
+  .hero-wrap svg{width:100%;height:auto;display:block;}
+  .hero-duo{display:flex;align-items:flex-end;justify-content:center;}
+  .moomoo-peek{display:flex;justify-content:center;margin-top:20px;}
+  .moomoo-peek img{height:58px;width:auto;filter:drop-shadow(0 6px 10px rgba(63,140,119,.18));}
+
+  .confetti{position:fixed;top:-10px;font-size:22px;pointer-events:none;z-index:60;animation:fall 2.4s linear forwards;}
+  @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0;}}
+
+  .footer-note{text-align:center;color:var(--ink-soft);font-size:12px;margin-top:30px;letter-spacing:.2px;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== HOME ===== -->
+  <section id="home" class="screen active">
+    <div class="home-head">
+      <p class="bismillah">بِسْمِ اللَّهِ</p>
+      <p class="bismillah-th">เริ่มต้นด้วยพระนามของอัลลอฮ์</p>
+      <div class="hero-wrap" id="hero"></div>
+      <h1 class="brand">อามีน กับ อัลลีน</h1>
+      <p class="tagline">เรียนรู้ เล่นสนุก เติบโตด้วยความดี ✨</p>
+    </div>
+    <div class="menu">
+      <button class="card c-iq" onclick="go('iqhub')">
+        <div class="tint" style="background:rgba(169,221,240,.35);color:var(--green-dark)"><i data-lucide="brain"></i></div>
+        <div class="label">ฝึกไอคิว</div>
+        <div class="sub">10 เกมพัฒนาสมอง</div>
+      </button>
+      <button class="card" onclick="go('colorhub')">
+        <div class="tint" style="background:rgba(233,169,138,.30);color:#C97A52"><i data-lucide="palette"></i></div>
+        <div class="label">ระบายสี</div>
+        <div class="sub">4 หมวด กว่า 29 ภาพ</div>
+      </button>
+      <button class="card big" onclick="go('storyhub')">
+        <div class="tint" style="background:rgba(239,206,134,.42);color:#C79A3C"><i data-lucide="book-open"></i></div>
+        <div>
+          <div class="label">นิทาน</div>
+          <div class="sub">2 หมวด • เรื่องเล่านบี และนิทานเด็กดี</div>
+        </div>
+      </button>
+    </div>
+    <div class="moomoo-peek"><img src="public/Moomoo_Sprites/03_Poses/14_sit.png" alt="มูมู"></div>
+    <p class="footer-note">สำหรับเด็ก 3–10 ปี • เล่นได้ทุกอุปกรณ์</p>
+  </section>
+
+  <!-- ===== IQ HUB ===== -->
+  <section id="iqhub" class="screen">
+    <div class="topbar"><button class="back-btn" onclick="go('home')"><i data-lucide="chevron-left"></i></button><h2>ฝึกไอคิว</h2></div>
+    <div class="hub-grid">
+      <button class="hub-item" onclick="startGame('memory')"><div class="ico"><i data-lucide="layout-grid"></i></div><div class="t">จับคู่ความจำ</div><div class="d">พลิกการ์ดหาคู่</div></button>
+      <button class="hub-item" onclick="startGame('odd')"><div class="ico"><i data-lucide="search"></i></div><div class="t">หาสิ่งที่ต่าง</div><div class="d">อันไหนไม่เหมือน</div></button>
+      <button class="hub-item" onclick="startGame('pattern')"><div class="ico"><i data-lucide="puzzle"></i></div><div class="t">ต่อลำดับ</div><div class="d">อะไรมาต่อไป</div></button>
+      <button class="hub-item" onclick="startGame('count')"><div class="ico"><i data-lucide="hash"></i></div><div class="t">นับจำนวน</div><div class="d">นับให้ถูก</div></button>
+      <button class="hub-item" onclick="startGame('shadow')"><div class="ico"><i data-lucide="moon"></i></div><div class="t">จับคู่เงา</div><div class="d">หาเงาที่ใช่</div></button>
+      <button class="hub-item" onclick="startGame('coding')"><div class="ico"><i data-lucide="bot"></i></div><div class="t">หัดเขียนโค้ด</div><div class="d">สั่งทางอามีน</div></button>
+      <button class="hub-item" onclick="startGame('seq')"><div class="ico"><i data-lucide="music"></i></div><div class="t">จำลำดับ</div><div class="d">จำแล้วแตะตาม</div></button>
+      <button class="hub-item" onclick="startGame('math')"><div class="ico"><i data-lucide="calculator"></i></div><div class="t">คณิตคิดเร็ว</div><div class="d">บวก ลบ คูณ</div></button>
+      <button class="hub-item" onclick="startGame('missing')"><div class="ico"><i data-lucide="eye"></i></div><div class="t">อะไรหายไป</div><div class="d">จับสังเกต</div></button>
+      <button class="hub-item" onclick="startGame('moreless')"><div class="ico"><i data-lucide="scale"></i></div><div class="t">มากหรือน้อย</div><div class="d">เทียบจำนวน</div></button>
+    </div>
+  </section>
+
+  <!-- ===== GAME SCREEN ===== -->
+  <section id="game" class="screen">
+    <div class="topbar">
+      <button class="back-btn" onclick="go('iqhub')"><i data-lucide="chevron-left"></i></button>
+      <h2 id="gameTitle"></h2>
+      <div class="spacer"></div>
+      <div class="score-pill">⭐ <span id="gameScore">0</span></div>
+    </div>
+    <div class="progress-dots" id="dots"></div>
+    <div class="game-wrap" id="gameArea"></div>
+    <div class="noor-say" id="noorSay" style="display:none"></div>
+  </section>
+
+  <!-- ===== COLOR HUB ===== -->
+  <section id="colorhub" class="screen">
+    <div class="topbar"><button class="back-btn" onclick="colorBack()"><i data-lucide="chevron-left"></i></button><h2 id="colorTitle">ระบายสี</h2></div>
+    <div class="cat-grid" id="colorCats"></div>
+    <div class="color-editor" id="colorEditor" style="display:none">
+      <div class="pic-tabs" id="picTabs"></div>
+      <div class="color-stage" id="colorStage">
+        <div id="svgLayer"></div>
+        <canvas id="paintCanvas"></canvas>
+      </div>
+      <div class="tool-row" id="toolRow"></div>
+      <div class="size-row" id="sizeRow"></div>
+      <div class="palette" id="palette"></div>
+      <div class="color-actions">
+        <button class="ghost-btn" onclick="clearColors()">🧽 เริ่มใหม่</button>
+        <button class="primary-btn" style="margin-top:0" onclick="celebrate()">✅ เสร็จแล้ว!</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STORY HUB ===== -->
+  <section id="storyhub" class="screen">
+    <div class="topbar"><button class="back-btn" onclick="storyBack()"><i data-lucide="chevron-left"></i></button><h2 id="storyTitle">นิทาน</h2></div>
+    <div class="cat-grid" id="storyCats"></div>
+    <div id="storyListWrap" style="display:none">
+      <div id="storyList"></div>
+    </div>
+  </section>
+
+  <!-- ===== STORY READER ===== -->
+  <section id="story" class="screen">
+    <div class="topbar"><button class="back-btn" onclick="_go('storyhub')"><i data-lucide="chevron-left"></i></button><h2>นิทาน</h2></div>
+    <div class="reader" id="storyReader"></div>
+    <button class="ghost-btn" onclick="_go('storyhub')">‹ กลับไปเลือกเรื่องอื่น</button>
+  </section>
+
+</div>
+
+<script>
+/* ============ Characters ============ */
+function charImg(folder,file,size,alt){
+  return `<img src="public/${folder}_Sprites/${file}" style="height:${size}px;width:auto;display:inline-block;vertical-align:middle;" alt="${alt}">`;
+}
+function suhail(size,file){return charImg('Suhail',file||'02_Expressions/06_smile.png',size,'ซูฮัยล์');}
+function ameen(size,file){return charImg('Ameen',file||'00_hero_main.png',size,'อามีน');}
+function alleen(size,file){return charImg('Alleen',file||'00_hero_main.png',size,'อัลลีน');}
+function moomoo(size,file){return charImg('Moomoo',file||'00_hero_main.png',size,'มูมู');}
+
+document.getElementById('hero').innerHTML = `
+  <div class="hero-duo">
+    ${alleen(168)}
+    <img src="public/Ameen_Sprites/00_hero_main.png" alt="อามีน" style="height:168px;width:auto;margin-left:-16px;">
+  </div>`;
+
+/* ============ Navigation ============ */
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ============ Confetti + celebrate ============ */
+function confetti(){
+  const e=['⭐','🌟','✨','🎉','💛','🟢'];
+  for(let i=0;i<26;i++){
+    const c=document.createElement('div');
+    c.className='confetti';c.textContent=e[Math.floor(Math.random()*e.length)];
+    c.style.left=Math.random()*100+'vw';
+    c.style.animationDelay=Math.random()*0.6+'s';
+    c.style.fontSize=(16+Math.random()*18)+'px';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  }
+}
+const praises=['มาชาอัลลอฮ์! เก่งมาก 🌟','อัลฮัมดุลิลลาห์ ถูกต้อง! 💚','สุดยอดเลย! ✨','เยี่ยมไปเลย เก่งจัง! 🎉'];
+function celebrate(){confetti();}
+
+/* ============ IQ GAMES ============ */
+let G = { type:null, round:0, total:0, score:0, rounds:[] };
+const emojiSet = ['🕌','🌙','⭐','🕋','🏮','📖','🧕','📿','🌴','🐫','🕊️','☀️','🐑','🍎','🌸','🐟'];
+const simGroups=[['🌙','⭐','☀️','🌸'],['🕌','🕋','🏮'],['🐫','🐑','🐟'],['📖','📿','🧕'],['🌴','🌸','⭐']];
+
+function startGame(type){
+  if(type==='coding'){startCoding();return;}
+  if(type==='seq'){startSeq();return;}
+  G={type, round:0, total:10, score:0, rounds:[]};
+  const titles={memory:'จับคู่ความจำ',odd:'หาสิ่งที่ต่าง',pattern:'ต่อลำดับ',count:'นับจำนวน',shadow:'จับคู่เงา',math:'คณิตคิดเร็ว',missing:'อะไรหายไป',moreless:'มากหรือน้อย'};
+  document.getElementById('gameTitle').textContent=titles[type];
+  document.getElementById('gameScore').textContent='0';
+  buildDots();
+  go('game');
+  if(type==='memory'){renderMemory();}
+  else{renderRound();}
+}
+function buildDots(){
+  const d=document.getElementById('dots');d.innerHTML='';
+  for(let i=0;i<G.total;i++){const s=document.createElement('div');s.className='dot'+(i===0?' on':'');d.appendChild(s);}
+}
+function updateDots(){
+  document.querySelectorAll('#dots .dot').forEach((el,i)=>{
+    el.className='dot'+(i<G.round?' done':i===G.round?' on':'');
+  });
+}
+const suhailPraiseFiles=['02_Expressions/07_happy.png','02_Expressions/13_proud.png','02_Expressions/06_smile.png'];
+const suhailHintFiles=['02_Expressions/11_gentle.png','02_Expressions/10_think.png'];
+function noor(msg){
+  const n=document.getElementById('noorSay');
+  const pool=praises.includes(msg)?suhailPraiseFiles:suhailHintFiles;
+  const file=pool[Math.floor(Math.random()*pool.length)];
+  n.style.display='flex';n.innerHTML=suhail(34,file)+'<span>'+msg+'</span>';
+}
+function pick(arr,n){const a=[...arr];const r=[];while(r.length<n&&a.length){r.push(a.splice(Math.floor(Math.random()*a.length),1)[0]);}return r;}
+function shuffle(a){return a.sort(()=>Math.random()-.5);}
+
+function nextRound(correct){
+  if(correct){G.score++;document.getElementById('gameScore').textContent=G.score;}
+  G.round++;
+  if(G.round>=G.total){setTimeout(finishGame,900);}
+  else {setTimeout(()=>{updateDots();renderRound();},900);}
+}
+function finishGame(){
+  const area=document.getElementById('gameArea');
+  document.getElementById('noorSay').style.display='none';
+  confetti();
+  const good=G.score>=4;
+  area.innerHTML=`
+    ${suhail(90,good?'02_Expressions/13_proud.png':'02_Expressions/12_encourage.png')}
+    <div class="prompt" style="margin-top:8px">จบเกมแล้ว! 🎉</div>
+    <div style="text-align:center;font-size:20px;font-weight:700;color:var(--green-dark)">
+      ได้ ${G.score} จาก ${G.total} ดาว ⭐
+    </div>
+    <div class="noor-say" style="margin-top:14px">${good?'มาชาอัลลอฮ์ เก่งมาก ๆ เลย!':'เยี่ยมมาก ลองอีกครั้งได้นะ!'}</div>
+    <button class="primary-btn" onclick="startGame('${G.type}')">🔁 เล่นอีกครั้ง</button>
+    <button class="ghost-btn" onclick="go('iqhub')">เลือกเกมอื่น</button>`;
+  area.style.textAlign='center';
+}
+
+function renderRound(){
+  const fn={odd:renderOdd,pattern:renderPattern,count:renderCount,shadow:renderShadow,math:renderMath,missing:renderMissing,moreless:renderMoreLess}[G.type];
+  updateDots();fn();
+}
+
+/* --- Odd one out --- */
+function renderOdd(){
+  const lvl=G.round;
+  const area=document.getElementById('gameArea');area.style.textAlign='center';
+  const n=Math.min(3+Math.floor(lvl*0.6),8);
+  let same,diff;
+  if(lvl>=4){const grp=simGroups[Math.floor(Math.random()*simGroups.length)];[same,diff]=pick(grp,2);}
+  else{[same,diff]=pick(emojiSet,2);}
+  const items=Array(n).fill(same);
+  const oddIdx=Math.floor(Math.random()*n);
+  items[oddIdx]=diff;
+  area.innerHTML=`<div class="prompt">อันไหน "ไม่เหมือน" เพื่อน?</div><div class="choices g3" id="ch"></div>`;
+  const ch=document.getElementById('ch');
+  items.forEach((e,i)=>{
+    const b=document.createElement('button');b.className='opt';b.textContent=e;
+    b.onclick=()=>{
+      if(i===oddIdx){b.classList.add('correct');noor(praises[Math.floor(Math.random()*praises.length)]);nextRound(true);}
+      else{b.classList.add('wrong');noor('ลองอีกที เพ่งดูดี ๆ นะ 👀');document.querySelectorAll('#ch .opt')[oddIdx].classList.add('correct');nextRound(false);}
+      disable('#ch');
+    };
+    ch.appendChild(b);
+  });
+}
+
+/* --- Pattern sequence --- */
+function renderPattern(){
+  const lvl=G.round;
+  const area=document.getElementById('gameArea');area.style.textAlign='center';
+  const period=lvl<3?2:lvl<6?3:(Math.random()<.5?3:4);
+  const syms=pick(emojiSet,period);
+  let cycle;
+  if(period===2)cycle=[syms[0],syms[1]];
+  else if(period===3)cycle=Math.random()<.5?[syms[0],syms[1],syms[2]]:[syms[0],syms[0],syms[1]];
+  else cycle=[syms[0],syms[1],syms[0],syms[2]];
+  const seqLen=Math.min(cycle.length*(lvl<6?3:2)+(lvl>=6?2:0),8);
+  let full=[];while(full.length<seqLen+1)full=full.concat(cycle);
+  full=full.slice(0,seqLen+1);
+  const ans=full[seqLen];const shown=full.slice(0,seqLen);
+  let seqHtml='';shown.forEach(s=>seqHtml+=`<div>${s}</div>`);seqHtml+='<div class="q">?</div>';
+  const nOpt=lvl>=6?4:3;
+  const others=pick(emojiSet.filter(e=>e!==ans),nOpt-1);
+  const opts=shuffle([ans,...others]);
+  area.innerHTML=`<div class="prompt">อะไรมาต่อไป?</div><div class="seq">${seqHtml}</div><div class="choices ${nOpt===4?'g2':'g3'}" id="ch"></div>`;
+  const ch=document.getElementById('ch');
+  opts.forEach(o=>{
+    const btn=document.createElement('button');btn.className='opt';btn.textContent=o;
+    btn.onclick=()=>{
+      if(o===ans){btn.classList.add('correct');noor(praises[Math.floor(Math.random()*praises.length)]);nextRound(true);}
+      else{btn.classList.add('wrong');noor('ดูจังหวะของรูปดี ๆ นะ 😊');nextRound(false);}
+      disable('#ch');
+    };
+    ch.appendChild(btn);
+  });
+}
+
+/* --- Counting --- */
+function renderCount(){
+  const lvl=G.round;
+  const area=document.getElementById('gameArea');area.style.textAlign='center';
+  const e=pick(emojiSet,1)[0];
+  const maxN=3+lvl;
+  const n=2+Math.floor(Math.random()*(maxN-1));
+  let box='';for(let i=0;i<n;i++)box+=`<span>${e}</span>`;
+  const nOpt=lvl>=5?4:3;
+  const pool=[];for(let d=-3;d<=3;d++){const v=n+d;if(v>=1&&v!==n)pool.push(v);}
+  const opts=shuffle([n,...pick(pool,nOpt-1)]);
+  area.innerHTML=`<div class="prompt">นับดูสิ มีทั้งหมดกี่อัน?</div><div class="count-box">${box}</div><div class="choices ${nOpt===4?'g2':'g3'}" id="ch"></div>`;
+  const ch=document.getElementById('ch');
+  opts.forEach(o=>{
+    const btn=document.createElement('button');btn.className='opt num';btn.textContent=o;
+    btn.onclick=()=>{
+      if(o===n){btn.classList.add('correct');noor(praises[Math.floor(Math.random()*praises.length)]);nextRound(true);}
+      else{btn.classList.add('wrong');noor('ลองนับใหม่ทีละอันนะ 1..2..3 🔢');nextRound(false);}
+      disable('#ch');
+    };
+    ch.appendChild(btn);
+  });
+}
+
+/* --- Shadow matching --- */
+function renderShadow(){
+  const lvl=G.round;
+  const area=document.getElementById('gameArea');area.style.textAlign='center';
+  const nOpt=Math.min(3+Math.floor(lvl/2),6);
+  const chosen=pick(emojiSet,nOpt);
+  const target=chosen[0];
+  const opts=shuffle([...chosen]);
+  area.innerHTML=`<div class="prompt">เงานี้เป็นของอะไร? แตะที่รูปที่ใช่</div>
+    <div class="shadow-target"><span class="shadow-opt">${target}</span></div>
+    <div class="choices g3" id="ch"></div>`;
+  const ch=document.getElementById('ch');
+  opts.forEach(o=>{
+    const btn=document.createElement('button');btn.className='opt';btn.textContent=o;
+    btn.onclick=()=>{
+      if(o===target){btn.classList.add('correct');noor(praises[Math.floor(Math.random()*praises.length)]);nextRound(true);}
+      else{btn.classList.add('wrong');noor('เปรียบเทียบรูปร่างกับเงาดูนะ 🌑');nextRound(false);}
+      disable('#ch');
+    };
+    ch.appendChild(btn);
+  });
+}
+function disable(sel){document.querySelectorAll(sel+' .opt').forEach(b=>b.style.pointerEvents='none');}
+
+/* --- Memory match (10 levels) --- */
+function renderMemory(){
+  const lvl=G.round;
+  updateDots();
+  document.getElementById('noorSay').style.display='none';
+  const area=document.getElementById('gameArea');area.style.textAlign='left';
+  const pairs=Math.min(3+Math.floor(lvl/2),8);
+  const icons=pick(emojiSet,pairs);
+  const deck=shuffle([...icons,...icons]);
+  const cols=deck.length<=6?3:4;
+  let flipped=[],matched=0,lock=false;
+  area.innerHTML=`<div class="prompt">ด่าน ${lvl+1}/10 — พลิกหาคู่ที่เหมือนกัน</div><div class="mem-grid" id="mgrid" style="grid-template-columns:repeat(${cols},1fr)"></div>`;
+  const grid=document.getElementById('mgrid');
+  deck.forEach((icon)=>{
+    const card=document.createElement('button');card.className='mcard';
+    card.innerHTML=`<div class="inner"><div class="mface mfront">❓</div><div class="mface mback">${icon}</div></div>`;
+    card.onclick=()=>{
+      if(lock||card.classList.contains('flip')||card.classList.contains('matched'))return;
+      card.classList.add('flip');flipped.push({card,icon});
+      if(flipped.length===2){
+        lock=true;
+        if(flipped[0].icon===flipped[1].icon){
+          setTimeout(()=>{flipped.forEach(f=>f.card.classList.add('matched'));flipped=[];lock=false;matched++;
+            if(matched===pairs){
+              G.score++;document.getElementById('gameScore').textContent=G.score;confetti();
+              noor(praises[Math.floor(Math.random()*praises.length)]);
+              G.round++;
+              if(G.round>=10){setTimeout(finishGame,900);}else{setTimeout(renderMemory,950);}
+            } else {
+              noor(praises[Math.floor(Math.random()*praises.length)]);
+            }
+          },520);
+        } else {
+          setTimeout(()=>{flipped.forEach(f=>f.card.classList.remove('flip'));flipped=[];lock=false;noor('ยังไม่ใช่คู่ จำตำแหน่งไว้นะ 🧠');},850);
+        }
+      }
+    };
+    grid.appendChild(card);
+  });
+}
+
+/* ============ CODING GAME (หัดเขียนโค้ด) ============ */
+const codeLevels=[
+  {w:3,h:1,start:{x:0,y:0},goal:{x:2,y:0},walls:[]},
+  {w:3,h:3,start:{x:0,y:2},goal:{x:2,y:0},walls:[]},
+  {w:4,h:3,start:{x:0,y:1},goal:{x:3,y:1},walls:[{x:2,y:1}]},
+  {w:4,h:4,start:{x:0,y:3},goal:{x:3,y:0},walls:[]},
+  {w:5,h:4,start:{x:0,y:3},goal:{x:4,y:0},walls:[{x:2,y:2},{x:2,y:1}]},
+  {w:5,h:5,start:{x:0,y:4},goal:{x:4,y:0},walls:[{x:1,y:3},{x:3,y:1},{x:2,y:2}]},
+  {w:5,h:4,start:{x:0,y:0},goal:{x:4,y:3},walls:[{x:2,y:0},{x:2,y:1},{x:2,y:2}]},
+  {w:5,h:5,start:{x:0,y:0},goal:{x:4,y:0},walls:[{x:1,y:0},{x:1,y:1},{x:3,y:0},{x:3,y:1}]},
+  {w:5,h:5,start:{x:0,y:0},goal:{x:4,y:4},walls:[{x:1,y:1},{x:2,y:1},{x:3,y:1},{x:1,y:3},{x:2,y:3},{x:3,y:3}]},
+  {w:5,h:5,start:{x:0,y:4},goal:{x:4,y:0},walls:[{x:1,y:4},{x:1,y:3},{x:3,y:2},{x:3,y:1},{x:2,y:2}]},
+];
+let CODE={lvl:0,queue:[],running:false};
+function startCoding(){
+  CODE={lvl:0,queue:[],running:false};
+  G={type:'coding',round:0,total:codeLevels.length,score:0,rounds:[]};
+  document.getElementById('gameTitle').textContent='หัดเขียนโค้ด';
+  document.getElementById('gameScore').textContent='1';
+  document.getElementById('dots').innerHTML='';
+  document.getElementById('noorSay').style.display='none';
+  go('game');
+  codingIntro();
+}
+function codingIntro(){
+  const area=document.getElementById('gameArea');area.style.textAlign='center';
+  area.innerHTML=`${suhail(80,'03_Poses/18_teach.png')}
+    <div class="prompt" style="margin-top:6px">มาช่วยสอนอามีนเดินกัน! 🤖</div>
+    <p style="font-family:'Sarabun',sans-serif;font-size:16px;line-height:1.85;color:var(--ink);max-width:340px;margin:0 auto 6px">
+    กด <b>ปุ่มลูกศร</b> เพื่อสั่งทางให้อามีนทีละก้าว แล้วกด <b>▶️ เริ่ม</b> ให้เดินไปหา <b>มัสยิด 🕌</b><br><br>
+    นี่แหละคือ "การเขียนโค้ด" — บอกคอมพิวเตอร์ให้ทำทีละขั้นตอน!</p>
+    <button class="primary-btn" onclick="renderCoding()">เริ่มเลย!</button>`;
+}
+function renderCoding(){
+  const L=codeLevels[CODE.lvl];
+  CODE.queue=[];CODE.running=false;
+  document.getElementById('gameScore').textContent=(CODE.lvl+1);
+  const area=document.getElementById('gameArea');area.style.textAlign='center';
+  area.innerHTML=`
+    <div class="prompt">ด่าน ${CODE.lvl+1}/${codeLevels.length} — พาอามีนไปหามัสยิด 🕌</div>
+    <div id="codeGrid" class="code-grid"></div>
+    <div class="queue" id="queue"></div>
+    <div class="arrow-pad">
+      <button class="apad" onclick="addCmd('up')">⬆️</button>
+      <div>
+        <button class="apad" onclick="addCmd('left')">⬅️</button>
+        <button class="apad" onclick="addCmd('down')">⬇️</button>
+        <button class="apad" onclick="addCmd('right')">➡️</button>
+      </div>
+    </div>
+    <div class="color-actions">
+      <button class="ghost-btn" onclick="clearQueue()">🗑️ ล้าง</button>
+      <button class="primary-btn" style="margin-top:0" onclick="runCode()">▶️ เริ่ม</button>
+    </div>`;
+  drawGrid(L,L.start);
+  renderQueue();
+}
+function drawGrid(L,pos){
+  const g=document.getElementById('codeGrid');
+  g.style.gridTemplateColumns=`repeat(${L.w},52px)`;
+  g.innerHTML='';
+  for(let y=0;y<L.h;y++)for(let x=0;x<L.w;x++){
+    const t=document.createElement('div');t.className='tile';
+    if(L.walls.some(w=>w.x===x&&w.y===y)){t.classList.add('wall');t.textContent='🧱';}
+    else if(L.goal.x===x&&L.goal.y===y){t.classList.add('goal');t.textContent='🕌';}
+    if(pos.x===x&&pos.y===y)t.innerHTML=ameen(38,'03_Poses/18_walk.png');
+    g.appendChild(t);
+  }
+}
+function addCmd(d){if(CODE.running)return;if(CODE.queue.length>=14)return;CODE.queue.push(d);renderQueue();}
+function clearQueue(){if(CODE.running)return;CODE.queue=[];renderQueue();drawGrid(codeLevels[CODE.lvl],codeLevels[CODE.lvl].start);}
+function renderQueue(){
+  const q=document.getElementById('queue');const m={up:'⬆️',down:'⬇️',left:'⬅️',right:'➡️'};
+  q.innerHTML=CODE.queue.length?CODE.queue.map(c=>`<span class="qchip">${m[c]}</span>`).join(''):'<span class="queue-empty">กดลูกศรเพื่อสั่งทาง…</span>';
+}
+function runCode(){
+  if(CODE.running||!CODE.queue.length)return;
+  CODE.running=true;
+  const L=codeLevels[CODE.lvl];let pos={x:L.start.x,y:L.start.y};let i=0;
+  noor('อามีนกำลังเดิน… 👣');
+  const step=()=>{
+    if(i>=CODE.queue.length){finishCoding(pos,L);return;}
+    const c=CODE.queue[i];let nx=pos.x,ny=pos.y;
+    if(c==='up')ny--;else if(c==='down')ny++;else if(c==='left')nx--;else if(c==='right')nx++;
+    if(nx<0||ny<0||nx>=L.w||ny>=L.h||L.walls.some(w=>w.x===nx&&w.y===ny)){
+      CODE.running=false;noor('อุ๊ย ชนกำแพง! ลองวางแผนใหม่นะ 🧱');
+      setTimeout(()=>drawGrid(L,L.start),700);return;
+    }
+    pos={x:nx,y:ny};drawGrid(L,pos);i++;setTimeout(step,420);
+  };
+  setTimeout(step,350);
+}
+function finishCoding(pos,L){
+  CODE.running=false;
+  if(pos.x===L.goal.x&&pos.y===L.goal.y){
+    confetti();noor(praises[Math.floor(Math.random()*praises.length)]);
+    if(CODE.lvl>=codeLevels.length-1){
+      setTimeout(()=>{
+        const area=document.getElementById('gameArea');
+        area.innerHTML=`${suhail(90,'02_Expressions/13_proud.png')}<div class="prompt" style="text-align:center;margin-top:8px">เก่งมาก! ผ่านครบทุกด่าน 🎉</div>
+          <p style="text-align:center;font-family:'Sarabun',sans-serif;font-size:16px;line-height:1.8">หนูสั่งงานทีละขั้นตอนได้แล้ว<br>นี่คือพื้นฐานสำคัญของการเขียนโค้ด! 💚</p>
+          <button class="primary-btn" onclick="startCoding()">🔁 เล่นใหม่</button>
+          <button class="ghost-btn" onclick="go('iqhub')">เลือกเกมอื่น</button>`;
+        document.getElementById('noorSay').style.display='none';
+      },1100);
+    } else {
+      setTimeout(()=>{CODE.lvl++;renderCoding();},1200);
+    }
+  } else {
+    noor('เกือบแล้ว! อามีนยังไม่ถึงมัสยิด ลองใหม่นะ 😊');
+  }
+}
+
+/* ============ SEQUENCE MEMORY (จำลำดับ) ============ */
+let SEQ={pads:[{c:'#7FC9B3',i:'🕌'},{c:'#EFCE86',i:'🌙'},{c:'#9BD1E8',i:'⭐'},{c:'#E0B48C',i:'🏮'}],order:[],input:[],busy:false};
+function startSeq(){
+  G={type:'seq',round:0,total:10,score:0,rounds:[]};
+  SEQ.order=[];SEQ.input=[];SEQ.busy=false;
+  document.getElementById('gameTitle').textContent='จำลำดับ';
+  document.getElementById('gameScore').textContent='0';
+  buildDots();
+  document.getElementById('noorSay').style.display='none';
+  go('game');
+  const area=document.getElementById('gameArea');area.style.textAlign='center';
+  area.innerHTML=`<div class="prompt">ดูให้ดี แล้วแตะตามลำดับ 👀</div>
+    <div class="seq-pads" id="seqPads"></div>
+    <button class="ghost-btn" onclick="replaySeq()">🔁 ดูอีกครั้ง</button>`;
+  const p=document.getElementById('seqPads');
+  SEQ.pads.forEach((pad,idx)=>{const b=document.createElement('button');b.className='spad';b.style.background=pad.c;b.textContent=pad.i;b.onclick=()=>seqTap(idx);p.appendChild(b);});
+  setTimeout(nextSeqRound,600);
+}
+function nextSeqRound(){
+  SEQ.input=[];
+  SEQ.order=Array.from({length:G.round+2},()=>Math.floor(Math.random()*4));
+  updateDots();
+  playSeq();
+}
+function playSeq(){
+  SEQ.busy=true;noor('ดูให้ดีนะ… 👀');
+  const pads=[...document.querySelectorAll('.spad')];let i=0;
+  const t=setInterval(()=>{
+    if(i>0)pads[SEQ.order[i-1]].classList.remove('flash');
+    if(i>=SEQ.order.length){clearInterval(t);SEQ.busy=false;noor('ตาหนูแล้ว แตะตามเลย! ✨');return;}
+    pads[SEQ.order[i]].classList.add('flash');i++;
+  },680);
+}
+function seqTap(idx){
+  if(SEQ.busy)return;
+  const pads=[...document.querySelectorAll('.spad')];
+  pads[idx].classList.add('flash');setTimeout(()=>pads[idx].classList.remove('flash'),230);
+  SEQ.input.push(idx);const pos=SEQ.input.length-1;
+  if(SEQ.input[pos]!==SEQ.order[pos]){
+    SEQ.busy=true;noor('ยังไม่ตรง ลองดูใหม่นะ 😊');
+    setTimeout(()=>{SEQ.input=[];playSeq();},1100);return;
+  }
+  if(SEQ.input.length===SEQ.order.length){
+    SEQ.busy=true;G.score++;document.getElementById('gameScore').textContent=G.score;
+    noor(praises[Math.floor(Math.random()*praises.length)]);G.round++;
+    if(G.round>=G.total)setTimeout(finishGame,1000);
+    else setTimeout(nextSeqRound,1100);
+  }
+}
+function replaySeq(){if(SEQ.busy)return;SEQ.input=[];playSeq();}
+
+/* ============ MATH (คณิตคิดเร็ว) ============ */
+function renderMath(){
+  const lvl=G.round;
+  const area=document.getElementById('gameArea');area.style.textAlign='center';
+  let a,b,op,ans;
+  if(lvl<3){op='+';a=1+Math.floor(Math.random()*(3+lvl));b=1+Math.floor(Math.random()*(3+lvl));ans=a+b;}
+  else if(lvl<6){
+    if(Math.random()<.5){op='+';a=1+Math.floor(Math.random()*9);b=1+Math.floor(Math.random()*9);ans=a+b;}
+    else{op='−';a=3+Math.floor(Math.random()*9);b=1+Math.floor(Math.random()*a);ans=a-b;}
+  } else {
+    const r=Math.random();
+    if(r<.34){op='+';a=5+Math.floor(Math.random()*10);b=5+Math.floor(Math.random()*10);ans=a+b;}
+    else if(r<.67){op='−';a=8+Math.floor(Math.random()*12);b=1+Math.floor(Math.random()*a);ans=a-b;}
+    else{op='×';a=2+Math.floor(Math.random()*4);b=2+Math.floor(Math.random()*5);ans=a*b;}
+  }
+  const pool=[];for(let d=-4;d<=4;d++){const v=ans+d;if(v>=0&&v!==ans)pool.push(v);}
+  const opts=shuffle([ans,...pick([...new Set(pool)],3)]);
+  area.innerHTML=`<div class="prompt" style="font-size:30px">${a} ${op} ${b} = ?</div><div class="choices g2" id="ch"></div>`;
+  const ch=document.getElementById('ch');
+  opts.forEach(o=>{
+    const btn=document.createElement('button');btn.className='opt num';btn.textContent=o;
+    btn.onclick=()=>{
+      if(o===ans){btn.classList.add('correct');noor(praises[Math.floor(Math.random()*praises.length)]);nextRound(true);}
+      else{btn.classList.add('wrong');noor('ลองคิดใหม่นะ ค่อย ๆ นับ 😊');nextRound(false);}
+      disable('#ch');
+    };
+    ch.appendChild(btn);
+  });
+}
+
+/* ============ WHAT'S MISSING (อะไรหายไป) ============ */
+function renderMissing(){
+  const lvl=G.round;
+  const area=document.getElementById('gameArea');area.style.textAlign='center';
+  const n=Math.min(3+Math.floor(lvl*0.6),8);
+  const set=pick(emojiSet,n);
+  const missing=set[Math.floor(Math.random()*set.length)];
+  const remaining=shuffle(set.filter(e=>e!==missing));
+  area.innerHTML=`<div class="prompt">จำให้ดีนะ… มีอะไรบ้าง 👀</div><div class="count-box">${set.map(e=>`<span>${e}</span>`).join('')}</div>`;
+  const delay=1500+lvl*150;
+  setTimeout(()=>{
+    const opts=shuffle([missing,...pick(remaining,2)]);
+    area.innerHTML=`<div class="prompt">อะไร "หายไป"?</div><div class="count-box">${remaining.map(e=>`<span>${e}</span>`).join('')}</div><div class="choices g3" id="ch"></div>`;
+    const ch=document.getElementById('ch');
+    opts.forEach(o=>{
+      const btn=document.createElement('button');btn.className='opt';btn.textContent=o;
+      btn.onclick=()=>{
+        if(o===missing){btn.classList.add('correct');noor(praises[Math.floor(Math.random()*praises.length)]);nextRound(true);}
+        else{btn.classList.add('wrong');noor('ลองสังเกตดี ๆ นะ 🔍');[...document.querySelectorAll('#ch .opt')][opts.indexOf(missing)].classList.add('correct');nextRound(false);}
+        disable('#ch');
+      };
+      ch.appendChild(btn);
+    });
+  },delay);
+}
+
+/* ============ MORE OR LESS (มากหรือน้อย) ============ */
+function renderMoreLess(){
+  const lvl=G.round;
+  const area=document.getElementById('gameArea');area.style.textAlign='center';
+  const askMore=lvl<3?true:Math.random()<.5;
+  const icon=pick(emojiSet,1)[0];
+  const base=2+Math.floor(Math.random()*(3+lvl));
+  const gap=lvl<3?(2+Math.floor(Math.random()*3)):lvl<7?(1+Math.floor(Math.random()*2)):1;
+  let cA=base,cB=base+(Math.random()<.5?gap:-gap);
+  if(cB<1)cB=base+gap;
+  if(cA===cB)cB=cA+gap;
+  const q=askMore?'กล่องไหนมี "มากกว่า"?':'กล่องไหนมี "น้อยกว่า"?';
+  const correctBox=askMore?(cA>cB?'A':'B'):(cA<cB?'A':'B');
+  const boxHtml=(letter,c)=>`<button class="opt" data-b="${letter}" style="min-height:120px;padding:14px;align-items:center"><div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;font-size:23px;line-height:1.3">${Array(c).fill(icon).join('')}</div></button>`;
+  area.innerHTML=`<div class="prompt">${q}</div><div class="choices g2" id="ch">${boxHtml('A',cA)}${boxHtml('B',cB)}</div>`;
+  [...document.querySelectorAll('#ch .opt')].forEach(btn=>{
+    btn.onclick=()=>{
+      if(btn.dataset.b===correctBox){btn.classList.add('correct');noor(praises[Math.floor(Math.random()*praises.length)]);nextRound(true);}
+      else{btn.classList.add('wrong');noor('ลองนับจำนวนในแต่ละกล่องดูนะ 🔢');document.querySelector('#ch .opt[data-b="'+correctBox+'"]').classList.add('correct');nextRound(false);}
+      disable('#ch');
+    };
+  });
+}
+
+/* ============ COLORING ============ */
+const colorCategories=[
+  {key:'islamic',name:'อิสลามิค',emoji:'🕌'},
+  {key:'cars',name:'รถยนต์',emoji:'🚗'},
+  {key:'animals',name:'สัตว์',emoji:'🐱'},
+  {key:'dino',name:'ไดโนเสาร์',emoji:'🦕'},
+];
+const picLib = {
+  islamic:{
+    masjid:{name:'มัสยิด',svg:`
+      <rect class="region" x="0" y="0" width="300" height="230" fill="#EAF6FF"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#EFE6CF"/>
+      <rect class="region" x="70" y="120" width="160" height="90" fill="#FFFFFF"/>
+      <path class="region" d="M70 120 Q150 40 230 120 Z" fill="#FFFFFF"/>
+      <circle class="region" cx="150" cy="60" r="8" fill="#FFFFFF"/>
+      <path d="M150 44 a8 8 0 1 0 3 15 a6 6 0 1 1 -3 -15" class="region" fill="#FFFFFF"/>
+      <rect class="region" x="40" y="90" width="22" height="120" fill="#FFFFFF"/>
+      <path class="region" d="M40 90 Q51 60 62 90 Z" fill="#FFFFFF"/>
+      <rect class="region" x="238" y="90" width="22" height="120" fill="#FFFFFF"/>
+      <path class="region" d="M238 90 Q249 60 260 90 Z" fill="#FFFFFF"/>
+      <path class="region" d="M130 210 v-40 a20 20 0 0 1 40 0 v40 Z" fill="#FFFFFF"/>
+      <rect class="region" x="90" y="150" width="26" height="34" rx="13" fill="#FFFFFF"/>
+      <rect class="region" x="184" y="150" width="26" height="34" rx="13" fill="#FFFFFF"/>`},
+    lantern:{name:'โคมไฟ',svg:`
+      <rect class="region" x="0" y="0" width="300" height="260" fill="#FFF7E8"/>
+      <rect class="region" x="140" y="10" width="20" height="18" fill="#FFFFFF"/>
+      <path class="region" d="M100 50 h100 l-14 -22 h-72 Z" fill="#FFFFFF"/>
+      <rect class="region" x="96" y="50" width="108" height="12" fill="#FFFFFF"/>
+      <path class="region" d="M104 62 h92 v120 h-92 Z" fill="#FFFFFF"/>
+      <path class="region" d="M120 78 h60 v88 h-60 Z" fill="#FFF3CF"/>
+      <circle class="region" cx="150" cy="122" r="20" fill="#FFFFFF"/>
+      <rect class="region" x="96" y="182" width="108" height="14" fill="#FFFFFF"/>
+      <path class="region" d="M112 196 h76 l-10 26 h-56 Z" fill="#FFFFFF"/>
+      <rect class="region" x="140" y="222" width="20" height="16" fill="#FFFFFF"/>`},
+    starmoon:{name:'ดาวและจันทร์',svg:`
+      <rect class="region" x="0" y="0" width="300" height="260" fill="#EAF1FF"/>
+      <path class="region" d="M180 40 a70 70 0 1 0 20 130 a55 55 0 1 1 -20 -130" fill="#FFFFFF"/>
+      <path class="region" d="M95 150 l10 26 h28 l-22 18 l8 27 l-24 -16 l-24 16 l8 -27 l-22 -18 h28 Z" fill="#FFFFFF"/>
+      <path class="region" d="M60 60 l5 12 h13 l-10 9 l4 13 l-12 -8 l-12 8 l4 -13 l-10 -9 h13 Z" fill="#FFFFFF"/>
+      <path class="region" d="M235 180 l5 12 h13 l-10 9 l4 13 l-12 -8 l-12 8 l4 -13 l-10 -9 h13 Z" fill="#FFFFFF"/>
+      <circle class="region" cx="40" cy="200" r="6" fill="#FFFFFF"/>
+      <circle class="region" cx="260" cy="60" r="6" fill="#FFFFFF"/>`},
+    palm:{name:'ต้นอินทผลัม',svg:`
+      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6FF"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#F1E4C5"/>
+      <circle class="region" cx="255" cy="45" r="26" fill="#FFFFFF"/>
+      <rect class="region" x="138" y="120" width="24" height="95" rx="6" fill="#FFFFFF"/>
+      <path class="region" d="M150 120 Q90 90 60 110 Q100 100 150 130 Z" fill="#FFFFFF"/>
+      <path class="region" d="M150 120 Q210 90 240 110 Q200 100 150 130 Z" fill="#FFFFFF"/>
+      <path class="region" d="M150 118 Q100 70 80 50 Q120 80 150 128 Z" fill="#FFFFFF"/>
+      <path class="region" d="M150 118 Q200 70 220 50 Q180 80 150 128 Z" fill="#FFFFFF"/>
+      <path class="region" d="M150 116 Q150 60 150 44 Q160 80 150 128 Z" fill="#FFFFFF"/>
+      <circle class="region" cx="140" cy="132" r="6" fill="#FFFFFF"/>
+      <circle class="region" cx="158" cy="136" r="6" fill="#FFFFFF"/>
+      <circle class="region" cx="150" cy="144" r="6" fill="#FFFFFF"/>`},
+    flower:{name:'ดอกไม้',svg:`
+      <rect class="region" x="0" y="0" width="300" height="260" fill="#FFF3F7"/>
+      <ellipse class="region" cx="150" cy="70" rx="26" ry="34" fill="#FFFFFF"/>
+      <ellipse class="region" cx="196" cy="105" rx="26" ry="34" fill="#FFFFFF" transform="rotate(72 196 105)"/>
+      <ellipse class="region" cx="178" cy="160" rx="26" ry="34" fill="#FFFFFF" transform="rotate(144 178 160)"/>
+      <ellipse class="region" cx="122" cy="160" rx="26" ry="34" fill="#FFFFFF" transform="rotate(216 122 160)"/>
+      <ellipse class="region" cx="104" cy="105" rx="26" ry="34" fill="#FFFFFF" transform="rotate(288 104 105)"/>
+      <circle class="region" cx="150" cy="118" r="24" fill="#FFFFFF"/>
+      <rect class="region" x="144" y="140" width="12" height="90" fill="#FFFFFF"/>
+      <path class="region" d="M150 190 Q110 180 96 205 Q140 205 150 210 Z" fill="#FFFFFF"/>`},
+    quran:{name:'อัลกุรอาน',svg:`
+      <rect class="region" x="0" y="0" width="300" height="260" fill="#F3F7EA"/>
+      <rect class="region" x="45" y="205" width="210" height="18" rx="4" fill="#FFFFFF"/>
+      <path class="region" d="M50 75 Q150 60 150 75 L150 195 Q150 180 50 195 Z" fill="#FFFFFF"/>
+      <path class="region" d="M250 75 Q150 60 150 75 L150 195 Q150 180 250 195 Z" fill="#FFFFFF"/>
+      <line x1="65" y1="100" x2="130" y2="94" stroke="#3a3a3a" stroke-width="2"/>
+      <line x1="65" y1="118" x2="130" y2="112" stroke="#3a3a3a" stroke-width="2"/>
+      <line x1="65" y1="136" x2="130" y2="130" stroke="#3a3a3a" stroke-width="2"/>
+      <line x1="170" y1="94" x2="235" y2="100" stroke="#3a3a3a" stroke-width="2"/>
+      <line x1="170" y1="112" x2="235" y2="118" stroke="#3a3a3a" stroke-width="2"/>
+      <line x1="170" y1="130" x2="235" y2="136" stroke="#3a3a3a" stroke-width="2"/>
+      <path class="region" d="M140 55 L160 55 L156 90 L150 82 L144 90 Z" fill="#FFFFFF"/>`},
+    tasbih:{name:'ลูกประคำ',svg:`
+      <rect class="region" x="0" y="0" width="300" height="260" fill="#FFF7EE"/>
+      <circle class="region" cx="225" cy="130" r="11" fill="#FFFFFF"/>
+      <circle class="region" cx="217.5" cy="162.6" r="11" fill="#FFFFFF"/>
+      <circle class="region" cx="196.8" cy="188.6" r="11" fill="#FFFFFF"/>
+      <circle class="region" cx="166.7" cy="203.1" r="15" fill="#FFFFFF"/>
+      <circle class="region" cx="133.3" cy="203.1" r="11" fill="#FFFFFF"/>
+      <circle class="region" cx="103.2" cy="188.6" r="11" fill="#FFFFFF"/>
+      <circle class="region" cx="82.5" cy="162.6" r="11" fill="#FFFFFF"/>
+      <circle class="region" cx="75" cy="130" r="11" fill="#FFFFFF"/>
+      <circle class="region" cx="82.5" cy="97.4" r="11" fill="#FFFFFF"/>
+      <circle class="region" cx="103.2" cy="71.4" r="11" fill="#FFFFFF"/>
+      <circle class="region" cx="133.3" cy="56.9" r="11" fill="#FFFFFF"/>
+      <circle class="region" cx="166.7" cy="56.9" r="11" fill="#FFFFFF"/>
+      <circle class="region" cx="196.8" cy="71.4" r="11" fill="#FFFFFF"/>
+      <circle class="region" cx="217.5" cy="97.4" r="11" fill="#FFFFFF"/>
+      <line x1="166.7" y1="218" x2="166.7" y2="240" stroke="#3a3a3a" stroke-width="2"/>
+      <path class="region" d="M156.7 240 L176.7 240 L166.7 262 Z" fill="#FFFFFF"/>`},
+    camel:{name:'อูฐ',svg:`
+      <rect class="region" x="0" y="0" width="300" height="210" fill="#FFF6E5"/>
+      <rect class="region" x="0" y="210" width="300" height="50" fill="#F0DDB0"/>
+      <circle class="region" cx="255" cy="55" r="24" fill="#FFFFFF"/>
+      <path class="region" d="M60 210 Q60 150 90 140 Q100 110 130 130 Q140 100 160 125 Q185 115 190 150 Q220 155 220 210 Z" fill="#FFFFFF"/>
+      <path class="region" d="M190 150 Q210 110 230 130 Q235 150 220 165 Z" fill="#FFFFFF"/>
+      <ellipse class="region" cx="235" cy="120" rx="16" ry="13" fill="#FFFFFF"/>
+      <rect class="region" x="75" y="205" width="10" height="35" fill="#FFFFFF"/>
+      <rect class="region" x="105" y="205" width="10" height="35" fill="#FFFFFF"/>
+      <rect class="region" x="165" y="205" width="10" height="35" fill="#FFFFFF"/>
+      <rect class="region" x="195" y="205" width="10" height="35" fill="#FFFFFF"/>
+      <path class="region" d="M55 195 Q40 190 45 210 Q55 215 60 205 Z" fill="#FFFFFF"/>`},
+  },
+  cars:{
+    sedan:{name:'รถเก๋ง',svg:`
+      <rect class="region" x="0" y="0" width="300" height="190" fill="#EAF6FF"/>
+      <rect class="region" x="0" y="190" width="300" height="70" fill="#D8D8D8"/>
+      <rect x="0" y="222" width="300" height="6" fill="#FFFFFF" opacity=".6"/>
+      <path class="region" d="M40 190 Q40 165 65 160 L95 130 Q115 115 150 115 Q185 115 205 130 L235 160 Q260 165 260 190 Z" fill="#FFFFFF"/>
+      <rect class="region" x="108" y="128" width="34" height="30" rx="4" fill="#FFF7E0"/>
+      <rect class="region" x="150" y="128" width="34" height="30" rx="4" fill="#FFF7E0"/>
+      <circle class="region" cx="90" cy="192" r="20" fill="#FFFFFF"/>
+      <circle class="region" cx="210" cy="192" r="20" fill="#FFFFFF"/>
+      <circle cx="90" cy="192" r="8" fill="#EAF6FF"/>
+      <circle cx="210" cy="192" r="8" fill="#EAF6FF"/>`},
+    truck:{name:'รถบรรทุก',svg:`
+      <rect class="region" x="0" y="0" width="300" height="190" fill="#EAF6FF"/>
+      <rect class="region" x="0" y="190" width="300" height="70" fill="#D8D8D8"/>
+      <rect x="0" y="222" width="300" height="6" fill="#FFFFFF" opacity=".6"/>
+      <path class="region" d="M30 190 L30 150 Q30 135 45 135 L95 135 Q110 135 110 150 L110 190 Z" fill="#FFFFFF"/>
+      <rect class="region" x="55" y="145" width="30" height="26" rx="3" fill="#FFF7E0"/>
+      <rect class="region" x="110" y="160" width="140" height="30" fill="#FFFFFF"/>
+      <rect class="region" x="120" y="140" width="24" height="24" fill="#FFFFFF"/>
+      <rect class="region" x="150" y="145" width="20" height="19" fill="#FFFFFF"/>
+      <circle class="region" cx="75" cy="192" r="20" fill="#FFFFFF"/>
+      <circle class="region" cx="215" cy="192" r="20" fill="#FFFFFF"/>
+      <circle cx="75" cy="192" r="8" fill="#EAF6FF"/>
+      <circle cx="215" cy="192" r="8" fill="#EAF6FF"/>`},
+    bus:{name:'รถบัส',svg:`
+      <rect class="region" x="0" y="0" width="300" height="190" fill="#EAF6FF"/>
+      <rect class="region" x="0" y="190" width="300" height="70" fill="#D8D8D8"/>
+      <rect x="0" y="222" width="300" height="6" fill="#FFFFFF" opacity=".6"/>
+      <rect class="region" x="30" y="120" width="220" height="70" rx="14" fill="#FFFFFF"/>
+      <rect class="region" x="45" y="135" width="30" height="26" rx="3" fill="#FFF7E0"/>
+      <rect class="region" x="85" y="135" width="30" height="26" rx="3" fill="#FFF7E0"/>
+      <rect class="region" x="125" y="135" width="30" height="26" rx="3" fill="#FFF7E0"/>
+      <rect class="region" x="165" y="135" width="30" height="26" rx="3" fill="#FFF7E0"/>
+      <rect class="region" x="205" y="135" width="30" height="26" rx="3" fill="#FFF7E0"/>
+      <circle class="region" cx="80" cy="192" r="20" fill="#FFFFFF"/>
+      <circle class="region" cx="200" cy="192" r="20" fill="#FFFFFF"/>
+      <circle cx="80" cy="192" r="8" fill="#EAF6FF"/>
+      <circle cx="200" cy="192" r="8" fill="#EAF6FF"/>`},
+    racecar:{name:'รถแข่ง',svg:`
+      <rect class="region" x="0" y="0" width="300" height="190" fill="#EAF6FF"/>
+      <rect class="region" x="0" y="190" width="300" height="70" fill="#D8D8D8"/>
+      <rect x="0" y="222" width="300" height="6" fill="#FFFFFF" opacity=".6"/>
+      <path class="region" d="M35 185 Q40 165 70 160 L110 140 Q150 130 190 140 L230 160 Q260 165 265 185 Q200 195 150 195 Q100 195 35 185 Z" fill="#FFFFFF"/>
+      <path class="region" d="M120 142 Q150 132 180 142 L175 158 L125 158 Z" fill="#FFF7E0"/>
+      <rect class="region" x="30" y="132" width="70" height="12" rx="3" fill="#FFFFFF"/>
+      <circle class="region" cx="85" cy="192" r="22" fill="#FFFFFF"/>
+      <circle class="region" cx="215" cy="192" r="22" fill="#FFFFFF"/>
+      <circle cx="85" cy="192" r="9" fill="#EAF6FF"/>
+      <circle cx="215" cy="192" r="9" fill="#EAF6FF"/>`},
+    firetruck:{name:'รถดับเพลิง',svg:`
+      <rect class="region" x="0" y="0" width="300" height="190" fill="#EAF6FF"/>
+      <rect class="region" x="0" y="190" width="300" height="70" fill="#D8D8D8"/>
+      <rect x="0" y="222" width="300" height="6" fill="#FFFFFF" opacity=".6"/>
+      <path class="region" d="M30 190 L30 145 Q30 130 45 130 L90 130 Q105 130 105 145 L105 190 Z" fill="#FFFFFF"/>
+      <rect class="region" x="50" y="140" width="30" height="24" rx="3" fill="#FFF7E0"/>
+      <rect class="region" x="105" y="150" width="140" height="40" fill="#FFFFFF"/>
+      <rect class="region" x="115" y="120" width="120" height="14" rx="4" fill="#FFFFFF"/>
+      <line x1="120" y1="120" x2="120" y2="134" stroke="#3a3a3a" stroke-width="2"/>
+      <line x1="140" y1="120" x2="140" y2="134" stroke="#3a3a3a" stroke-width="2"/>
+      <line x1="160" y1="120" x2="160" y2="134" stroke="#3a3a3a" stroke-width="2"/>
+      <line x1="180" y1="120" x2="180" y2="134" stroke="#3a3a3a" stroke-width="2"/>
+      <line x1="200" y1="120" x2="200" y2="134" stroke="#3a3a3a" stroke-width="2"/>
+      <line x1="220" y1="120" x2="220" y2="134" stroke="#3a3a3a" stroke-width="2"/>
+      <circle class="region" cx="75" cy="192" r="20" fill="#FFFFFF"/>
+      <circle class="region" cx="205" cy="192" r="20" fill="#FFFFFF"/>
+      <circle cx="75" cy="192" r="8" fill="#EAF6FF"/>
+      <circle cx="205" cy="192" r="8" fill="#EAF6FF"/>
+      <circle class="region" cx="220" cy="140" r="10" fill="#FFFFFF"/>`},
+    digger:{name:'รถขุด',svg:`
+      <rect class="region" x="0" y="0" width="300" height="190" fill="#EAF6FF"/>
+      <rect class="region" x="0" y="190" width="300" height="70" fill="#D8D8D8"/>
+      <rect class="region" x="40" y="175" width="150" height="20" rx="6" fill="#FFFFFF"/>
+      <rect class="region" x="70" y="120" width="80" height="55" rx="8" fill="#FFFFFF"/>
+      <rect class="region" x="90" y="132" width="35" height="26" rx="3" fill="#FFF7E0"/>
+      <path class="region" d="M150 135 L210 110 L225 118 L175 150 Z" fill="#FFFFFF"/>
+      <path class="region" d="M210 108 L245 100 L250 115 L220 128 Z" fill="#FFFFFF"/>
+      <circle cx="70" cy="185" r="9" fill="#EAF6FF"/>
+      <circle cx="100" cy="185" r="9" fill="#EAF6FF"/>
+      <circle cx="130" cy="185" r="9" fill="#EAF6FF"/>
+      <circle cx="160" cy="185" r="9" fill="#EAF6FF"/>`},
+    train:{name:'รถไฟ',svg:`
+      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6FF"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#D8D8D8"/>
+      <rect class="region" x="30" y="140" width="90" height="55" rx="8" fill="#FFFFFF"/>
+      <rect class="region" x="45" y="100" width="30" height="45" rx="6" fill="#FFFFFF"/>
+      <rect class="region" x="52" y="112" width="16" height="16" rx="2" fill="#FFF7E0"/>
+      <circle class="region" cx="95" cy="90" r="10" fill="#FFFFFF"/>
+      <rect class="region" x="88" y="95" width="14" height="20" fill="#FFFFFF"/>
+      <rect class="region" x="130" y="150" width="90" height="45" rx="6" fill="#FFFFFF"/>
+      <rect class="region" x="145" y="160" width="24" height="22" rx="3" fill="#FFF7E0"/>
+      <rect class="region" x="180" y="160" width="24" height="22" rx="3" fill="#FFF7E0"/>
+      <circle class="region" cx="55" cy="197" r="16" fill="#FFFFFF"/>
+      <circle class="region" cx="95" cy="197" r="16" fill="#FFFFFF"/>
+      <circle class="region" cx="150" cy="197" r="14" fill="#FFFFFF"/>
+      <circle class="region" cx="195" cy="197" r="14" fill="#FFFFFF"/>
+      <rect x="0" y="213" width="300" height="4" fill="#8a8a8a"/>`},
+  },
+  animals:{
+    cat:{name:'แมว',svg:`
+      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6FF"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#DCEFD1"/>
+      <ellipse class="region" cx="150" cy="175" rx="55" ry="45" fill="#FFFFFF"/>
+      <circle class="region" cx="150" cy="100" r="45" fill="#FFFFFF"/>
+      <path class="region" d="M112 75 L100 40 L135 68 Z" fill="#FFFFFF"/>
+      <path class="region" d="M188 75 L200 40 L165 68 Z" fill="#FFFFFF"/>
+      <circle cx="135" cy="98" r="5" fill="#3a3a3a"/>
+      <circle cx="165" cy="98" r="5" fill="#3a3a3a"/>
+      <path d="M150 108 L145 116 L155 116 Z" fill="#E9A98A"/>
+      <path class="region" d="M195 190 Q225 180 220 155 Q235 170 225 195 Q210 205 195 198 Z" fill="#FFFFFF"/>`},
+    dog:{name:'สุนัข',svg:`
+      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6FF"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#DCEFD1"/>
+      <ellipse class="region" cx="150" cy="180" rx="58" ry="42" fill="#FFFFFF"/>
+      <circle class="region" cx="150" cy="105" r="48" fill="#FFFFFF"/>
+      <path class="region" d="M108 90 Q90 60 105 105 Q100 120 118 118 Z" fill="#FFFFFF"/>
+      <path class="region" d="M192 90 Q210 60 195 105 Q200 120 182 118 Z" fill="#FFFFFF"/>
+      <circle cx="135" cy="102" r="5" fill="#3a3a3a"/>
+      <circle cx="165" cy="102" r="5" fill="#3a3a3a"/>
+      <ellipse class="region" cx="150" cy="122" rx="14" ry="10" fill="#FFFFFF"/>
+      <circle cx="150" cy="118" r="4" fill="#3a3a3a"/>
+      <path class="region" d="M205 175 Q230 160 225 140 Q240 165 220 185 Z" fill="#FFFFFF"/>`},
+    elephant:{name:'ช้าง',svg:`
+      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6FF"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#DCEFD1"/>
+      <ellipse class="region" cx="150" cy="150" rx="70" ry="50" fill="#FFFFFF"/>
+      <circle class="region" cx="150" cy="100" r="50" fill="#FFFFFF"/>
+      <path class="region" d="M95 85 Q60 90 65 130 Q70 155 100 145 Q80 120 95 85 Z" fill="#FFFFFF"/>
+      <path class="region" d="M205 85 Q240 90 235 130 Q230 155 200 145 Q220 120 205 85 Z" fill="#FFFFFF"/>
+      <path class="region" d="M140 120 Q130 165 110 175 Q100 178 105 165 Q120 155 128 120 Z" fill="#FFFFFF"/>
+      <circle cx="135" cy="95" r="5" fill="#3a3a3a"/>
+      <circle cx="165" cy="95" r="5" fill="#3a3a3a"/>
+      <rect class="region" x="120" y="195" width="16" height="35" fill="#FFFFFF"/>
+      <rect class="region" x="164" y="195" width="16" height="35" fill="#FFFFFF"/>`},
+    lion:{name:'สิงโต',svg:`
+      <rect class="region" x="0" y="0" width="300" height="200" fill="#FFF3DE"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#F0DDB0"/>
+      <circle class="region" cx="150" cy="130" r="70" fill="#FFFFFF"/>
+      <circle class="region" cx="150" cy="130" r="42" fill="#FFFFFF"/>
+      <circle cx="135" cy="125" r="5" fill="#3a3a3a"/>
+      <circle cx="165" cy="125" r="5" fill="#3a3a3a"/>
+      <path d="M150 138 L143 148 L157 148 Z" fill="#D9825C"/>
+      <ellipse class="region" cx="150" cy="215" rx="60" ry="35" fill="#FFFFFF"/>`},
+    rabbit:{name:'กระต่าย',svg:`
+      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6FF"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#DCEFD1"/>
+      <ellipse class="region" cx="150" cy="185" rx="48" ry="38" fill="#FFFFFF"/>
+      <circle class="region" cx="150" cy="120" r="38" fill="#FFFFFF"/>
+      <ellipse class="region" cx="125" cy="60" rx="14" ry="45" fill="#FFFFFF"/>
+      <ellipse class="region" cx="175" cy="60" rx="14" ry="45" fill="#FFFFFF"/>
+      <circle cx="138" cy="118" r="4" fill="#3a3a3a"/>
+      <circle cx="162" cy="118" r="4" fill="#3a3a3a"/>
+      <path d="M150 128 L145 135 L155 135 Z" fill="#E9A98A"/>
+      <circle class="region" cx="150" cy="220" r="14" fill="#FFFFFF"/>`},
+    fish:{name:'ปลา',svg:`
+      <rect class="region" x="0" y="0" width="300" height="260" fill="#DFF3FA"/>
+      <ellipse class="region" cx="140" cy="140" rx="80" ry="55" fill="#FFFFFF"/>
+      <path class="region" d="M215 110 L260 80 L260 200 L215 170 Z" fill="#FFFFFF"/>
+      <path class="region" d="M110 95 Q130 70 155 90 Q135 100 130 110 Z" fill="#FFFFFF"/>
+      <path class="region" d="M110 185 Q130 210 155 190 Q135 180 130 170 Z" fill="#FFFFFF"/>
+      <circle cx="95" cy="130" r="7" fill="#3a3a3a"/>
+      <path class="region" d="M60 140 Q85 130 90 140 Q85 150 60 140 Z" fill="#FFFFFF"/>
+      <circle class="region" cx="180" cy="120" r="18" fill="#FFFFFF" opacity=".8"/>`},
+    bird:{name:'นก',svg:`
+      <rect class="region" x="0" y="0" width="300" height="260" fill="#EAF6FF"/>
+      <ellipse class="region" cx="150" cy="150" rx="55" ry="45" fill="#FFFFFF"/>
+      <circle class="region" cx="205" cy="110" r="30" fill="#FFFFFF"/>
+      <path d="M232 108 L252 114 L232 120 Z" fill="#D9A93E"/>
+      <circle cx="215" cy="102" r="4" fill="#3a3a3a"/>
+      <path class="region" d="M110 140 Q60 130 70 165 Q100 175 125 160 Z" fill="#FFFFFF"/>
+      <path class="region" d="M100 185 L80 220 L110 200 L120 225 L135 195 Z" fill="#FFFFFF"/>
+      <rect class="region" x="140" y="192" width="6" height="20" fill="#FFFFFF"/>
+      <rect class="region" x="160" y="192" width="6" height="20" fill="#FFFFFF"/>`},
+  },
+  dino:{
+    trex:{name:'ทีเร็กซ์',svg:`
+      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6E0"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#CDE7B0"/>
+      <path class="region" d="M90 200 Q80 140 120 110 Q160 80 200 100 Q220 70 245 85 Q235 100 220 105 Q235 115 225 135 Q205 130 195 145 Q210 160 195 175 Q170 165 160 185 Q140 205 90 200 Z" fill="#FFFFFF"/>
+      <circle cx="228" cy="92" r="4" fill="#3a3a3a"/>
+      <path class="region" d="M120 190 L110 225 L130 225 L135 195 Z" fill="#FFFFFF"/>
+      <path class="region" d="M160 190 L155 225 L175 225 L175 195 Z" fill="#FFFFFF"/>
+      <path class="region" d="M175 130 Q190 135 185 150 Q175 148 172 138 Z" fill="#FFFFFF"/>`},
+    triceratops:{name:'ไทรเซราทอปส์',svg:`
+      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6E0"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#CDE7B0"/>
+      <ellipse class="region" cx="170" cy="170" rx="75" ry="40" fill="#FFFFFF"/>
+      <path class="region" d="M70 120 Q50 80 90 90 Q100 60 130 85 Q150 70 155 100 Q120 100 100 130 Q85 145 70 120 Z" fill="#FFFFFF"/>
+      <path class="region" d="M85 90 L75 60 L95 85 Z" fill="#FFFFFF"/>
+      <path class="region" d="M115 78 L110 45 L128 75 Z" fill="#FFFFFF"/>
+      <path class="region" d="M75 118 L58 128 L78 132 Z" fill="#FFFFFF"/>
+      <circle cx="95" cy="105" r="4" fill="#3a3a3a"/>
+      <rect class="region" x="100" y="195" width="16" height="30" fill="#FFFFFF"/>
+      <rect class="region" x="150" y="200" width="16" height="30" fill="#FFFFFF"/>
+      <rect class="region" x="200" y="200" width="16" height="30" fill="#FFFFFF"/>`},
+    stego:{name:'สเตโกซอรัส',svg:`
+      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6E0"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#CDE7B0"/>
+      <path class="region" d="M60 195 Q60 150 100 140 Q150 120 200 150 Q230 160 240 195 Z" fill="#FFFFFF"/>
+      <path class="region" d="M55 175 Q35 165 40 185 Q50 195 60 190 Z" fill="#FFFFFF"/>
+      <path class="region" d="M230 175 Q255 195 240 210 Q220 205 218 190 Z" fill="#FFFFFF"/>
+      <path class="region" d="M90 130 L105 95 L120 135 Z" fill="#FFFFFF"/>
+      <path class="region" d="M130 118 L145 82 L158 122 Z" fill="#FFFFFF"/>
+      <path class="region" d="M170 122 L183 88 L196 128 Z" fill="#FFFFFF"/>
+      <rect class="region" x="85" y="190" width="14" height="25" fill="#FFFFFF"/>
+      <rect class="region" x="130" y="195" width="14" height="25" fill="#FFFFFF"/>
+      <rect class="region" x="185" y="195" width="14" height="25" fill="#FFFFFF"/>`},
+    longneck:{name:'คอยาว',svg:`
+      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6E0"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#CDE7B0"/>
+      <ellipse class="region" cx="170" cy="185" rx="65" ry="30" fill="#FFFFFF"/>
+      <path class="region" d="M150 165 Q120 100 90 55 Q80 40 100 35 Q115 60 140 100 Q160 140 165 165 Z" fill="#FFFFFF"/>
+      <ellipse class="region" cx="95" cy="35" rx="16" ry="12" fill="#FFFFFF"/>
+      <circle cx="90" cy="32" r="3" fill="#3a3a3a"/>
+      <path class="region" d="M220 180 Q260 190 255 210 Q235 215 220 200 Z" fill="#FFFFFF"/>
+      <rect class="region" x="130" y="205" width="16" height="30" fill="#FFFFFF"/>
+      <rect class="region" x="165" y="208" width="16" height="30" fill="#FFFFFF"/>
+      <rect class="region" x="200" y="205" width="16" height="30" fill="#FFFFFF"/>`},
+    ptero:{name:'เทอโรแดคทิล',svg:`
+      <rect class="region" x="0" y="0" width="300" height="260" fill="#D9EEF7"/>
+      <ellipse class="region" cx="150" cy="140" rx="24" ry="18" fill="#FFFFFF"/>
+      <path class="region" d="M140 130 Q90 70 40 90 Q80 100 110 130 Z" fill="#FFFFFF"/>
+      <path class="region" d="M160 130 Q210 70 260 90 Q220 100 190 130 Z" fill="#FFFFFF"/>
+      <path class="region" d="M138 128 Q110 100 90 105 Q110 115 125 135 Z" fill="#FFFFFF"/>
+      <path d="M92 108 L70 115 L92 118 Z" fill="#D9825C"/>
+      <circle cx="100" cy="110" r="3" fill="#3a3a3a"/>
+      <path class="region" d="M150 156 L140 190 L155 175 L165 195 L172 160 Z" fill="#FFFFFF"/>`},
+    anky:{name:'แองคิโลซอรัส',svg:`
+      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6E0"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#CDE7B0"/>
+      <ellipse class="region" cx="150" cy="175" rx="90" ry="35" fill="#FFFFFF"/>
+      <ellipse class="region" cx="70" cy="170" rx="25" ry="22" fill="#FFFFFF"/>
+      <path class="region" d="M100 150 L112 138 L118 156 Z" fill="#FFFFFF"/>
+      <path class="region" d="M120 145 L132 132 L138 152 Z" fill="#FFFFFF"/>
+      <path class="region" d="M150 148 L162 134 L168 156 Z" fill="#FFFFFF"/>
+      <path class="region" d="M180 152 L192 138 L198 158 Z" fill="#FFFFFF"/>
+      <path class="region" d="M235 175 Q265 178 260 195 Q270 205 255 210 Q245 195 235 190 Z" fill="#FFFFFF"/>
+      <circle cx="60" cy="164" r="4" fill="#3a3a3a"/>
+      <rect class="region" x="90" y="200" width="14" height="22" fill="#FFFFFF"/>
+      <rect class="region" x="190" y="200" width="14" height="22" fill="#FFFFFF"/>`},
+    raptor:{name:'เวโลซีแรพเตอร์',svg:`
+      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6E0"/>
+      <rect class="region" x="0" y="200" width="300" height="60" fill="#CDE7B0"/>
+      <path class="region" d="M110 195 Q100 150 130 130 Q150 100 190 105 Q220 90 235 105 Q225 115 210 115 Q225 125 215 140 Q195 135 185 150 Q195 165 180 178 Q160 190 110 195 Z" fill="#FFFFFF"/>
+      <circle cx="218" cy="103" r="3.5" fill="#3a3a3a"/>
+      <path class="region" d="M150 188 L142 220 L158 220 L162 195 Z" fill="#FFFFFF"/>
+      <path class="region" d="M180 148 Q195 150 190 165 Q178 162 176 152 Z" fill="#FFFFFF"/>`},
+  },
+};
+const colors=['#FF6B6B','#FF9F43','#F5B92E','#2ECC71','#178F6B','#4FB0E8','#5B7CFA','#8B6FC9','#EE5A9B','#8B5A2B','#2A3B36','#FFFFFF'];
+const brushSizes=[10,20,34];
+let selColor=colors[3];
+let curCat='islamic';
+let curPic='masjid';
+let PAINT={tool:'bucket',size:1,drawing:false,lastX:0,lastY:0};
+
+function initColorHub(){
+  document.getElementById('colorEditor').style.display='none';
+  document.getElementById('colorCats').style.display='grid';
+  document.getElementById('colorTitle').textContent='ระบายสี';
+  renderColorCats();
+}
+function renderColorCats(){
+  const wrap=document.getElementById('colorCats');wrap.innerHTML='';
+  colorCategories.forEach(c=>{
+    const b=document.createElement('button');b.className='cat-card';
+    const count=Object.keys(picLib[c.key]).length;
+    b.innerHTML=`<div class="cat-emoji">${c.emoji}</div><div class="cat-name">${c.name}</div><div class="cat-count">${count} รูป</div>`;
+    b.onclick=()=>openCategory(c.key);
+    wrap.appendChild(b);
+  });
+}
+function openCategory(key){
+  curCat=key;
+  curPic=Object.keys(picLib[key])[0];
+  document.getElementById('colorCats').style.display='none';
+  document.getElementById('colorEditor').style.display='block';
+  document.getElementById('colorTitle').textContent=colorCategories.find(c=>c.key===key).name;
+  renderPicTabs();
+  renderPalette();
+  renderToolRow();
+  renderSizeRow();
+  updateToolUI();
+  loadPic();
+}
+function colorBack(){
+  if(document.getElementById('colorEditor').style.display!=='none'){initColorHub();}
+  else{go('home');}
+}
+function renderPicTabs(){
+  const tabs=document.getElementById('picTabs');tabs.innerHTML='';
+  Object.keys(picLib[curCat]).forEach(k=>{
+    const b=document.createElement('button');b.className='pic-tab'+(k===curPic?' sel':'');b.textContent=picLib[curCat][k].name;
+    b.onclick=()=>{curPic=k;document.querySelectorAll('.pic-tab').forEach(t=>t.classList.remove('sel'));b.classList.add('sel');loadPic();};
+    tabs.appendChild(b);
+  });
+}
+function renderPalette(){
+  const pal=document.getElementById('palette');pal.innerHTML='';
+  colors.forEach(c=>{
+    const s=document.createElement('div');s.className='swatch'+(c===selColor?' sel':'');s.style.background=c;
+    if(c==='#FFFFFF')s.style.border='3px solid #ddd';
+    s.onclick=()=>{selColor=c;document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('sel'));s.classList.add('sel');};
+    pal.appendChild(s);
+  });
+}
+function renderToolRow(){
+  const tr=document.getElementById('toolRow');tr.innerHTML='';
+  const tools=[{k:'bucket',ico:'🪣',label:'เทสี'},{k:'brush',ico:'🖌️',label:'แปรง'},{k:'eraser',ico:'🧹',label:'ยางลบ'}];
+  tools.forEach(t=>{
+    const b=document.createElement('button');b.className='tool-btn'+(PAINT.tool===t.k?' sel':'');b.dataset.tool=t.k;
+    b.innerHTML=`<span class="tico">${t.ico}</span><span class="tlabel">${t.label}</span>`;
+    b.onclick=()=>{PAINT.tool=t.k;updateToolUI();};
+    tr.appendChild(b);
+  });
+}
+function renderSizeRow(){
+  const sr=document.getElementById('sizeRow');sr.innerHTML='';
+  [8,14,20].forEach((d,i)=>{
+    const b=document.createElement('button');b.className='size-btn'+(PAINT.size===i?' sel':'');
+    b.innerHTML=`<span class="sdot" style="width:${d}px;height:${d}px"></span>`;
+    b.onclick=()=>{PAINT.size=i;updateToolUI();};
+    sr.appendChild(b);
+  });
+}
+function updateToolUI(){
+  document.querySelectorAll('#toolRow .tool-btn').forEach(b=>b.classList.toggle('sel',b.dataset.tool===PAINT.tool));
+  document.querySelectorAll('#sizeRow .size-btn').forEach((b,i)=>b.classList.toggle('sel',i===PAINT.size));
+  const canvas=document.getElementById('paintCanvas');
+  if(canvas)canvas.style.pointerEvents=PAINT.tool==='bucket'?'none':'auto';
+  const palette=document.getElementById('palette');
+  if(palette)palette.style.display=PAINT.tool==='eraser'?'none':'flex';
+  const sizeRow=document.getElementById('sizeRow');
+  if(sizeRow)sizeRow.style.display=PAINT.tool==='bucket'?'none':'flex';
+}
+function loadPic(){
+  const layer=document.getElementById('svgLayer');
+  layer.innerHTML=`<svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">${picLib[curCat][curPic].svg}</svg>`;
+  layer.querySelectorAll('.region').forEach(r=>{
+    r.setAttribute('stroke','#3a3a3a');r.setAttribute('stroke-width','2');r.setAttribute('stroke-linejoin','round');
+    r.addEventListener('click',()=>r.setAttribute('fill',selColor));
+  });
+  const canvas=document.getElementById('paintCanvas');
+  if(canvas)canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
+}
+function clearColors(){
+  document.querySelectorAll('#svgLayer .region').forEach(r=>r.setAttribute('fill','#FFFFFF'));
+  const canvas=document.getElementById('paintCanvas');
+  if(canvas)canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
+}
+function setupPaintCanvas(){
+  const canvas=document.getElementById('paintCanvas');
+  canvas.width=600;canvas.height=520;
+  const ctx=canvas.getContext('2d');
+  ctx.lineCap='round';ctx.lineJoin='round';
+  function posFromEvent(e){
+    const r=canvas.getBoundingClientRect();
+    return {x:(e.clientX-r.left)*(canvas.width/r.width), y:(e.clientY-r.top)*(canvas.height/r.height)};
+  }
+  function dot(p){
+    ctx.save();
+    ctx.globalCompositeOperation=PAINT.tool==='eraser'?'destination-out':'source-over';
+    ctx.fillStyle=selColor;
+    ctx.beginPath();ctx.arc(p.x,p.y,brushSizes[PAINT.size]/2,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+  function line(x1,y1,x2,y2){
+    ctx.save();
+    ctx.globalCompositeOperation=PAINT.tool==='eraser'?'destination-out':'source-over';
+    ctx.strokeStyle=selColor;ctx.lineWidth=brushSizes[PAINT.size];
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    ctx.restore();
+  }
+  canvas.addEventListener('pointerdown',e=>{
+    if(PAINT.tool==='bucket')return;
+    canvas.setPointerCapture(e.pointerId);
+    PAINT.drawing=true;
+    const p=posFromEvent(e);PAINT.lastX=p.x;PAINT.lastY=p.y;dot(p);
+  });
+  canvas.addEventListener('pointermove',e=>{
+    if(!PAINT.drawing)return;
+    const p=posFromEvent(e);line(PAINT.lastX,PAINT.lastY,p.x,p.y);PAINT.lastX=p.x;PAINT.lastY=p.y;
+  });
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>canvas.addEventListener(ev,()=>{PAINT.drawing=false;}));
+}
+
+/* ============ STORIES ============ */
+const stories=[
+  {id:'adam',scene:'🌳',title:'นบีอาดัม',sub:'มนุษย์คนแรก ผู้เรียนรู้',arabic:'آدَم عليه السلام',
+   body:[
+     'นานมาแล้ว อัลลอฮ์ทรงสร้าง "นบีอาดัม" ขึ้นมาเป็นมนุษย์คนแรกของโลก และทรงเป่าวิญญาณให้ท่านมีชีวิต',
+     'อัลลอฮ์ทรงสอนชื่อของทุกสิ่งให้นบีอาดัม ทั้งชื่อของสัตว์ ต้นไม้ และสรรพสิ่ง ท่านจึงเป็นผู้มีความรู้ และมลาอิกะฮ์ (เทวทูต) ต่างก็ให้เกียรติท่าน',
+     'วันหนึ่งนบีอาดัมทำผิดพลาด แต่ท่านรู้สึกเสียใจและขออภัยต่ออัลลอฮ์ด้วยหัวใจที่จริงใจ อัลลอฮ์ผู้ทรงเมตตาก็ทรงอภัยให้ท่าน',
+   ],
+   lesson:'ทุกคนเคยทำผิดได้ สิ่งสำคัญคือการรู้สำนึกและขออภัย (เตาบะฮ์) และหมั่นเรียนรู้สิ่งใหม่ ๆ เสมอ 🌱'},
+  {id:'nuh',scene:'🚢',title:'นบีนูห์',sub:'เรือใหญ่กับความอดทน',arabic:'نوح عليه السلام',
+   body:[
+     'นบีนูห์เชิญชวนผู้คนให้เคารพภักดีต่ออัลลอฮ์เพียงองค์เดียว ท่านพูดด้วยความอ่อนโยนอยู่นานหลายปี แต่มีคนน้อยคนที่ยอมฟัง',
+     'อัลลอฮ์ทรงสั่งให้นบีนูห์ต่อ "เรือลำใหญ่" ท่านตั้งใจต่อเรืออย่างขยันขันแข็ง แม้บางคนจะหัวเราะเยาะ ท่านก็ไม่ท้อใจ',
+     'เมื่อน้ำท่วมใหญ่มาถึง นบีนูห์พาผู้ศรัทธาและสัตว์ต่าง ๆ อย่างละคู่ขึ้นเรือ อัลลอฮ์ทรงคุ้มครองทุกคนบนเรือให้ปลอดภัย',
+   ],
+   lesson:'ความอดทน (ศ็อบร์) และความเชื่อมั่นในอัลลอฮ์ จะพาเราผ่านเรื่องยากไปได้เสมอ อย่ายอมแพ้เพราะคำเยาะเย้ยของคนอื่น ⛵'},
+  {id:'yunus',scene:'🐋',title:'นบียูนุส',sub:'คำวิงวอนในความมืด',arabic:'يونس عليه السلام',
+   body:[
+     'นบียูนุสออกเดินทางทางเรือ แต่เกิดพายุใหญ่ ท่านตกลงไปในทะเลและถูกปลาตัวมหึมากลืนลงไปในท้อง',
+     'ในความมืดมิดของท้องปลา นบียูนุสไม่สิ้นหวัง ท่านวิงวอนต่ออัลลอฮ์ว่า "ไม่มีพระเจ้าอื่นใดนอกจากพระองค์ มหาบริสุทธิ์ยิ่ง แท้จริงฉันเป็นผู้หนึ่งที่ทำผิด"',
+     'อัลลอฮ์ทรงได้ยินคำวิงวอนของท่าน และทรงช่วยให้ปลาปล่อยท่านขึ้นฝั่งอย่างปลอดภัย',
+   ],
+   lesson:'ไม่ว่าเราจะอยู่ในสถานการณ์มืดมนแค่ไหน การขอดุอาอ์ต่ออัลลอฮ์คือแสงสว่างเสมอ อย่าหมดหวังในความเมตตาของพระองค์ 🤲'},
+  {id:'ibrahim',scene:'🕋',title:'นบีอิบรอฮีม',sub:'ความกล้าและศรัทธา',arabic:'إبراهيم عليه السلام',
+   body:[
+     'ตั้งแต่ยังเด็ก นบีอิบรอฮีมสงสัยว่าทำไมผู้คนจึงกราบไหว้รูปปั้นที่พูดไม่ได้และช่วยอะไรไม่ได้ ท่านเชื่อมั่นว่ามีพระเจ้าที่แท้จริงเพียงองค์เดียว',
+     'ท่านกล้าหาญยืนหยัดในความจริง แม้จะถูกขู่ด้วยไฟ อัลลอฮ์ก็ทรงคุ้มครองท่าน ทรงบัญชาให้ไฟเย็นลงและปลอดภัยสำหรับท่าน',
+     'ต่อมา นบีอิบรอฮีมกับนบีอิสมาอีลผู้เป็นลูกได้ร่วมกันสร้าง "กะอ์บะฮ์" บ้านของอัลลอฮ์ที่มักกะฮ์ ซึ่งมุสลิมทั่วโลกหันไปละหมาดจนถึงทุกวันนี้',
+   ],
+   lesson:'จงกล้ายืนหยัดในสิ่งที่ถูกต้อง และเชื่อมั่นในอัลลอฮ์เพียงองค์เดียว (เตาฮีด) ความศรัทธาที่จริงใจทำให้หัวใจเข้มแข็ง 💪'},
+  {id:'musa',scene:'🌊',title:'นบีมูซา',sub:'ทะเลที่แหวกออก',arabic:'موسى عليه السلام',
+   body:[
+     'เมื่อนบีมูซายังเป็นทารก แม่ของท่านวางท่านลงในตะกร้าลอยไปตามแม่น้ำเพื่อความปลอดภัย และอัลลอฮ์ทรงดลใจให้ครอบครัวของฟาโรห์รับท่านไปเลี้ยงดูในวัง',
+     'เมื่อโตขึ้น อัลลอฮ์ทรงเลือกนบีมูซาเป็นศาสนทูต และประทานปาฏิหาริย์ให้ท่านไปเชิญชวนฟาโรห์ผู้หยิ่งยโสให้ศรัทธา',
+     'เมื่อฟาโรห์ไล่ตามนบีมูซากับผู้ศรัทธ์จนถึงริมทะเล อัลลอฮ์ทรงสั่งให้ท่านฟาดไม้เท้าลงบนน้ำ ทะเลก็แหวกออกเป็นทางเดิน ทุกคนจึงข้ามไปอย่างปลอดภัย',
+   ],
+   lesson:'อัลลอฮ์ทรงคุ้มครองผู้ที่วางใจในพระองค์เสมอ แม้ในยามที่ดูเหมือนไม่มีทางออก พระองค์ก็ทรงเปิดทางให้ได้ 🌟'},
+  {id:'yusuf',scene:'🧥',title:'นบียูซุฟ',sub:'ความฝันและการให้อภัย',arabic:'يوسف عليه السلام',
+   body:[
+     'นบียูซุฟเป็นเด็กที่พ่อ (นบียะอ์กูบ) รักมาก จนพี่ ๆ เกิดความอิจฉา วันหนึ่งพวกพี่พาท่านไปทิ้งไว้ในบ่อน้ำลึก แต่อัลลอฮ์ทรงคุ้มครองท่านไว้เสมอ',
+     'มีกองคาราวานผ่านมาช่วยท่านขึ้นจากบ่อ และพาไปยังเมืองอียิปต์ นบียูซุฟเติบโตเป็นคนซื่อสัตย์และฉลาด อัลลอฮ์ประทานความสามารถให้ท่านทำนายความฝันได้',
+     'ต่อมาท่านได้เป็นผู้ดูแลคลังอาหารของทั้งเมือง ช่วยผู้คนให้รอดพ้นจากความอดอยาก และเมื่อได้พบพี่ ๆ อีกครั้ง ท่านก็ให้อภัยพวกเขาด้วยหัวใจที่งดงาม',
+   ],
+   lesson:'แม้ถูกกลั่นแกล้ง แต่ความซื่อสัตย์ อดทน และการรู้จักให้อภัย จะนำสิ่งดี ๆ กลับมาเสมอ อัลลอฮ์ทรงอยู่เคียงข้างผู้อดทน 💛'},
+  {id:'sulayman',scene:'🐜',title:'นบีสุลัยมาน',sub:'ผู้เข้าใจภาษาสัตว์',arabic:'سليمان عليه السلام',
+   body:[
+     'นบีสุลัยมานเป็นกษัตริย์ผู้ยิ่งใหญ่ที่อัลลอฮ์ประทานความสามารถพิเศษให้ ท่านสามารถเข้าใจภาษาของสัตว์ต่าง ๆ ได้',
+     'วันหนึ่งขณะกองทัพเดินทาง มดตัวน้อยร้องเตือนพวกพ้องให้รีบหลบเข้ารัง นบีสุลัยมานได้ยินก็ยิ้มและขอบคุณอัลลอฮ์ ที่ทำให้ท่านระวังไม่เหยียบมดตัวเล็ก ๆ',
+     'ท่านยังมีนกฮุดฮุดเป็นผู้ส่งข่าว และปกครองบ้านเมืองด้วยความยุติธรรมและปัญญา โดยไม่เคยลืมขอบคุณอัลลอฮ์ในความโปรดปรานทั้งหมด',
+   ],
+   lesson:'อัลลอฮ์ประทานความสามารถให้เราเพื่อทำความดีและเมตตาต่อสรรพสิ่ง จงขอบคุณ (ชุโกร) ในสิ่งที่มี แม้แต่มดตัวเล็กก็มีค่า 🐜'},
+  {id:'dawud',scene:'🛡️',title:'นบีดาวูด',sub:'ตัวเล็กใจกล้า',arabic:'داود عليه السلام',
+   body:[
+     'นบีดาวูดเป็นชายหนุ่มผู้กล้าหาญและศรัทธาต่ออัลลอฮ์ ครั้งหนึ่งมีนักรบร่างยักษ์ชื่อ "ญาลูต" ที่แข็งแรงมากมาข่มเหงผู้คน จนไม่มีใครกล้าออกไปสู้',
+     'นบีดาวูดวางใจในอัลลอฮ์ และด้วยความช่วยเหลือของพระองค์ ท่านก็เอาชนะญาลูตได้ แม้ตัวจะเล็กกว่ามาก ทุกคนต่างประหลาดใจในความกล้าของท่าน',
+     'อัลลอฮ์ยังประทานเสียงอันไพเราะให้ท่าน เมื่อนบีดาวูดสรรเสริญอัลลอฮ์ ภูเขาและฝูงนกก็พร้อมใจกันสรรเสริญไปด้วย',
+   ],
+   lesson:'ความกล้าหาญที่แท้จริงมาจากการวางใจในอัลลอฮ์ ตัวเล็กก็ทำสิ่งยิ่งใหญ่ได้ ถ้ามีศรัทธาและความดีอยู่ในใจ 🌟'},
+  {id:'isa',scene:'🕊️',title:'นบีอีซา',sub:'ปาฏิหาริย์แห่งความเมตตา',arabic:'عيسى عليه السلام',
+   body:[
+     'นบีอีซาประสูติอย่างน่าอัศจรรย์จากท่านหญิงมัรยัม หญิงผู้บริสุทธิ์และศรัทธา โดยพระบัญชาของอัลลอฮ์ ท่านถือกำเนิดมาโดยไม่มีพ่อ',
+     'เมื่อผู้คนสงสัยท่านหญิงมัรยัม อัลลอฮ์ทรงให้ทารกน้อยอีซาพูดขึ้นเพื่อปกป้องแม่ของท่านว่า ท่านเป็นบ่าวของอัลลอฮ์และเป็นนบี ผู้คนต่างอัศจรรย์ใจในปาฏิหาริย์นี้',
+     'เมื่อเติบโตขึ้น อัลลอฮ์ประทานปาฏิหาริย์ให้ท่านรักษาคนป่วยและช่วยเหลือผู้คนมากมาย ซึ่งทั้งหมดเกิดขึ้นได้ด้วยอนุมัติของอัลลอฮ์เท่านั้น',
+   ],
+   lesson:'ปาฏิหาริย์ทุกอย่างมาจากอัลลอฮ์ และเราควรรักและให้เกียรติแม่ของเราเสมอ เหมือนที่นบีอีซาปกป้องแม่ของท่าน 🤍'},
+  {id:'muhammad',scene:'💚',title:'นบีมุฮัมมัด ﷺ',sub:'แบบอย่างแห่งความดีงาม',arabic:'مُحَمَّد ﷺ',
+   body:[
+     'นบีมุฮัมมัด ﷺ คือนบีท่านสุดท้ายที่อัลลอฮ์ทรงส่งมาเป็นแบบอย่างแก่มวลมนุษย์ ตั้งแต่ก่อนเป็นนบี ผู้คนต่างเรียกท่านว่า "อัลอะมีน" ซึ่งแปลว่า "ผู้ซื่อสัตย์ที่ไว้ใจได้"',
+     'ท่านมีหัวใจที่เปี่ยมเมตตา รักเด็ก ๆ อ่อนโยนต่อผู้เฒ่าผู้แก่ และเมตตาแม้กระทั่งสัตว์ ท่านสอนว่าคนที่ดีที่สุด คือคนที่ทำดีต่อผู้อื่นมากที่สุด',
+     'ท่านนำสารของอัลลอฮ์ คืออัลกุรอาน มาสู่มนุษย์ และสอนให้เราภักดีต่ออัลลอฮ์เพียงองค์เดียว มีมารยาทงดงาม และรักกันฉันพี่น้อง',
+   ],
+   lesson:'จงเอาแบบอย่างจากนบีมุฮัมมัด ﷺ — ซื่อสัตย์ อ่อนโยน และเมตตาต่อทุกคน ความดีเล็ก ๆ ทำให้โลกน่าอยู่ขึ้น 💚'},
+];
+const goodKidStories=[
+  {id:'ameen-honest',scene:'💚',title:'อามีนพูดความจริง',sub:'ความกล้าที่จะซื่อสัตย์',
+   body:[
+     'วันหนึ่งอามีนเผลอทำแจกันของคุณแม่แตกตอนวิ่งเล่นในบ้าน หัวใจเต้นแรงเพราะกลัวถูกดุ',
+     'อามีนคิดอยู่นานว่าจะบอกความจริงดีไหม แต่ในที่สุดก็เดินไปหาคุณแม่แล้วสารภาพว่า "หนูทำแจกันแตกครับ หนูขอโทษ"',
+     'คุณแม่กอดอามีนแล้วบอกว่าดีใจที่ลูกกล้าพูดความจริง ซูฮัยล์ที่เกาะอยู่ริมหน้าต่างพยักหน้ายิ้ม บอกว่า "นี่แหละคือความซื่อสัตย์ที่อัลลอฮ์ทรงรัก"',
+   ],
+   lesson:'การพูดความจริงแม้จะกลัว คือความกล้าหาญที่แท้จริง อัลลอฮ์ทรงรักผู้ที่ซื่อสัตย์เสมอ 💚'},
+  {id:'alleen-share',scene:'🍪',title:'อัลลีนแบ่งปันขนม',sub:'ให้แล้วไม่ขาด มีแต่เพิ่มความสุข',
+   body:[
+     'อัลลีนได้ขนมคุกกี้ห่อโปรดมาจากคุณยาย เธอดีใจมากจนอยากกินคนเดียวให้หมดทันที',
+     'แต่พอเห็นเพื่อนข้างบ้านนั่งเล่นอยู่คนเดียวโดยไม่มีขนมเลย อัลลีนก็นึกถึงคำที่ซูฮัยล์เคยบอกว่า "การให้ทำให้หัวใจอิ่มยิ่งกว่าการกิน"',
+     'อัลลีนเดินไปแบ่งคุกกี้ให้เพื่อนครึ่งหนึ่ง ทั้งสองคนนั่งกินด้วยกันอย่างมีความสุข และขนมก็อร่อยกว่าเดิมเสียอีก',
+   ],
+   lesson:'การแบ่งปันสิ่งที่เรามี แม้เพียงเล็กน้อย ก็ทำให้ทั้งเราและคนรอบข้างมีความสุข อัลลอฮ์ทรงรักผู้ที่ให้ 🍪'},
+  {id:'moomoo-kind',scene:'🐦',title:'มูมูกับนกตัวน้อย',sub:'ความเมตตาต่อสัตว์ตัวเล็ก',
+   body:[
+     'มูมูเห็นลูกนกตัวเล็กตกลงมาจากรังใต้ต้นไม้ในสวน มันยังบินไม่เป็นและตัวสั่นด้วยความกลัว',
+     'ตามสัญชาตญาณแมว มูมูอยากจะจับเล่นเสียเหลือเกิน แต่มันหยุดคิดถึงคำที่ซูฮัยล์เคยบอกว่า "สัตว์ทุกตัวก็มีหัวใจ ต้องเมตตาเหมือนที่เรามีน้ำใจต่อกัน"',
+     'มูมูเลยแค่นั่งเฝ้าอยู่ข้าง ๆ อย่างอ่อนโยน จนอามีนกับอัลลีนมาช่วยกันเอาลูกนกกลับขึ้นรังอย่างปลอดภัย',
+   ],
+   lesson:'ความเมตตาต่อสัตว์เล็ก ๆ ก็เป็นความดีที่อัลลอฮ์ทรงโปรดปราน แม้แต่สัตว์ก็ยังรู้จักมีน้ำใจได้ 🐾'},
+  {id:'ameen-fajr',scene:'🌅',title:'อามีนตื่นละหมาดฟัจร์',sub:'เริ่มต้นวันใหม่ด้วยความดี',
+   body:[
+     'เสียงอะซานฟัจร์ดังขึ้นตอนฟ้ายังมืด อามีนง่วงมากจนอยากนอนต่อ แต่ซูฮัยล์ที่เกาะอยู่ริมหน้าต่างเบา ๆ เรียกว่า "ตื่นเถอะอามีน การละหมาดฟัจร์ดีกว่าการนอนหลับนะ"',
+     'อามีนลุกขึ้นล้างหน้าล้างมือ แล้วละหมาดฟัจร์พร้อมคุณพ่ออย่างตั้งใจ แม้จะยังง่วงอยู่บ้าง',
+     'หลังละหมาดเสร็จ อามีนรู้สึกสดชื่นและภูมิใจในตัวเองที่ตื่นมาทำในสิ่งที่ถูกต้อง',
+   ],
+   lesson:'การละหมาดตรงเวลาแม้จะยาก คือความรักที่เรามีต่ออัลลอฮ์ ยิ่งฝึกบ่อย ๆ ก็จะยิ่งง่ายขึ้น 🌅'},
+  {id:'alleen-sorry',scene:'🤝',title:'อัลลีนขอโทษเพื่อน',sub:'หัวใจที่กล้าขอโทษคือหัวใจที่กล้าหาญ',
+   body:[
+     'ระหว่างเล่นด้วยกัน อัลลีนพูดแรงใส่เพื่อนโดยไม่ตั้งใจ ทำให้เพื่อนเสียใจจนน้ำตาคลอ',
+     'อัลลีนรู้สึกผิดมาก จึงเดินไปหาเพื่อนแล้วพูดว่า "ขอโทษนะ หนูไม่ได้ตั้งใจจะทำให้เธอเสียใจเลย"',
+     'เพื่อนยิ้มและให้อภัย ทั้งสองกลับมาเล่นด้วยกันอย่างสนุกสนานเหมือนเดิม',
+   ],
+   lesson:'การขอโทษเมื่อทำผิด และการให้อภัยเมื่อมีคนขอโทษ ทำให้มิตรภาพแข็งแรงขึ้นเสมอ 🤍'},
+  {id:'tidy-toys',scene:'🧸',title:'เก็บของเล่นให้เรียบร้อย',sub:'ความสะอาดเป็นส่วนหนึ่งของศรัทธา',
+   body:[
+     'หลังเล่นกันสนุกทั้งบ่าย ห้องของอามีนกับอัลลีนก็เต็มไปด้วยของเล่นกระจัดกระจาย',
+     'ซูฮัยล์บินมาเกาะที่ขอบชั้นแล้วพูดยิ้ม ๆ ว่า "ท่านนบีเคยสอนไว้ว่าความสะอาดเป็นส่วนหนึ่งของศรัทธานะ"',
+     'ทั้งสองคนช่วยกันเก็บของเล่นใส่ตะกร้าจนห้องเรียบร้อย แล้วรู้สึกสบายใจกว่าตอนที่ห้องรกมากเลย',
+   ],
+   lesson:'การรักษาความสะอาดและเก็บของให้เป็นระเบียบ คือความดีเล็ก ๆ ที่ทำได้ทุกวัน 🧸'},
+  {id:'ameen-elder',scene:'👵',title:'อามีนช่วยคุณยาย',sub:'ให้เกียรติผู้ใหญ่ในบ้าน',
+   body:[
+     'คุณยายเดินถือถุงกับข้าวหนัก ๆ กลับจากตลาด อามีนเห็นแล้วรีบวิ่งไปช่วยถือทันที',
+     '"ขอบคุณนะลูก" คุณยายยิ้มอย่างมีความสุข อามีนเดินเคียงข้างคุณยายกลับบ้านอย่างภาคภูมิใจ',
+     'ที่บ้าน ซูฮัยล์บอกอามีนว่า "การให้เกียรติและช่วยเหลือผู้ใหญ่ เป็นสิ่งที่อัลลอฮ์ทรงพอพระทัยมากนะ"',
+   ],
+   lesson:'การเคารพและช่วยเหลือผู้ใหญ่ ไม่ว่าจะเป็นคุณตาคุณยายหรือพ่อแม่ คือมารยาทงามที่ควรทำเสมอ 👵'},
+  {id:'dua-sleep',scene:'🌙',title:'ขอบคุณอัลลอฮ์ก่อนนอน',sub:'ปิดวันด้วยหัวใจที่กตัญญู',
+   body:[
+     'ก่อนเข้านอนทุกคืน ซูฮัยล์จะชวนอามีนกับอัลลีนนั่งคุยกันว่าวันนี้มีเรื่องดี ๆ อะไรเกิดขึ้นบ้าง',
+     'คืนนี้อามีนเล่าว่าได้ช่วยคุณยาย ส่วนอัลลีนเล่าว่าได้แบ่งขนมให้เพื่อน ทั้งคู่ยิ้มอย่างมีความสุข',
+     'ก่อนหลับตา ทั้งสองคนกล่าวดุอาอ์ขอบคุณอัลลอฮ์ที่ประทานวันดี ๆ ให้ แล้วหลับฝันดีด้วยหัวใจที่อิ่มเอม',
+   ],
+   lesson:'การขอบคุณอัลลอฮ์ (ชุโกร) ทุกคืนก่อนนอน ทำให้เรามองเห็นความดีที่เกิดขึ้นในแต่ละวัน 🌙'},
+];
+const storyCategories=[
+  {key:'prophets',name:'เรื่องเล่านบี',emoji:'📖'},
+  {key:'goodkid',name:'นิทานเด็กดี',emoji:'🌟'},
+];
+const storyLib={prophets:stories,goodkid:goodKidStories};
+let curStoryCat='prophets';
+
+function initStoryHub(){
+  document.getElementById('storyListWrap').style.display='none';
+  document.getElementById('storyCats').style.display='grid';
+  document.getElementById('storyTitle').textContent='นิทาน';
+  renderStoryCats();
+}
+function renderStoryCats(){
+  const wrap=document.getElementById('storyCats');wrap.innerHTML='';
+  storyCategories.forEach(c=>{
+    const b=document.createElement('button');b.className='cat-card';
+    const count=storyLib[c.key].length;
+    b.innerHTML=`<div class="cat-emoji">${c.emoji}</div><div class="cat-name">${c.name}</div><div class="cat-count">${count} เรื่อง</div>`;
+    b.onclick=()=>openStoryCategory(c.key);
+    wrap.appendChild(b);
+  });
+}
+function openStoryCategory(key){
+  curStoryCat=key;
+  document.getElementById('storyCats').style.display='none';
+  document.getElementById('storyListWrap').style.display='block';
+  document.getElementById('storyTitle').textContent=storyCategories.find(c=>c.key===key).name;
+  const list=document.getElementById('storyList');list.innerHTML='';
+  storyLib[key].forEach(s=>{
+    const b=document.createElement('button');b.className='story-card';
+    b.innerHTML=`<div class="scene">${s.scene}</div><div><div class="st">${s.title}</div><div class="ss">${s.sub}</div></div>`;
+    b.onclick=()=>openStory(key,s.id);
+    list.appendChild(b);
+  });
+}
+function storyBack(){
+  if(document.getElementById('storyListWrap').style.display!=='none'){initStoryHub();}
+  else{go('home');}
+}
+function openStory(cat,id){
+  const s=storyLib[cat].find(x=>x.id===id);
+  document.getElementById('storyReader').innerHTML=`
+    <div class="hero">${s.scene}</div>
+    <h3>${s.title}</h3>
+    ${s.arabic?`<div class="arabic">${s.arabic}</div>`:''}
+    ${s.body.map(p=>`<p>${p}</p>`).join('')}
+    <div class="lesson"><div class="lt">💡 บทเรียนสำหรับหนู</div><p>${s.lesson}</p></div>`;
+  go('story');
+}
+
+/* ============ Hook up hub inits ============ */
+const _go=go;
+go=function(id){
+  _go(id);
+  if(id==='colorhub')initColorHub();
+  if(id==='storyhub')initStoryHub();
+  if(window.lucide)lucide.createIcons();
+};
+
+/* init */
+initStoryHub();
+setupPaintCanvas();
+if(window.lucide)lucide.createIcons();
+</script>
+</body>
+</html>
