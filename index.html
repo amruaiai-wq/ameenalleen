@@ -75,13 +75,14 @@
     backdrop-filter:blur(6px);
   }
   .back-btn{
-    border:1px solid var(--line);background:var(--white);color:var(--green-dark);
-    width:46px;height:46px;border-radius:var(--radius-sm);font-size:22px;
-    box-shadow:var(--shadow-sm);cursor:pointer;flex:0 0 auto;
-    display:flex;align-items:center;justify-content:center;font-weight:700;
+    border:none;background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;
+    height:42px;padding:0 16px 0 12px;border-radius:var(--radius-pill);font-size:15px;
+    box-shadow:var(--shadow-green);cursor:pointer;flex:0 0 auto;
+    display:flex;align-items:center;gap:3px;font-weight:700;font-family:inherit;
     transition:transform .15s var(--ease-out), box-shadow .15s;
   }
-  .back-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);}
+  .back-btn svg.lucide{stroke-width:2.6;width:20px;height:20px;}
+  .back-btn:hover{transform:translateY(-1px) scale(1.03);box-shadow:var(--shadow-lg);}
   .back-btn:active{transform:scale(.9);box-shadow:var(--shadow-press);}
   .topbar h2{font-size:20px;margin:0;font-weight:700;color:var(--green-dark);letter-spacing:.2px;}
   .topbar .spacer{flex:1;}
@@ -232,6 +233,9 @@
   .cat-emoji{font-size:44px;}
   .cat-name{font-weight:700;font-size:17px;margin-top:9px;}
   .cat-count{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+  .color-empty{text-align:center;padding:40px 16px;background:linear-gradient(180deg,var(--cream-2),var(--white));border-radius:var(--radius-lg);border:1px solid var(--line);box-shadow:var(--shadow-sm);}
+  .color-empty-emoji{font-size:56px;}
+  .color-empty p{font-family:'Sarabun',sans-serif;color:var(--ink-soft);font-size:15px;line-height:1.7;margin:10px 0 0;}
 
   .color-editor{margin-top:2px;}
   .color-stage{background:var(--white);border-radius:var(--radius-lg);padding:12px;box-shadow:var(--shadow-md);border:1px solid var(--line);position:relative;}
@@ -347,7 +351,6 @@
   svg.lucide{width:24px;height:24px;stroke-width:2.1;vertical-align:middle;}
   .hub-item .ico{color:var(--green-dark);}
   .ico svg.lucide{width:34px;height:34px;}
-  .back-btn svg.lucide{width:24px;height:24px;}
   .hero-wrap{width:100%;max-width:330px;margin:4px auto 0;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 14px 20px rgba(63,140,119,.18));}
   .hero-wrap svg{width:100%;height:auto;display:block;}
   .hero-duo{display:flex;align-items:flex-end;justify-content:center;}
@@ -396,7 +399,7 @@
       <button class="card" onclick="go('colorhub')">
         <div class="tint" style="background:rgba(233,169,138,.30)"><img src="public/Moomoo_Sprites/02_Expressions/13_delighted.png" alt="มูมู"></div>
         <div class="label">ระบายสี</div>
-        <div class="sub">4 หมวด กว่า 29 ภาพ</div>
+        <div class="sub">4 หมวด • รูปใหม่เร็ว ๆ นี้</div>
       </button>
       <button class="card big" onclick="go('storyhub')">
         <div class="tint" style="background:rgba(239,206,134,.42)"><img src="public/Alleen_Sprites/02_Expressions/07_happy.png" alt="อัลลีน"></div>
@@ -412,7 +415,7 @@
 
   <!-- ===== IQ HUB ===== -->
   <section id="iqhub" class="screen">
-    <div class="topbar"><button class="back-btn" onclick="go('home')"><i data-lucide="chevron-left"></i></button><h2>ฝึกไอคิว</h2></div>
+    <div class="topbar"><button class="back-btn" onclick="go('home')"><i data-lucide="chevron-left"></i><span>กลับ</span></button><h2>ฝึกไอคิว</h2></div>
     <div class="hub-grid">
       <button class="hub-item" onclick="startGame('memory')"><div class="ico"><i data-lucide="layout-grid"></i></div><div class="t">จับคู่ความจำ</div><div class="d">พลิกการ์ดหาคู่</div></button>
       <button class="hub-item" onclick="startGame('odd')"><div class="ico"><i data-lucide="search"></i></div><div class="t">หาสิ่งที่ต่าง</div><div class="d">อันไหนไม่เหมือน</div></button>
@@ -430,7 +433,7 @@
   <!-- ===== GAME SCREEN ===== -->
   <section id="game" class="screen">
     <div class="topbar">
-      <button class="back-btn" onclick="go('iqhub')"><i data-lucide="chevron-left"></i></button>
+      <button class="back-btn" onclick="go('iqhub')"><i data-lucide="chevron-left"></i><span>กลับ</span></button>
       <h2 id="gameTitle"></h2>
       <div class="spacer"></div>
       <div class="score-pill">⭐ <span id="gameScore">0</span></div>
@@ -442,7 +445,7 @@
 
   <!-- ===== COLOR HUB ===== -->
   <section id="colorhub" class="screen">
-    <div class="topbar"><button class="back-btn" onclick="colorBack()"><i data-lucide="chevron-left"></i></button><h2 id="colorTitle">ระบายสี</h2></div>
+    <div class="topbar"><button class="back-btn" onclick="colorBack()"><i data-lucide="chevron-left"></i><span>กลับ</span></button><h2 id="colorTitle">ระบายสี</h2></div>
     <div class="cat-grid" id="colorCats"></div>
     <div class="color-editor" id="colorEditor" style="display:none">
       <div class="pic-tabs" id="picTabs"></div>
@@ -453,16 +456,20 @@
       <div class="tool-row" id="toolRow"></div>
       <div class="size-row" id="sizeRow"></div>
       <div class="palette" id="palette"></div>
-      <div class="color-actions">
+      <div class="color-actions" id="colorActions">
         <button class="ghost-btn" onclick="clearColors()">🧽 เริ่มใหม่</button>
         <button class="primary-btn" style="margin-top:0" onclick="celebrate()">✅ เสร็จแล้ว!</button>
+      </div>
+      <div class="color-empty" id="colorEmpty" style="display:none">
+        <div class="color-empty-emoji">🎨</div>
+        <p>ยังไม่มีรูปในหมวดนี้<br>เร็ว ๆ นี้!</p>
       </div>
     </div>
   </section>
 
   <!-- ===== STORY HUB ===== -->
   <section id="storyhub" class="screen">
-    <div class="topbar"><button class="back-btn" onclick="storyBack()"><i data-lucide="chevron-left"></i></button><h2 id="storyTitle">นิทาน</h2></div>
+    <div class="topbar"><button class="back-btn" onclick="storyBack()"><i data-lucide="chevron-left"></i><span>กลับ</span></button><h2 id="storyTitle">นิทาน</h2></div>
     <div class="cat-grid" id="storyCats"></div>
     <div id="storyListWrap" style="display:none">
       <div id="storyList"></div>
@@ -486,7 +493,7 @@
     </div>
     <div id="storySlideBody"></div>
     <div class="story-modal-nav">
-      <button class="story-nav-btn" id="storyPrevBtn" onclick="storyPrev()"><i data-lucide="chevron-left"></i></button>
+      <button class="story-nav-btn" id="storyPrevBtn" onclick="storyPrev()"><i data-lucide="chevron-left"></i><span>กลับ</span></button>
       <div class="story-dots progress-dots" id="storyModalDots"></div>
       <button class="story-nav-btn primary" id="storyNextBtn" onclick="storyNext()"><i data-lucide="chevron-right"></i></button>
     </div>
@@ -993,360 +1000,16 @@ const colorCategories=[
   {key:'dino',name:'ไดโนเสาร์',emoji:'🦕'},
 ];
 const picLib = {
-  islamic:{
-    masjid:{name:'มัสยิด',svg:`
-      <rect class="region" x="0" y="0" width="300" height="230" fill="#EAF6FF"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#EFE6CF"/>
-      <rect class="region" x="70" y="120" width="160" height="90" fill="#FFFFFF"/>
-      <path class="region" d="M70 120 Q150 40 230 120 Z" fill="#FFFFFF"/>
-      <circle class="region" cx="150" cy="60" r="8" fill="#FFFFFF"/>
-      <path d="M150 44 a8 8 0 1 0 3 15 a6 6 0 1 1 -3 -15" class="region" fill="#FFFFFF"/>
-      <rect class="region" x="40" y="90" width="22" height="120" fill="#FFFFFF"/>
-      <path class="region" d="M40 90 Q51 60 62 90 Z" fill="#FFFFFF"/>
-      <rect class="region" x="238" y="90" width="22" height="120" fill="#FFFFFF"/>
-      <path class="region" d="M238 90 Q249 60 260 90 Z" fill="#FFFFFF"/>
-      <path class="region" d="M130 210 v-40 a20 20 0 0 1 40 0 v40 Z" fill="#FFFFFF"/>
-      <rect class="region" x="90" y="150" width="26" height="34" rx="13" fill="#FFFFFF"/>
-      <rect class="region" x="184" y="150" width="26" height="34" rx="13" fill="#FFFFFF"/>`},
-    lantern:{name:'โคมไฟ',svg:`
-      <rect class="region" x="0" y="0" width="300" height="260" fill="#FFF7E8"/>
-      <rect class="region" x="140" y="10" width="20" height="18" fill="#FFFFFF"/>
-      <path class="region" d="M100 50 h100 l-14 -22 h-72 Z" fill="#FFFFFF"/>
-      <rect class="region" x="96" y="50" width="108" height="12" fill="#FFFFFF"/>
-      <path class="region" d="M104 62 h92 v120 h-92 Z" fill="#FFFFFF"/>
-      <path class="region" d="M120 78 h60 v88 h-60 Z" fill="#FFF3CF"/>
-      <circle class="region" cx="150" cy="122" r="20" fill="#FFFFFF"/>
-      <rect class="region" x="96" y="182" width="108" height="14" fill="#FFFFFF"/>
-      <path class="region" d="M112 196 h76 l-10 26 h-56 Z" fill="#FFFFFF"/>
-      <rect class="region" x="140" y="222" width="20" height="16" fill="#FFFFFF"/>`},
-    starmoon:{name:'ดาวและจันทร์',svg:`
-      <rect class="region" x="0" y="0" width="300" height="260" fill="#EAF1FF"/>
-      <path class="region" d="M180 40 a70 70 0 1 0 20 130 a55 55 0 1 1 -20 -130" fill="#FFFFFF"/>
-      <path class="region" d="M95 150 l10 26 h28 l-22 18 l8 27 l-24 -16 l-24 16 l8 -27 l-22 -18 h28 Z" fill="#FFFFFF"/>
-      <path class="region" d="M60 60 l5 12 h13 l-10 9 l4 13 l-12 -8 l-12 8 l4 -13 l-10 -9 h13 Z" fill="#FFFFFF"/>
-      <path class="region" d="M235 180 l5 12 h13 l-10 9 l4 13 l-12 -8 l-12 8 l4 -13 l-10 -9 h13 Z" fill="#FFFFFF"/>
-      <circle class="region" cx="40" cy="200" r="6" fill="#FFFFFF"/>
-      <circle class="region" cx="260" cy="60" r="6" fill="#FFFFFF"/>`},
-    palm:{name:'ต้นอินทผลัม',svg:`
-      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6FF"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#F1E4C5"/>
-      <circle class="region" cx="255" cy="45" r="26" fill="#FFFFFF"/>
-      <rect class="region" x="138" y="120" width="24" height="95" rx="6" fill="#FFFFFF"/>
-      <path class="region" d="M150 120 Q90 90 60 110 Q100 100 150 130 Z" fill="#FFFFFF"/>
-      <path class="region" d="M150 120 Q210 90 240 110 Q200 100 150 130 Z" fill="#FFFFFF"/>
-      <path class="region" d="M150 118 Q100 70 80 50 Q120 80 150 128 Z" fill="#FFFFFF"/>
-      <path class="region" d="M150 118 Q200 70 220 50 Q180 80 150 128 Z" fill="#FFFFFF"/>
-      <path class="region" d="M150 116 Q150 60 150 44 Q160 80 150 128 Z" fill="#FFFFFF"/>
-      <circle class="region" cx="140" cy="132" r="6" fill="#FFFFFF"/>
-      <circle class="region" cx="158" cy="136" r="6" fill="#FFFFFF"/>
-      <circle class="region" cx="150" cy="144" r="6" fill="#FFFFFF"/>`},
-    flower:{name:'ดอกไม้',svg:`
-      <rect class="region" x="0" y="0" width="300" height="260" fill="#FFF3F7"/>
-      <ellipse class="region" cx="150" cy="70" rx="26" ry="34" fill="#FFFFFF"/>
-      <ellipse class="region" cx="196" cy="105" rx="26" ry="34" fill="#FFFFFF" transform="rotate(72 196 105)"/>
-      <ellipse class="region" cx="178" cy="160" rx="26" ry="34" fill="#FFFFFF" transform="rotate(144 178 160)"/>
-      <ellipse class="region" cx="122" cy="160" rx="26" ry="34" fill="#FFFFFF" transform="rotate(216 122 160)"/>
-      <ellipse class="region" cx="104" cy="105" rx="26" ry="34" fill="#FFFFFF" transform="rotate(288 104 105)"/>
-      <circle class="region" cx="150" cy="118" r="24" fill="#FFFFFF"/>
-      <rect class="region" x="144" y="140" width="12" height="90" fill="#FFFFFF"/>
-      <path class="region" d="M150 190 Q110 180 96 205 Q140 205 150 210 Z" fill="#FFFFFF"/>`},
-    quran:{name:'อัลกุรอาน',svg:`
-      <rect class="region" x="0" y="0" width="300" height="260" fill="#F3F7EA"/>
-      <rect class="region" x="45" y="205" width="210" height="18" rx="4" fill="#FFFFFF"/>
-      <path class="region" d="M50 75 Q150 60 150 75 L150 195 Q150 180 50 195 Z" fill="#FFFFFF"/>
-      <path class="region" d="M250 75 Q150 60 150 75 L150 195 Q150 180 250 195 Z" fill="#FFFFFF"/>
-      <line x1="65" y1="100" x2="130" y2="94" stroke="#3a3a3a" stroke-width="2"/>
-      <line x1="65" y1="118" x2="130" y2="112" stroke="#3a3a3a" stroke-width="2"/>
-      <line x1="65" y1="136" x2="130" y2="130" stroke="#3a3a3a" stroke-width="2"/>
-      <line x1="170" y1="94" x2="235" y2="100" stroke="#3a3a3a" stroke-width="2"/>
-      <line x1="170" y1="112" x2="235" y2="118" stroke="#3a3a3a" stroke-width="2"/>
-      <line x1="170" y1="130" x2="235" y2="136" stroke="#3a3a3a" stroke-width="2"/>
-      <path class="region" d="M140 55 L160 55 L156 90 L150 82 L144 90 Z" fill="#FFFFFF"/>`},
-    tasbih:{name:'ลูกประคำ',svg:`
-      <rect class="region" x="0" y="0" width="300" height="260" fill="#FFF7EE"/>
-      <circle class="region" cx="225" cy="130" r="11" fill="#FFFFFF"/>
-      <circle class="region" cx="217.5" cy="162.6" r="11" fill="#FFFFFF"/>
-      <circle class="region" cx="196.8" cy="188.6" r="11" fill="#FFFFFF"/>
-      <circle class="region" cx="166.7" cy="203.1" r="15" fill="#FFFFFF"/>
-      <circle class="region" cx="133.3" cy="203.1" r="11" fill="#FFFFFF"/>
-      <circle class="region" cx="103.2" cy="188.6" r="11" fill="#FFFFFF"/>
-      <circle class="region" cx="82.5" cy="162.6" r="11" fill="#FFFFFF"/>
-      <circle class="region" cx="75" cy="130" r="11" fill="#FFFFFF"/>
-      <circle class="region" cx="82.5" cy="97.4" r="11" fill="#FFFFFF"/>
-      <circle class="region" cx="103.2" cy="71.4" r="11" fill="#FFFFFF"/>
-      <circle class="region" cx="133.3" cy="56.9" r="11" fill="#FFFFFF"/>
-      <circle class="region" cx="166.7" cy="56.9" r="11" fill="#FFFFFF"/>
-      <circle class="region" cx="196.8" cy="71.4" r="11" fill="#FFFFFF"/>
-      <circle class="region" cx="217.5" cy="97.4" r="11" fill="#FFFFFF"/>
-      <line x1="166.7" y1="218" x2="166.7" y2="240" stroke="#3a3a3a" stroke-width="2"/>
-      <path class="region" d="M156.7 240 L176.7 240 L166.7 262 Z" fill="#FFFFFF"/>`},
-    camel:{name:'อูฐ',svg:`
-      <rect class="region" x="0" y="0" width="300" height="210" fill="#FFF6E5"/>
-      <rect class="region" x="0" y="210" width="300" height="50" fill="#F0DDB0"/>
-      <circle class="region" cx="255" cy="55" r="24" fill="#FFFFFF"/>
-      <path class="region" d="M60 210 Q60 150 90 140 Q100 110 130 130 Q140 100 160 125 Q185 115 190 150 Q220 155 220 210 Z" fill="#FFFFFF"/>
-      <path class="region" d="M190 150 Q210 110 230 130 Q235 150 220 165 Z" fill="#FFFFFF"/>
-      <ellipse class="region" cx="235" cy="120" rx="16" ry="13" fill="#FFFFFF"/>
-      <rect class="region" x="75" y="205" width="10" height="35" fill="#FFFFFF"/>
-      <rect class="region" x="105" y="205" width="10" height="35" fill="#FFFFFF"/>
-      <rect class="region" x="165" y="205" width="10" height="35" fill="#FFFFFF"/>
-      <rect class="region" x="195" y="205" width="10" height="35" fill="#FFFFFF"/>
-      <path class="region" d="M55 195 Q40 190 45 210 Q55 215 60 205 Z" fill="#FFFFFF"/>`},
-  },
-  cars:{
-    sedan:{name:'รถเก๋ง',svg:`
-      <rect class="region" x="0" y="0" width="300" height="190" fill="#EAF6FF"/>
-      <rect class="region" x="0" y="190" width="300" height="70" fill="#D8D8D8"/>
-      <rect x="0" y="222" width="300" height="6" fill="#FFFFFF" opacity=".6"/>
-      <path class="region" d="M40 190 Q40 165 65 160 L95 130 Q115 115 150 115 Q185 115 205 130 L235 160 Q260 165 260 190 Z" fill="#FFFFFF"/>
-      <rect class="region" x="108" y="128" width="34" height="30" rx="4" fill="#FFF7E0"/>
-      <rect class="region" x="150" y="128" width="34" height="30" rx="4" fill="#FFF7E0"/>
-      <circle class="region" cx="90" cy="192" r="20" fill="#FFFFFF"/>
-      <circle class="region" cx="210" cy="192" r="20" fill="#FFFFFF"/>
-      <circle cx="90" cy="192" r="8" fill="#EAF6FF"/>
-      <circle cx="210" cy="192" r="8" fill="#EAF6FF"/>`},
-    truck:{name:'รถบรรทุก',svg:`
-      <rect class="region" x="0" y="0" width="300" height="190" fill="#EAF6FF"/>
-      <rect class="region" x="0" y="190" width="300" height="70" fill="#D8D8D8"/>
-      <rect x="0" y="222" width="300" height="6" fill="#FFFFFF" opacity=".6"/>
-      <path class="region" d="M30 190 L30 150 Q30 135 45 135 L95 135 Q110 135 110 150 L110 190 Z" fill="#FFFFFF"/>
-      <rect class="region" x="55" y="145" width="30" height="26" rx="3" fill="#FFF7E0"/>
-      <rect class="region" x="110" y="160" width="140" height="30" fill="#FFFFFF"/>
-      <rect class="region" x="120" y="140" width="24" height="24" fill="#FFFFFF"/>
-      <rect class="region" x="150" y="145" width="20" height="19" fill="#FFFFFF"/>
-      <circle class="region" cx="75" cy="192" r="20" fill="#FFFFFF"/>
-      <circle class="region" cx="215" cy="192" r="20" fill="#FFFFFF"/>
-      <circle cx="75" cy="192" r="8" fill="#EAF6FF"/>
-      <circle cx="215" cy="192" r="8" fill="#EAF6FF"/>`},
-    bus:{name:'รถบัส',svg:`
-      <rect class="region" x="0" y="0" width="300" height="190" fill="#EAF6FF"/>
-      <rect class="region" x="0" y="190" width="300" height="70" fill="#D8D8D8"/>
-      <rect x="0" y="222" width="300" height="6" fill="#FFFFFF" opacity=".6"/>
-      <rect class="region" x="30" y="120" width="220" height="70" rx="14" fill="#FFFFFF"/>
-      <rect class="region" x="45" y="135" width="30" height="26" rx="3" fill="#FFF7E0"/>
-      <rect class="region" x="85" y="135" width="30" height="26" rx="3" fill="#FFF7E0"/>
-      <rect class="region" x="125" y="135" width="30" height="26" rx="3" fill="#FFF7E0"/>
-      <rect class="region" x="165" y="135" width="30" height="26" rx="3" fill="#FFF7E0"/>
-      <rect class="region" x="205" y="135" width="30" height="26" rx="3" fill="#FFF7E0"/>
-      <circle class="region" cx="80" cy="192" r="20" fill="#FFFFFF"/>
-      <circle class="region" cx="200" cy="192" r="20" fill="#FFFFFF"/>
-      <circle cx="80" cy="192" r="8" fill="#EAF6FF"/>
-      <circle cx="200" cy="192" r="8" fill="#EAF6FF"/>`},
-    racecar:{name:'รถแข่ง',svg:`
-      <rect class="region" x="0" y="0" width="300" height="190" fill="#EAF6FF"/>
-      <rect class="region" x="0" y="190" width="300" height="70" fill="#D8D8D8"/>
-      <rect x="0" y="222" width="300" height="6" fill="#FFFFFF" opacity=".6"/>
-      <path class="region" d="M35 185 Q40 165 70 160 L110 140 Q150 130 190 140 L230 160 Q260 165 265 185 Q200 195 150 195 Q100 195 35 185 Z" fill="#FFFFFF"/>
-      <path class="region" d="M120 142 Q150 132 180 142 L175 158 L125 158 Z" fill="#FFF7E0"/>
-      <rect class="region" x="30" y="132" width="70" height="12" rx="3" fill="#FFFFFF"/>
-      <circle class="region" cx="85" cy="192" r="22" fill="#FFFFFF"/>
-      <circle class="region" cx="215" cy="192" r="22" fill="#FFFFFF"/>
-      <circle cx="85" cy="192" r="9" fill="#EAF6FF"/>
-      <circle cx="215" cy="192" r="9" fill="#EAF6FF"/>`},
-    firetruck:{name:'รถดับเพลิง',svg:`
-      <rect class="region" x="0" y="0" width="300" height="190" fill="#EAF6FF"/>
-      <rect class="region" x="0" y="190" width="300" height="70" fill="#D8D8D8"/>
-      <rect x="0" y="222" width="300" height="6" fill="#FFFFFF" opacity=".6"/>
-      <path class="region" d="M30 190 L30 145 Q30 130 45 130 L90 130 Q105 130 105 145 L105 190 Z" fill="#FFFFFF"/>
-      <rect class="region" x="50" y="140" width="30" height="24" rx="3" fill="#FFF7E0"/>
-      <rect class="region" x="105" y="150" width="140" height="40" fill="#FFFFFF"/>
-      <rect class="region" x="115" y="120" width="120" height="14" rx="4" fill="#FFFFFF"/>
-      <line x1="120" y1="120" x2="120" y2="134" stroke="#3a3a3a" stroke-width="2"/>
-      <line x1="140" y1="120" x2="140" y2="134" stroke="#3a3a3a" stroke-width="2"/>
-      <line x1="160" y1="120" x2="160" y2="134" stroke="#3a3a3a" stroke-width="2"/>
-      <line x1="180" y1="120" x2="180" y2="134" stroke="#3a3a3a" stroke-width="2"/>
-      <line x1="200" y1="120" x2="200" y2="134" stroke="#3a3a3a" stroke-width="2"/>
-      <line x1="220" y1="120" x2="220" y2="134" stroke="#3a3a3a" stroke-width="2"/>
-      <circle class="region" cx="75" cy="192" r="20" fill="#FFFFFF"/>
-      <circle class="region" cx="205" cy="192" r="20" fill="#FFFFFF"/>
-      <circle cx="75" cy="192" r="8" fill="#EAF6FF"/>
-      <circle cx="205" cy="192" r="8" fill="#EAF6FF"/>
-      <circle class="region" cx="220" cy="140" r="10" fill="#FFFFFF"/>`},
-    digger:{name:'รถขุด',svg:`
-      <rect class="region" x="0" y="0" width="300" height="190" fill="#EAF6FF"/>
-      <rect class="region" x="0" y="190" width="300" height="70" fill="#D8D8D8"/>
-      <rect class="region" x="40" y="175" width="150" height="20" rx="6" fill="#FFFFFF"/>
-      <rect class="region" x="70" y="120" width="80" height="55" rx="8" fill="#FFFFFF"/>
-      <rect class="region" x="90" y="132" width="35" height="26" rx="3" fill="#FFF7E0"/>
-      <path class="region" d="M150 135 L210 110 L225 118 L175 150 Z" fill="#FFFFFF"/>
-      <path class="region" d="M210 108 L245 100 L250 115 L220 128 Z" fill="#FFFFFF"/>
-      <circle cx="70" cy="185" r="9" fill="#EAF6FF"/>
-      <circle cx="100" cy="185" r="9" fill="#EAF6FF"/>
-      <circle cx="130" cy="185" r="9" fill="#EAF6FF"/>
-      <circle cx="160" cy="185" r="9" fill="#EAF6FF"/>`},
-    train:{name:'รถไฟ',svg:`
-      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6FF"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#D8D8D8"/>
-      <rect class="region" x="30" y="140" width="90" height="55" rx="8" fill="#FFFFFF"/>
-      <rect class="region" x="45" y="100" width="30" height="45" rx="6" fill="#FFFFFF"/>
-      <rect class="region" x="52" y="112" width="16" height="16" rx="2" fill="#FFF7E0"/>
-      <circle class="region" cx="95" cy="90" r="10" fill="#FFFFFF"/>
-      <rect class="region" x="88" y="95" width="14" height="20" fill="#FFFFFF"/>
-      <rect class="region" x="130" y="150" width="90" height="45" rx="6" fill="#FFFFFF"/>
-      <rect class="region" x="145" y="160" width="24" height="22" rx="3" fill="#FFF7E0"/>
-      <rect class="region" x="180" y="160" width="24" height="22" rx="3" fill="#FFF7E0"/>
-      <circle class="region" cx="55" cy="197" r="16" fill="#FFFFFF"/>
-      <circle class="region" cx="95" cy="197" r="16" fill="#FFFFFF"/>
-      <circle class="region" cx="150" cy="197" r="14" fill="#FFFFFF"/>
-      <circle class="region" cx="195" cy="197" r="14" fill="#FFFFFF"/>
-      <rect x="0" y="213" width="300" height="4" fill="#8a8a8a"/>`},
-  },
-  animals:{
-    cat:{name:'แมว',svg:`
-      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6FF"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#DCEFD1"/>
-      <ellipse class="region" cx="150" cy="175" rx="55" ry="45" fill="#FFFFFF"/>
-      <circle class="region" cx="150" cy="100" r="45" fill="#FFFFFF"/>
-      <path class="region" d="M112 75 L100 40 L135 68 Z" fill="#FFFFFF"/>
-      <path class="region" d="M188 75 L200 40 L165 68 Z" fill="#FFFFFF"/>
-      <circle cx="135" cy="98" r="5" fill="#3a3a3a"/>
-      <circle cx="165" cy="98" r="5" fill="#3a3a3a"/>
-      <path d="M150 108 L145 116 L155 116 Z" fill="#E9A98A"/>
-      <path class="region" d="M195 190 Q225 180 220 155 Q235 170 225 195 Q210 205 195 198 Z" fill="#FFFFFF"/>`},
-    dog:{name:'สุนัข',svg:`
-      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6FF"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#DCEFD1"/>
-      <ellipse class="region" cx="150" cy="180" rx="58" ry="42" fill="#FFFFFF"/>
-      <circle class="region" cx="150" cy="105" r="48" fill="#FFFFFF"/>
-      <path class="region" d="M108 90 Q90 60 105 105 Q100 120 118 118 Z" fill="#FFFFFF"/>
-      <path class="region" d="M192 90 Q210 60 195 105 Q200 120 182 118 Z" fill="#FFFFFF"/>
-      <circle cx="135" cy="102" r="5" fill="#3a3a3a"/>
-      <circle cx="165" cy="102" r="5" fill="#3a3a3a"/>
-      <ellipse class="region" cx="150" cy="122" rx="14" ry="10" fill="#FFFFFF"/>
-      <circle cx="150" cy="118" r="4" fill="#3a3a3a"/>
-      <path class="region" d="M205 175 Q230 160 225 140 Q240 165 220 185 Z" fill="#FFFFFF"/>`},
-    elephant:{name:'ช้าง',svg:`
-      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6FF"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#DCEFD1"/>
-      <ellipse class="region" cx="150" cy="150" rx="70" ry="50" fill="#FFFFFF"/>
-      <circle class="region" cx="150" cy="100" r="50" fill="#FFFFFF"/>
-      <path class="region" d="M95 85 Q60 90 65 130 Q70 155 100 145 Q80 120 95 85 Z" fill="#FFFFFF"/>
-      <path class="region" d="M205 85 Q240 90 235 130 Q230 155 200 145 Q220 120 205 85 Z" fill="#FFFFFF"/>
-      <path class="region" d="M140 120 Q130 165 110 175 Q100 178 105 165 Q120 155 128 120 Z" fill="#FFFFFF"/>
-      <circle cx="135" cy="95" r="5" fill="#3a3a3a"/>
-      <circle cx="165" cy="95" r="5" fill="#3a3a3a"/>
-      <rect class="region" x="120" y="195" width="16" height="35" fill="#FFFFFF"/>
-      <rect class="region" x="164" y="195" width="16" height="35" fill="#FFFFFF"/>`},
-    lion:{name:'สิงโต',svg:`
-      <rect class="region" x="0" y="0" width="300" height="200" fill="#FFF3DE"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#F0DDB0"/>
-      <circle class="region" cx="150" cy="130" r="70" fill="#FFFFFF"/>
-      <circle class="region" cx="150" cy="130" r="42" fill="#FFFFFF"/>
-      <circle cx="135" cy="125" r="5" fill="#3a3a3a"/>
-      <circle cx="165" cy="125" r="5" fill="#3a3a3a"/>
-      <path d="M150 138 L143 148 L157 148 Z" fill="#D9825C"/>
-      <ellipse class="region" cx="150" cy="215" rx="60" ry="35" fill="#FFFFFF"/>`},
-    rabbit:{name:'กระต่าย',svg:`
-      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6FF"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#DCEFD1"/>
-      <ellipse class="region" cx="150" cy="185" rx="48" ry="38" fill="#FFFFFF"/>
-      <circle class="region" cx="150" cy="120" r="38" fill="#FFFFFF"/>
-      <ellipse class="region" cx="125" cy="60" rx="14" ry="45" fill="#FFFFFF"/>
-      <ellipse class="region" cx="175" cy="60" rx="14" ry="45" fill="#FFFFFF"/>
-      <circle cx="138" cy="118" r="4" fill="#3a3a3a"/>
-      <circle cx="162" cy="118" r="4" fill="#3a3a3a"/>
-      <path d="M150 128 L145 135 L155 135 Z" fill="#E9A98A"/>
-      <circle class="region" cx="150" cy="220" r="14" fill="#FFFFFF"/>`},
-    fish:{name:'ปลา',svg:`
-      <rect class="region" x="0" y="0" width="300" height="260" fill="#DFF3FA"/>
-      <ellipse class="region" cx="140" cy="140" rx="80" ry="55" fill="#FFFFFF"/>
-      <path class="region" d="M215 110 L260 80 L260 200 L215 170 Z" fill="#FFFFFF"/>
-      <path class="region" d="M110 95 Q130 70 155 90 Q135 100 130 110 Z" fill="#FFFFFF"/>
-      <path class="region" d="M110 185 Q130 210 155 190 Q135 180 130 170 Z" fill="#FFFFFF"/>
-      <circle cx="95" cy="130" r="7" fill="#3a3a3a"/>
-      <path class="region" d="M60 140 Q85 130 90 140 Q85 150 60 140 Z" fill="#FFFFFF"/>
-      <circle class="region" cx="180" cy="120" r="18" fill="#FFFFFF" opacity=".8"/>`},
-    bird:{name:'นก',svg:`
-      <rect class="region" x="0" y="0" width="300" height="260" fill="#EAF6FF"/>
-      <ellipse class="region" cx="150" cy="150" rx="55" ry="45" fill="#FFFFFF"/>
-      <circle class="region" cx="205" cy="110" r="30" fill="#FFFFFF"/>
-      <path d="M232 108 L252 114 L232 120 Z" fill="#D9A93E"/>
-      <circle cx="215" cy="102" r="4" fill="#3a3a3a"/>
-      <path class="region" d="M110 140 Q60 130 70 165 Q100 175 125 160 Z" fill="#FFFFFF"/>
-      <path class="region" d="M100 185 L80 220 L110 200 L120 225 L135 195 Z" fill="#FFFFFF"/>
-      <rect class="region" x="140" y="192" width="6" height="20" fill="#FFFFFF"/>
-      <rect class="region" x="160" y="192" width="6" height="20" fill="#FFFFFF"/>`},
-  },
-  dino:{
-    trex:{name:'ทีเร็กซ์',svg:`
-      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6E0"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#CDE7B0"/>
-      <path class="region" d="M90 200 Q80 140 120 110 Q160 80 200 100 Q220 70 245 85 Q235 100 220 105 Q235 115 225 135 Q205 130 195 145 Q210 160 195 175 Q170 165 160 185 Q140 205 90 200 Z" fill="#FFFFFF"/>
-      <circle cx="228" cy="92" r="4" fill="#3a3a3a"/>
-      <path class="region" d="M120 190 L110 225 L130 225 L135 195 Z" fill="#FFFFFF"/>
-      <path class="region" d="M160 190 L155 225 L175 225 L175 195 Z" fill="#FFFFFF"/>
-      <path class="region" d="M175 130 Q190 135 185 150 Q175 148 172 138 Z" fill="#FFFFFF"/>`},
-    triceratops:{name:'ไทรเซราทอปส์',svg:`
-      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6E0"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#CDE7B0"/>
-      <ellipse class="region" cx="170" cy="170" rx="75" ry="40" fill="#FFFFFF"/>
-      <path class="region" d="M70 120 Q50 80 90 90 Q100 60 130 85 Q150 70 155 100 Q120 100 100 130 Q85 145 70 120 Z" fill="#FFFFFF"/>
-      <path class="region" d="M85 90 L75 60 L95 85 Z" fill="#FFFFFF"/>
-      <path class="region" d="M115 78 L110 45 L128 75 Z" fill="#FFFFFF"/>
-      <path class="region" d="M75 118 L58 128 L78 132 Z" fill="#FFFFFF"/>
-      <circle cx="95" cy="105" r="4" fill="#3a3a3a"/>
-      <rect class="region" x="100" y="195" width="16" height="30" fill="#FFFFFF"/>
-      <rect class="region" x="150" y="200" width="16" height="30" fill="#FFFFFF"/>
-      <rect class="region" x="200" y="200" width="16" height="30" fill="#FFFFFF"/>`},
-    stego:{name:'สเตโกซอรัส',svg:`
-      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6E0"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#CDE7B0"/>
-      <path class="region" d="M60 195 Q60 150 100 140 Q150 120 200 150 Q230 160 240 195 Z" fill="#FFFFFF"/>
-      <path class="region" d="M55 175 Q35 165 40 185 Q50 195 60 190 Z" fill="#FFFFFF"/>
-      <path class="region" d="M230 175 Q255 195 240 210 Q220 205 218 190 Z" fill="#FFFFFF"/>
-      <path class="region" d="M90 130 L105 95 L120 135 Z" fill="#FFFFFF"/>
-      <path class="region" d="M130 118 L145 82 L158 122 Z" fill="#FFFFFF"/>
-      <path class="region" d="M170 122 L183 88 L196 128 Z" fill="#FFFFFF"/>
-      <rect class="region" x="85" y="190" width="14" height="25" fill="#FFFFFF"/>
-      <rect class="region" x="130" y="195" width="14" height="25" fill="#FFFFFF"/>
-      <rect class="region" x="185" y="195" width="14" height="25" fill="#FFFFFF"/>`},
-    longneck:{name:'คอยาว',svg:`
-      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6E0"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#CDE7B0"/>
-      <ellipse class="region" cx="170" cy="185" rx="65" ry="30" fill="#FFFFFF"/>
-      <path class="region" d="M150 165 Q120 100 90 55 Q80 40 100 35 Q115 60 140 100 Q160 140 165 165 Z" fill="#FFFFFF"/>
-      <ellipse class="region" cx="95" cy="35" rx="16" ry="12" fill="#FFFFFF"/>
-      <circle cx="90" cy="32" r="3" fill="#3a3a3a"/>
-      <path class="region" d="M220 180 Q260 190 255 210 Q235 215 220 200 Z" fill="#FFFFFF"/>
-      <rect class="region" x="130" y="205" width="16" height="30" fill="#FFFFFF"/>
-      <rect class="region" x="165" y="208" width="16" height="30" fill="#FFFFFF"/>
-      <rect class="region" x="200" y="205" width="16" height="30" fill="#FFFFFF"/>`},
-    ptero:{name:'เทอโรแดคทิล',svg:`
-      <rect class="region" x="0" y="0" width="300" height="260" fill="#D9EEF7"/>
-      <ellipse class="region" cx="150" cy="140" rx="24" ry="18" fill="#FFFFFF"/>
-      <path class="region" d="M140 130 Q90 70 40 90 Q80 100 110 130 Z" fill="#FFFFFF"/>
-      <path class="region" d="M160 130 Q210 70 260 90 Q220 100 190 130 Z" fill="#FFFFFF"/>
-      <path class="region" d="M138 128 Q110 100 90 105 Q110 115 125 135 Z" fill="#FFFFFF"/>
-      <path d="M92 108 L70 115 L92 118 Z" fill="#D9825C"/>
-      <circle cx="100" cy="110" r="3" fill="#3a3a3a"/>
-      <path class="region" d="M150 156 L140 190 L155 175 L165 195 L172 160 Z" fill="#FFFFFF"/>`},
-    anky:{name:'แองคิโลซอรัส',svg:`
-      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6E0"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#CDE7B0"/>
-      <ellipse class="region" cx="150" cy="175" rx="90" ry="35" fill="#FFFFFF"/>
-      <ellipse class="region" cx="70" cy="170" rx="25" ry="22" fill="#FFFFFF"/>
-      <path class="region" d="M100 150 L112 138 L118 156 Z" fill="#FFFFFF"/>
-      <path class="region" d="M120 145 L132 132 L138 152 Z" fill="#FFFFFF"/>
-      <path class="region" d="M150 148 L162 134 L168 156 Z" fill="#FFFFFF"/>
-      <path class="region" d="M180 152 L192 138 L198 158 Z" fill="#FFFFFF"/>
-      <path class="region" d="M235 175 Q265 178 260 195 Q270 205 255 210 Q245 195 235 190 Z" fill="#FFFFFF"/>
-      <circle cx="60" cy="164" r="4" fill="#3a3a3a"/>
-      <rect class="region" x="90" y="200" width="14" height="22" fill="#FFFFFF"/>
-      <rect class="region" x="190" y="200" width="14" height="22" fill="#FFFFFF"/>`},
-    raptor:{name:'เวโลซีแรพเตอร์',svg:`
-      <rect class="region" x="0" y="0" width="300" height="200" fill="#EAF6E0"/>
-      <rect class="region" x="0" y="200" width="300" height="60" fill="#CDE7B0"/>
-      <path class="region" d="M110 195 Q100 150 130 130 Q150 100 190 105 Q220 90 235 105 Q225 115 210 115 Q225 125 215 140 Q195 135 185 150 Q195 165 180 178 Q160 190 110 195 Z" fill="#FFFFFF"/>
-      <circle cx="218" cy="103" r="3.5" fill="#3a3a3a"/>
-      <path class="region" d="M150 188 L142 220 L158 220 L162 195 Z" fill="#FFFFFF"/>
-      <path class="region" d="M180 148 Q195 150 190 165 Q178 162 176 152 Z" fill="#FFFFFF"/>`},
-  },
+  islamic:{},
+  cars:{},
+  animals:{},
+  dino:{},
 };
 const colors=['#FF6B6B','#FF9F43','#F5B92E','#2ECC71','#178F6B','#4FB0E8','#5B7CFA','#8B6FC9','#EE5A9B','#8B5A2B','#2A3B36','#FFFFFF'];
 const brushSizes=[10,20,34];
 let selColor=colors[3];
 let curCat='islamic';
-let curPic='masjid';
+let curPic=null;
 let PAINT={tool:'bucket',size:1,drawing:false,lastX:0,lastY:0};
 
 function initColorHub(){
@@ -1360,17 +1023,24 @@ function renderColorCats(){
   colorCategories.forEach(c=>{
     const b=document.createElement('button');b.className='cat-card';
     const count=Object.keys(picLib[c.key]).length;
-    b.innerHTML=`<div class="cat-emoji">${c.emoji}</div><div class="cat-name">${c.name}</div><div class="cat-count">${count} รูป</div>`;
+    b.innerHTML=`<div class="cat-emoji">${c.emoji}</div><div class="cat-name">${c.name}</div><div class="cat-count">${count>0?count+' รูป':'เร็ว ๆ นี้'}</div>`;
     b.onclick=()=>openCategory(c.key);
     wrap.appendChild(b);
   });
 }
 function openCategory(key){
   curCat=key;
-  curPic=Object.keys(picLib[key])[0];
+  const keys=Object.keys(picLib[key]);
   document.getElementById('colorCats').style.display='none';
   document.getElementById('colorEditor').style.display='block';
   document.getElementById('colorTitle').textContent=colorCategories.find(c=>c.key===key).name;
+  const hasPics=keys.length>0;
+  document.getElementById('colorEmpty').style.display=hasPics?'none':'block';
+  ['picTabs','colorStage','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
+    document.getElementById(id).style.display=hasPics?'':'none';
+  });
+  if(!hasPics)return;
+  curPic=keys[0];
   renderPicTabs();
   renderPalette();
   renderToolRow();
@@ -1430,13 +1100,22 @@ function updateToolUI(){
 }
 function loadPic(){
   const layer=document.getElementById('svgLayer');
-  layer.innerHTML=`<svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">${picLib[curCat][curPic].svg}</svg>`;
+  const pic=picLib[curCat][curPic];
+  const vb=pic.vb||'0 0 300 260';
+  layer.innerHTML=`<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg">${pic.svg}</svg>`;
   layer.querySelectorAll('.region').forEach(r=>{
-    r.setAttribute('stroke','#3a3a3a');r.setAttribute('stroke-width','2');r.setAttribute('stroke-linejoin','round');
+    if(!r.getAttribute('stroke'))r.setAttribute('stroke','#3a3a3a');
+    if(!r.getAttribute('stroke-width'))r.setAttribute('stroke-width','2');
+    r.setAttribute('stroke-linejoin','round');
     r.addEventListener('click',()=>r.setAttribute('fill',selColor));
   });
   const canvas=document.getElementById('paintCanvas');
-  if(canvas)canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
+  if(canvas){
+    const vbNums=vb.split(' ').map(Number);
+    canvas.width=600;
+    canvas.height=Math.round(600*vbNums[3]/vbNums[2]);
+    canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
+  }
 }
 function clearColors(){
   document.querySelectorAll('#svgLayer .region').forEach(r=>r.setAttribute('fill','#FFFFFF'));
