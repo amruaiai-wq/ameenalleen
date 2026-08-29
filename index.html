@@ -1367,7 +1367,7 @@ function storyBack(){
 }
 /* ============ STORY POPUP (carousel) ============ */
 let STORY_MODAL={cat:null,id:null,story:null,slide:0,total:1};
-function storyImgPath(cat,id,n){return `public/Story_Scenes/${cat}/${id}/slide-${n}.png`;}
+function storyImgPath(cat,id,n){return `public/Story_Scenes/${cat}/${id}/slide-${n}.jpg`;}
 function openStory(cat,id){
   const s=storyLib[cat].find(x=>x.id===id);
   STORY_MODAL={cat,id,story:s,slide:0,total:s.body.length};
@@ -1376,6 +1376,7 @@ function openStory(cat,id){
   document.getElementById('storyModalArabic').textContent=s.arabic||'';
   document.getElementById('storyModalArabic').style.display=s.arabic?'block':'none';
   renderStorySlide();
+  for(let n=1;n<=STORY_MODAL.total;n++){new Image().src=storyImgPath(cat,id,n);}
   document.getElementById('storyModal').classList.add('open');
   if(window.lucide)lucide.createIcons();
 }
@@ -1388,7 +1389,7 @@ function renderStorySlide(){
   body.innerHTML=`
     <div class="slide-art">
       <span class="slide-art-emoji">${s.scene}</span>
-      <img src="${storyImgPath(STORY_MODAL.cat,STORY_MODAL.id,art)}" alt="" onerror="this.style.display='none'">
+      <img src="${storyImgPath(STORY_MODAL.cat,STORY_MODAL.id,art)}" alt="" decoding="async" onerror="this.style.display='none'">
     </div>
     <p class="slide-text">${s.body[i]}</p>
     ${i===STORY_MODAL.total-1?`<div class="lesson"><div class="lt">💡 บทเรียนสำหรับหนู</div><p>${s.lesson}</p></div>`:''}`;
