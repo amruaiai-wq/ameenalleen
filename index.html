@@ -249,7 +249,7 @@
 
   .color-editor{margin-top:2px;}
   .color-stage{background:var(--white);border-radius:var(--radius-lg);padding:12px;box-shadow:var(--shadow-md);border:1px solid var(--line);position:relative;}
-  .color-stage svg{width:100%;height:auto;display:block;border-radius:var(--radius-md);overflow:hidden;}
+  #fillCanvas{width:100%;height:auto;display:block;border-radius:var(--radius-md);touch-action:none;}
   .region{cursor:pointer;transition:fill .12s;}
   #paintCanvas{position:absolute;inset:12px;width:calc(100% - 24px);height:calc(100% - 24px);border-radius:var(--radius-md);touch-action:none;}
   .palette{display:flex;flex-wrap:wrap;gap:11px;justify-content:center;margin-top:16px;}
@@ -308,7 +308,9 @@
     background:linear-gradient(180deg,var(--cream-2),var(--white));border-radius:var(--radius-xl);
     box-shadow:var(--shadow-lg);border:1px solid var(--line);padding:20px;
     animation:popIn .3s var(--ease);touch-action:pan-y;
+    scrollbar-width:none;-ms-overflow-style:none;
   }
+  .story-modal-card::-webkit-scrollbar{display:none;width:0;height:0;}
   @keyframes popIn{from{opacity:0;transform:scale(.9) translateY(10px)}to{opacity:1;transform:none}}
   .story-modal-close{
     position:absolute;top:14px;right:14px;z-index:2;border:none;background:var(--white);
@@ -476,7 +478,7 @@
     <div class="color-editor" id="colorEditor" style="display:none">
       <div class="pic-tabs" id="picTabs"></div>
       <div class="color-stage" id="colorStage">
-        <div id="svgLayer"></div>
+        <canvas id="fillCanvas"></canvas>
         <canvas id="paintCanvas"></canvas>
       </div>
       <div class="tool-row" id="toolRow"></div>
@@ -1049,22 +1051,63 @@ function renderMoreLess(){
 }
 
 /* ============ COLORING ============ */
+const COLORING_BASE='public/coloring/';
+function buildPics(cat,entries){
+  const obj={};
+  entries.forEach(([file,name])=>{ obj[file]={name, src:COLORING_BASE+cat+'/'+file+'.png'}; });
+  return obj;
+}
 const colorCategories=[
+  {key:'wild',name:'สัตว์ป่า',emoji:'🦁'},
+  {key:'sea',name:'สัตว์น้ำ',emoji:'🐠'},
+  {key:'dinosaurs',name:'ไดโนเสาร์',emoji:'🦕'},
+  {key:'vehicles',name:'รถทั่วไป',emoji:'🚗'},
+  {key:'construction',name:'รถก่อสร้าง',emoji:'🚧'},
   {key:'islamic',name:'อิสลามิค',emoji:'🕌'},
-  {key:'cars',name:'รถยนต์',emoji:'🚗'},
-  {key:'animals',name:'สัตว์',emoji:'🐱'},
-  {key:'dino',name:'ไดโนเสาร์',emoji:'🦕'},
 ];
 const picLib = {
-  islamic:{},
-  cars:{},
-  animals:{},
-  dino:{},
+  wild: buildPics('wild', [
+    ['01_lion','สิงโต'],['02_tiger','เสือ'],['03_elephant','ช้าง'],['04_giraffe','ยีราฟ'],['05_zebra','ม้าลาย'],
+    ['06_monkey','ลิง'],['07_panda','แพนด้า'],['08_koala','โคอาล่า'],['09_kangaroo','จิงโจ้'],['10_bear','หมี'],
+    ['11_fox','จิ้งจอก'],['12_wolf','หมาป่า'],['13_deer','กวาง'],['14_rhino','แรด'],['15_hippo','ฮิปโป'],
+    ['16_gorilla','กอริลลา'],['17_leopard','เสือดาว'],['18_cheetah','เสือชีตาห์'],['19_camel','อูฐ'],['20_hedgehog','เม่นแคระ']
+  ]),
+  sea: buildPics('sea', [
+    ['01_fish','ปลา'],['02_shark','ฉลาม'],['03_dolphin','โลมา'],['04_whale','ปลาวาฬ'],['05_octopus','ปลาหมึกยักษ์'],
+    ['06_jellyfish','แมงกะพรุน'],['07_starfish','ปลาดาว'],['08_seahorse','ม้าน้ำ'],['09_crab','ปู'],['10_lobster','กุ้งมังกร'],
+    ['11_sea_turtle','เต่าทะเล'],['12_seal','แมวน้ำ'],['13_otter','นาก'],['14_stingray','ปลากระเบน'],['15_squid','ปลาหมึก'],
+    ['16_clownfish','ปลาการ์ตูน'],['17_angelfish','ปลาเทวดา'],['18_shrimp','กุ้ง'],['19_coral','ปะการัง'],['20_penguin','เพนกวิน']
+  ]),
+  dinosaurs: buildPics('dinosaurs', [
+    ['01_t-rex','ทีเร็กซ์'],['02_triceratops','ไทรเซอราทอปส์'],['03_stegosaurus','สเตโกซอรัส'],['04_brachiosaurus','แบรคิโอซอรัส'],
+    ['05_velociraptor','เวโลซิแรปเตอร์'],['06_pterodactyl','เทอโรแดคทิล'],['07_spinosaurus','สไปโนซอรัส'],['08_ankylosaurus','แองคิโลซอรัส'],
+    ['09_parasaurolophus','พาราซอโรโลฟัส'],['10_diplodocus','ดิพโพลโดคัส'],['11_allosaurus','อัลโลซอรัส'],['12_iguanodon','อิกัวโนดอน'],
+    ['13_pachycephalosaurus','แพคีเซฟาโลซอรัส'],['14_brontosaurus','บรอนโตซอรัส'],['15_compsognathus','คอมซอกนาทัส'],['16_dilophosaurus','ไดโลโฟซอรัส'],
+    ['17_carnotaurus','คาร์โนทอรัส'],['18_therizinosaurus','เทอริซิโนซอรัส'],['19_dinosaur_egg','ไข่ไดโนเสาร์'],['20_baby_dinosaur','ลูกไดโนเสาร์']
+  ]),
+  vehicles: buildPics('vehicles', [
+    ['01_car','รถเก๋ง'],['02_suv','รถ SUV'],['03_pickup_truck','รถกระบะ'],['04_bus','รถบัส'],['05_motorcycle','มอเตอร์ไซค์'],
+    ['06_bicycle','จักรยาน'],['07_taxi','รถแท็กซี่'],['08_minivan','รถตู้'],['09_sports_car','รถสปอร์ต'],['10_train','รถไฟ'],
+    ['11_tram','รถราง'],['12_scooter','สกู๊ตเตอร์'],['13_tuk-tuk','ตุ๊กตุ๊ก'],['14_camper_van','รถบ้าน'],['15_limousine','รถลีมูซีน'],
+    ['16_hot_air_balloon','บอลลูนอากาศร้อน'],['17_ambulance','รถพยาบาล'],['18_police_car','รถตำรวจ'],['19_fire_truck','รถดับเพลิง'],['20_cable_car','กระเช้าลอยฟ้า']
+  ]),
+  construction: buildPics('construction', [
+    ['01_excavator','รถขุด'],['02_bulldozer','รถปราบดิน'],['03_crane_truck','รถเครน'],['04_dump_truck','รถบรรทุกดั้ม'],['05_cement_mixer','รถโม่ปูน'],
+    ['06_forklift','รถโฟล์คลิฟท์'],['07_road_roller','รถบดถนน'],['08_backhoe_loader','รถแบคโฮ'],['09_wheel_loader','รถตักล้อยาง'],['10_tow_truck','รถลาก'],
+    ['11_garbage_truck','รถขยะ'],['12_tanker_truck','รถบรรทุกน้ำมัน'],['13_tractor','รถแทรกเตอร์'],['14_harvester','รถเกี่ยวข้าว'],['15_drilling_rig','รถเจาะ'],
+    ['16_pile_driver','รถตอกเสาเข็ม'],['17_telehandler','รถยกแขนยาว'],['18_skid_steer_loader','รถตักขนาดเล็ก'],['19_asphalt_paver','รถปูยาง'],['20_container_truck','รถบรรทุกตู้คอนเทนเนอร์']
+  ]),
+  islamic: buildPics('islamic', [
+    ['01_mosque','มัสยิด'],['02_crescent_star','เสี้ยวจันทร์กับดาว'],['03_quran','คัมภีร์อัลกุรอาน'],['04_prayer_mat','พรมละหมาด'],['05_tasbih','ลูกประคำ'],
+    ['06_ramadan_lantern_fanous','โคมไฟรอมฎอน'],['07_kufi_hat','หมวกกะปิเยาะห์'],['08_kaaba','กะอ์บะฮ์'],['09_minaret','หอมินาเรต'],['10_date_palm','ต้นอินทผลัม'],
+    ['11_eid_gift_box','กล่องของขวัญอีด'],['12_eid_greeting_flag','ธง/การ์ดอวยพรอีด'],['13_qibla_compass','เข็มทิศกิบลัต'],['14_islamic_star_pattern','ลายดาวเรขาคณิตอิสลาม'],['15_incense_burner_bakhoor','กระถางเผาไม้หอม'],
+    ['16_zamzam_water_bottle','ขวดน้ำซัมซัม'],['17_quran_stand_rehal','ขาตั้งอัลกุรอาน'],['18_ihram_clothes','ชุดอิห์รอม'],['19_ramadan_calendar','ปฏิทินรอมฎอน'],['20_mecca_clock_tower','หอนาฬิกามักกะห์']
+  ])
 };
 const colors=['#FF6B6B','#FF9F43','#F5B92E','#2ECC71','#178F6B','#4FB0E8','#5B7CFA','#8B6FC9','#EE5A9B','#8B5A2B','#2A3B36','#FFFFFF'];
 const brushSizes=[10,20,34];
 let selColor=colors[3];
-let curCat='islamic';
+let curCat='wild';
 let curPic=null;
 let PAINT={tool:'bucket',size:1,drawing:false,lastX:0,lastY:0};
 
@@ -1155,28 +1198,68 @@ function updateToolUI(){
   if(sizeRow)sizeRow.style.display=PAINT.tool==='bucket'?'none':'flex';
 }
 function loadPic(){
-  const layer=document.getElementById('svgLayer');
   const pic=picLib[curCat][curPic];
-  const vb=pic.vb||'0 0 300 260';
-  layer.innerHTML=`<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg">${pic.svg}</svg>`;
-  layer.querySelectorAll('.region').forEach(r=>{
-    if(!r.getAttribute('stroke'))r.setAttribute('stroke','#3a3a3a');
-    if(!r.getAttribute('stroke-width'))r.setAttribute('stroke-width','2');
-    r.setAttribute('stroke-linejoin','round');
-    r.addEventListener('click',()=>r.setAttribute('fill',selColor));
-  });
-  const canvas=document.getElementById('paintCanvas');
-  if(canvas){
-    const vbNums=vb.split(' ').map(Number);
-    canvas.width=600;
-    canvas.height=Math.round(600*vbNums[3]/vbNums[2]);
-    canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
-  }
+  const img=new Image();
+  img.onload=()=>{
+    const maxSide=900;
+    const scale=Math.min(1,maxSide/Math.max(img.naturalWidth,img.naturalHeight));
+    const cw=Math.max(1,Math.round(img.naturalWidth*scale));
+    const ch=Math.max(1,Math.round(img.naturalHeight*scale));
+    const fillCanvas=document.getElementById('fillCanvas');
+    fillCanvas.width=cw;fillCanvas.height=ch;
+    fillCanvas.getContext('2d').drawImage(img,0,0,cw,ch);
+    const paint=document.getElementById('paintCanvas');
+    paint.width=cw;paint.height=ch;
+    paint.getContext('2d').clearRect(0,0,cw,ch);
+  };
+  img.src=pic.src;
 }
 function clearColors(){
-  document.querySelectorAll('#svgLayer .region').forEach(r=>r.setAttribute('fill','#FFFFFF'));
-  const canvas=document.getElementById('paintCanvas');
-  if(canvas)canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
+  loadPic();
+}
+function hexToRgb(hex){
+  const n=parseInt(hex.slice(1),16);
+  return [(n>>16)&255,(n>>8)&255,n&255];
+}
+function isDarkPixel(r,g,b){ return (r+g+b)/3 < 120; }
+function floodFillAt(ctx,x,y,hexColor){
+  const w=ctx.canvas.width,h=ctx.canvas.height;
+  if(x<0||y<0||x>=w||y>=h)return;
+  const imgData=ctx.getImageData(0,0,w,h);
+  const data=imgData.data;
+  const startIdx=(y*w+x)*4;
+  if(isDarkPixel(data[startIdx],data[startIdx+1],data[startIdx+2]))return;
+  const [fr,fg,fb]=hexToRgb(hexColor);
+  const sr=data[startIdx],sg=data[startIdx+1],sb=data[startIdx+2];
+  if(sr===fr&&sg===fg&&sb===fb)return;
+  const tol=48;
+  const visited=new Uint8Array(w*h);
+  const stack=[y*w+x];
+  while(stack.length){
+    const p=stack.pop();
+    if(visited[p])continue;
+    const i=p*4;
+    const dr=data[i]-sr,dg=data[i+1]-sg,db=data[i+2]-sb;
+    if(Math.sqrt(dr*dr+dg*dg+db*db)>tol||isDarkPixel(data[i],data[i+1],data[i+2]))continue;
+    visited[p]=1;
+    data[i]=fr;data[i+1]=fg;data[i+2]=fb;data[i+3]=255;
+    const px=p%w, py=(p-px)/w;
+    if(px>0)stack.push(p-1);
+    if(px<w-1)stack.push(p+1);
+    if(py>0)stack.push(p-w);
+    if(py<h-1)stack.push(p+w);
+  }
+  ctx.putImageData(imgData,0,0);
+}
+function setupFillCanvas(){
+  const canvas=document.getElementById('fillCanvas');
+  canvas.addEventListener('pointerdown',e=>{
+    if(PAINT.tool!=='bucket')return;
+    const r=canvas.getBoundingClientRect();
+    const x=Math.floor((e.clientX-r.left)*(canvas.width/r.width));
+    const y=Math.floor((e.clientY-r.top)*(canvas.height/r.height));
+    floodFillAt(canvas.getContext('2d'),x,y,selColor);
+  });
 }
 function setupPaintCanvas(){
   const canvas=document.getElementById('paintCanvas');
@@ -1512,6 +1595,7 @@ go=function(id){
 /* init */
 initStoryHub();
 setupPaintCanvas();
+setupFillCanvas();
 if(window.lucide)lucide.createIcons();
 </script>
 </body>
