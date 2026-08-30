@@ -259,10 +259,14 @@
   .swatch.sel{outline:3px solid var(--ink);outline-offset:2px;transform:scale(1.14);}
   .color-actions{display:flex;gap:10px;margin-top:14px;}
   .color-actions button{flex:1;}
-  .pic-tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;margin:0 -4px;}
-  .pic-tab{flex:0 0 auto;border:1px solid var(--line);font-family:inherit;font-weight:600;font-size:14px;
-    background:var(--white);color:var(--ink);padding:9px 16px;border-radius:var(--radius-pill);box-shadow:var(--shadow-xs);cursor:pointer;transition:all .15s;}
-  .pic-tab.sel{background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;border-color:transparent;box-shadow:var(--shadow-green);}
+  .pic-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 4px;}
+  .pic-card{border:2px solid var(--line);border-radius:var(--radius-md);background:var(--white);
+    padding:8px 6px 10px;cursor:pointer;text-align:center;box-shadow:var(--shadow-xs);font-family:inherit;
+    transition:transform .12s var(--ease-out), box-shadow .15s, border-color .15s;}
+  .pic-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);border-color:var(--green);}
+  .pic-card:active{transform:scale(.96);}
+  .pic-card img{width:100%;aspect-ratio:1/1;object-fit:contain;display:block;}
+  .pic-card .pic-name{font-size:12px;font-weight:700;color:var(--ink-soft);margin-top:6px;}
 
   .tool-row{display:flex;gap:8px;margin-top:14px;}
   .tool-btn{flex:1;border:1px solid var(--line);background:var(--white);border-radius:var(--radius-md);
@@ -476,7 +480,7 @@
     <div class="topbar"><button class="back-btn" onclick="colorBack()"><i data-lucide="chevron-left"></i><span>กลับ</span></button><h2 id="colorTitle">ระบายสี</h2></div>
     <div class="cat-grid" id="colorCats"></div>
     <div class="color-editor" id="colorEditor" style="display:none">
-      <div class="pic-tabs" id="picTabs"></div>
+      <div class="pic-grid" id="picGrid" style="display:none"></div>
       <div class="color-stage" id="colorStage">
         <canvas id="fillCanvas"></canvas>
         <canvas id="paintCanvas"></canvas>
@@ -1129,35 +1133,50 @@ function renderColorCats(){
 }
 function openCategory(key){
   curCat=key;
-  const keys=Object.keys(picLib[key]);
+  curPic=null;
   document.getElementById('colorCats').style.display='none';
   document.getElementById('colorEditor').style.display='block';
   document.getElementById('colorTitle').textContent=colorCategories.find(c=>c.key===key).name;
-  const hasPics=keys.length>0;
+  const hasPics=Object.keys(picLib[key]).length>0;
   document.getElementById('colorEmpty').style.display=hasPics?'none':'block';
-  ['picTabs','colorStage','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
-    document.getElementById(id).style.display=hasPics?'':'none';
+  document.getElementById('picGrid').style.display=hasPics?'grid':'none';
+  ['colorStage','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
+    document.getElementById(id).style.display='none';
   });
   if(!hasPics)return;
-  curPic=keys[0];
-  renderPicTabs();
+  renderPicGrid();
   renderPalette();
   renderToolRow();
   renderSizeRow();
-  updateToolUI();
-  loadPic();
 }
 function colorBack(){
-  if(document.getElementById('colorEditor').style.display!=='none'){initColorHub();}
-  else{go('home');}
+  const onStage=document.getElementById('colorEditor').style.display!=='none' && document.getElementById('picGrid').style.display==='none';
+  if(onStage){ showPicGrid(); return; }
+  if(document.getElementById('colorEditor').style.display!=='none'){ initColorHub(); return; }
+  go('home');
 }
-function renderPicTabs(){
-  const tabs=document.getElementById('picTabs');tabs.innerHTML='';
+function renderPicGrid(){
+  const grid=document.getElementById('picGrid');grid.innerHTML='';
   Object.keys(picLib[curCat]).forEach(k=>{
-    const b=document.createElement('button');b.className='pic-tab'+(k===curPic?' sel':'');b.textContent=picLib[curCat][k].name;
-    b.onclick=()=>{curPic=k;document.querySelectorAll('.pic-tab').forEach(t=>t.classList.remove('sel'));b.classList.add('sel');loadPic();};
-    tabs.appendChild(b);
+    const pic=picLib[curCat][k];
+    const b=document.createElement('button');b.className='pic-card';
+    b.innerHTML=`<img src="${pic.src}" alt="" loading="lazy"><div class="pic-name">${pic.name}</div>`;
+    b.onclick=()=>{ curPic=k; loadPic(); showEditorStage(); };
+    grid.appendChild(b);
   });
+}
+function showPicGrid(){
+  document.getElementById('picGrid').style.display='grid';
+  ['colorStage','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
+    document.getElementById(id).style.display='none';
+  });
+}
+function showEditorStage(){
+  document.getElementById('picGrid').style.display='none';
+  ['colorStage','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
+    document.getElementById(id).style.display='';
+  });
+  updateToolUI();
 }
 function renderPalette(){
   const pal=document.getElementById('palette');pal.innerHTML='';
@@ -1207,7 +1226,16 @@ function loadPic(){
     const ch=Math.max(1,Math.round(img.naturalHeight*scale));
     const fillCanvas=document.getElementById('fillCanvas');
     fillCanvas.width=cw;fillCanvas.height=ch;
-    fillCanvas.getContext('2d').drawImage(img,0,0,cw,ch);
+    const fctx=fillCanvas.getContext('2d');
+    fctx.drawImage(img,0,0,cw,ch);
+    // binarize to pure black/white so the outline is a solid, gap-free wall for the flood fill
+    const id=fctx.getImageData(0,0,cw,ch);
+    const d=id.data;
+    for(let i=0;i<d.length;i+=4){
+      const v=(d[i]+d[i+1]+d[i+2])/3<180?0:255;
+      d[i]=v;d[i+1]=v;d[i+2]=v;d[i+3]=255;
+    }
+    fctx.putImageData(id,0,0);
     const paint=document.getElementById('paintCanvas');
     paint.width=cw;paint.height=ch;
     paint.getContext('2d').clearRect(0,0,cw,ch);
@@ -1221,26 +1249,27 @@ function hexToRgb(hex){
   const n=parseInt(hex.slice(1),16);
   return [(n>>16)&255,(n>>8)&255,n&255];
 }
-function isDarkPixel(r,g,b){ return (r+g+b)/3 < 120; }
+function isWallPixel(r,g,b){ return (r+g+b)/3 < 128; }
 function floodFillAt(ctx,x,y,hexColor){
   const w=ctx.canvas.width,h=ctx.canvas.height;
   if(x<0||y<0||x>=w||y>=h)return;
   const imgData=ctx.getImageData(0,0,w,h);
   const data=imgData.data;
   const startIdx=(y*w+x)*4;
-  if(isDarkPixel(data[startIdx],data[startIdx+1],data[startIdx+2]))return;
+  if(isWallPixel(data[startIdx],data[startIdx+1],data[startIdx+2]))return;
   const [fr,fg,fb]=hexToRgb(hexColor);
   const sr=data[startIdx],sg=data[startIdx+1],sb=data[startIdx+2];
   if(sr===fr&&sg===fg&&sb===fb)return;
-  const tol=48;
+  // exact-match fill: the base image is pure black/white (or a previous flat fill color),
+  // so this can never bleed past the black outline into a neighboring area
   const visited=new Uint8Array(w*h);
   const stack=[y*w+x];
   while(stack.length){
     const p=stack.pop();
     if(visited[p])continue;
     const i=p*4;
-    const dr=data[i]-sr,dg=data[i+1]-sg,db=data[i+2]-sb;
-    if(Math.sqrt(dr*dr+dg*dg+db*db)>tol||isDarkPixel(data[i],data[i+1],data[i+2]))continue;
+    if(isWallPixel(data[i],data[i+1],data[i+2]))continue;
+    if(data[i]!==sr||data[i+1]!==sg||data[i+2]!==sb)continue;
     visited[p]=1;
     data[i]=fr;data[i+1]=fg;data[i+2]=fb;data[i+3]=255;
     const px=p%w, py=(p-px)/w;
