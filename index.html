@@ -1113,7 +1113,7 @@ const brushSizes=[10,20,34];
 let selColor=colors[3];
 let curCat='wild';
 let curPic=null;
-let PAINT={tool:'bucket',size:1,drawing:false,lastX:0,lastY:0};
+let PAINT={tool:'bucket',size:1,drawing:false,lastX:0,lastY:0,mask:null};
 
 function initColorHub(){
   document.getElementById('colorEditor').style.display='none';
@@ -1280,6 +1280,32 @@ function floodFillAt(ctx,x,y,hexColor){
   }
   ctx.putImageData(imgData,0,0);
 }
+function computeRegionMask(fillCtx,x,y){
+  const w=fillCtx.canvas.width,h=fillCtx.canvas.height;
+  if(x<0||y<0||x>=w||y>=h)return null;
+  const imgData=fillCtx.getImageData(0,0,w,h);
+  const data=imgData.data;
+  const startIdx=(y*w+x)*4;
+  if(isWallPixel(data[startIdx],data[startIdx+1],data[startIdx+2]))return null;
+  const sr=data[startIdx],sg=data[startIdx+1],sb=data[startIdx+2];
+  const mask=new Uint8Array(w*h);
+  const visited=new Uint8Array(w*h);
+  const stack=[y*w+x];
+  while(stack.length){
+    const p=stack.pop();
+    if(visited[p])continue;
+    const i=p*4;
+    if(isWallPixel(data[i],data[i+1],data[i+2]))continue;
+    if(data[i]!==sr||data[i+1]!==sg||data[i+2]!==sb)continue;
+    visited[p]=1;mask[p]=1;
+    const px=p%w, py=(p-px)/w;
+    if(px>0)stack.push(p-1);
+    if(px<w-1)stack.push(p+1);
+    if(py>0)stack.push(p-w);
+    if(py<h-1)stack.push(p+w);
+  }
+  return mask;
+}
 function setupFillCanvas(){
   const canvas=document.getElementById('fillCanvas');
   canvas.addEventListener('pointerdown',e=>{
@@ -1299,12 +1325,30 @@ function setupPaintCanvas(){
     const r=canvas.getBoundingClientRect();
     return {x:(e.clientX-r.left)*(canvas.width/r.width), y:(e.clientY-r.top)*(canvas.height/r.height)};
   }
+  function clipToMask(minX,minY,maxX,maxY){
+    if(!PAINT.mask)return;
+    minX=Math.max(0,Math.floor(minX));minY=Math.max(0,Math.floor(minY));
+    maxX=Math.min(canvas.width-1,Math.ceil(maxX));maxY=Math.min(canvas.height-1,Math.ceil(maxY));
+    const w=maxX-minX+1,h=maxY-minY+1;
+    if(w<=0||h<=0)return;
+    const imgData=ctx.getImageData(minX,minY,w,h);
+    const data=imgData.data;
+    const cw=canvas.width, mask=PAINT.mask;
+    for(let yy=0;yy<h;yy++){
+      for(let xx=0;xx<w;xx++){
+        if(!mask[(minY+yy)*cw+(minX+xx)]) data[(yy*w+xx)*4+3]=0;
+      }
+    }
+    ctx.putImageData(imgData,minX,minY);
+  }
   function dot(p){
     ctx.save();
     ctx.globalCompositeOperation=PAINT.tool==='eraser'?'destination-out':'source-over';
     ctx.fillStyle=selColor;
-    ctx.beginPath();ctx.arc(p.x,p.y,brushSizes[PAINT.size]/2,0,Math.PI*2);ctx.fill();
+    const rad=brushSizes[PAINT.size]/2;
+    ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();
     ctx.restore();
+    if(PAINT.tool==='brush')clipToMask(p.x-rad-1,p.y-rad-1,p.x+rad+1,p.y+rad+1);
   }
   function line(x1,y1,x2,y2){
     ctx.save();
@@ -1312,18 +1356,29 @@ function setupPaintCanvas(){
     ctx.strokeStyle=selColor;ctx.lineWidth=brushSizes[PAINT.size];
     ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
     ctx.restore();
+    if(PAINT.tool==='brush'){
+      const lw=brushSizes[PAINT.size]/2+1;
+      clipToMask(Math.min(x1,x2)-lw,Math.min(y1,y2)-lw,Math.max(x1,x2)+lw,Math.max(y1,y2)+lw);
+    }
   }
   canvas.addEventListener('pointerdown',e=>{
     if(PAINT.tool==='bucket')return;
     canvas.setPointerCapture(e.pointerId);
     PAINT.drawing=true;
-    const p=posFromEvent(e);PAINT.lastX=p.x;PAINT.lastY=p.y;dot(p);
+    const p=posFromEvent(e);PAINT.lastX=p.x;PAINT.lastY=p.y;
+    if(PAINT.tool==='brush'){
+      const fillCanvas=document.getElementById('fillCanvas');
+      PAINT.mask=computeRegionMask(fillCanvas.getContext('2d'),Math.round(p.x),Math.round(p.y));
+    } else {
+      PAINT.mask=null;
+    }
+    dot(p);
   });
   canvas.addEventListener('pointermove',e=>{
     if(!PAINT.drawing)return;
     const p=posFromEvent(e);line(PAINT.lastX,PAINT.lastY,p.x,p.y);PAINT.lastX=p.x;PAINT.lastY=p.y;
   });
-  ['pointerup','pointercancel','pointerleave'].forEach(ev=>canvas.addEventListener(ev,()=>{PAINT.drawing=false;}));
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>canvas.addEventListener(ev,()=>{PAINT.drawing=false;PAINT.mask=null;}));
 }
 
 /* ============ STORIES ============ */
