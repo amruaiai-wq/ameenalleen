@@ -119,15 +119,16 @@
     font-weight:700;font-size:12px;padding:5px 11px;border-radius:var(--radius-pill);cursor:pointer;}
   .rail-all:active{transform:scale(.94);}
   .rail-track{display:flex;gap:11px;overflow-x:auto;padding:11px 2px 6px;margin:0 -2px;
-    scrollbar-width:none;-ms-overflow-style:none;scroll-behavior:auto;overscroll-behavior-x:contain;}
+    scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;}
   .rail-track::-webkit-scrollbar{display:none;height:0;}
   .rail-chip{flex:0 0 auto;width:92px;border:none;background:none;padding:0;cursor:pointer;
-    font-family:inherit;text-align:center;}
-  .rc-art{display:flex;align-items:center;justify-content:center;gap:2px;width:92px;height:80px;
+    font-family:inherit;text-align:center;scroll-snap-align:center;}
+  .rc-art{position:relative;display:flex;align-items:center;justify-content:center;gap:2px;width:92px;height:80px;
     border-radius:var(--radius-md);background:linear-gradient(160deg,var(--cream-2),var(--white));
     border:1px solid var(--line);box-shadow:var(--shadow-sm);overflow:hidden;
     transition:transform .15s var(--ease-out);}
-  .rc-art>img{width:100%;height:100%;object-fit:cover;display:block;}
+  .rc-art>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
   .rail-chip.rc-photo .rc-art{background:linear-gradient(135deg,rgba(239,206,134,.35),rgba(127,201,179,.25));}
   .rail-chip.rc-white .rc-art{background:var(--white);}
   .rail-chip.rc-white .rc-art>img{object-fit:contain;padding:5px;}
@@ -317,8 +318,9 @@
   }
   .story-card:hover{transform:translateX(2px);box-shadow:var(--shadow-md);}
   .story-card:active{transform:scale(.97);}
-  .story-card .scene{font-size:38px;flex:0 0 auto;width:60px;height:60px;border-radius:var(--radius-sm);
+  .story-card .scene{position:relative;overflow:hidden;font-size:34px;flex:0 0 auto;width:64px;height:64px;border-radius:var(--radius-sm);
     display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(239,206,134,.38),rgba(239,206,134,.14));box-shadow:inset 0 -2px 6px rgba(0,0,0,.04);}
+  .story-card .scene img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
   .story-card .st{font-weight:700;font-size:18px;}
   .story-card .ss{font-size:13px;color:var(--ink-soft);margin-top:2px;}
   .story-card::after{content:'\203A';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:24px;color:var(--ink-faint);font-weight:700;}
@@ -1880,7 +1882,7 @@ function openStoryCategory(key){
   const list=document.getElementById('storyList');list.innerHTML='';
   storyLib[key].forEach(s=>{
     const b=document.createElement('button');b.className='story-card';
-    b.innerHTML=`<div class="scene">${s.scene}</div><div><div class="st">${s.title}</div><div class="ss">${s.sub}</div></div>`;
+    b.innerHTML=`<div class="scene">${storyCover(key,s)}</div><div><div class="st">${s.title}</div><div class="ss">${s.sub}</div></div>`;
     b.onclick=()=>openStory(key,s.id);
     list.appendChild(b);
   });
@@ -1892,6 +1894,10 @@ function storyBack(){
 /* ============ STORY POPUP (carousel) ============ */
 let STORY_MODAL={cat:null,id:null,story:null,slide:0,total:1,flipping:false};
 function storyImgPath(cat,id,n){return `/Story_Scenes/${cat}/${id}/slide-${n}.jpg`;}
+/* ปกนิทาน = ภาพแรกของเรื่อง ถ้ารูปหายก็ตกไปใช้อิโมจิที่อยู่ข้างหลังแทน */
+function storyCover(cat,s){
+  return `<span class="rc-emoji">${s.scene}</span><img src="${storyImgPath(cat,s.id,1)}" loading="lazy" alt="" onerror="this.remove()">`;
+}
 function openStory(cat,id){
   const s=storyLib[cat].find(x=>x.id===id);
   STORY_MODAL={cat,id,story:s,slide:0,total:s.body.length,flipping:false};
@@ -1985,12 +1991,8 @@ function buildRails(){
     railChip(`<span class="rc-game">${gameArt[g.k]||''}</span>`,g.n,`startGame('${g.k}')`)).join('');
 
   const allStories=[...stories.map(s=>({cat:'prophets',s})),...goodKidStories.map(s=>({cat:'goodkid',s}))];
-  const storiesHtml=allStories.map(o=>{
-    const art=o.cat==='prophets'
-      ?`<img src="${storyImgPath('prophets',o.s.id,1)}" loading="lazy" alt="" onerror="this.style.display='none'">`
-      :`<span class="rc-emoji">${o.s.scene}</span>`;
-    return railChip(art,o.s.title,`openStory('${o.cat}','${o.s.id}')`,'rc-photo');
-  }).join('');
+  const storiesHtml=allStories.map(o=>
+    railChip(storyCover(o.cat,o.s),o.s.title,`openStory('${o.cat}','${o.s.id}')`,'rc-photo')).join('');
 
   const picks=[];
   colorCategories.forEach(c=>{
@@ -1999,41 +2001,9 @@ function buildRails(){
   const colorHtml=shuffle(picks).map(p=>
     railChip(`<img src="${p.pic.src}" loading="lazy" alt="">`,p.pic.name,`openPicFromHome('${p.cat}','${p.k}')`,'rc-white')).join('');
 
-  initRail('railGames',gamesHtml,0.34);
-  initRail('railStories',storiesHtml,-0.30);
-  initRail('railColor',colorHtml,0.38);
-}
-function initRail(id,html,speed){
-  const el=document.getElementById(id);
-  if(!el||!html)return;
-  el.innerHTML=html+html; // ชุดที่สองไว้ให้วนต่อเนื่องแบบไม่มีรอยต่อ
-  let paused=false,resumeT=null,pos=null,written=null;
-  const pause=()=>{paused=true;clearTimeout(resumeT);};
-  const later=()=>{clearTimeout(resumeT);resumeT=setTimeout(()=>{paused=false;},2600);};
-  el.addEventListener('pointerdown',pause);
-  ['pointerup','pointercancel','pointerleave'].forEach(ev=>el.addEventListener(ev,later));
-  el.addEventListener('touchstart',pause,{passive:true});
-  el.addEventListener('touchend',later,{passive:true});
-  const home=document.getElementById('home');
-  function tick(){
-    const half=el.scrollWidth/2;
-    if(half>0){
-      if(pos===null){pos=speed<0?half:0;el.scrollLeft=pos;written=el.scrollLeft;}
-      if(paused){
-        pos=el.scrollLeft; // ตามนิ้วเด็กไปก่อน
-        if(pos>=half){pos-=half;el.scrollLeft=pos;}
-        else if(pos<=0){pos+=half;el.scrollLeft=pos;}
-        written=el.scrollLeft;
-      } else {
-        if(written!==null&&Math.abs(el.scrollLeft-written)>1.5)pos=el.scrollLeft;
-        if(home.classList.contains('active')&&!document.hidden)pos+=speed;
-        if(pos>=half)pos-=half;else if(pos<0)pos+=half;
-        el.scrollLeft=pos;written=el.scrollLeft;
-      }
-    }
-    requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
+  document.getElementById('railGames').innerHTML=gamesHtml;
+  document.getElementById('railStories').innerHTML=storiesHtml;
+  document.getElementById('railColor').innerHTML=colorHtml;
 }
 
 /* ============ Hook up hub inits ============ */
