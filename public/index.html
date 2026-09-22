@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.294.0/lucide.min.js"></script>
 <style>
   :root{
     --cream:#FBF5EA;
@@ -324,45 +323,49 @@
   .story-card .st{font-weight:700;font-size:18px;}
   .story-card .ss{font-size:13px;color:var(--ink-soft);margin-top:2px;}
   .story-card::after{content:'\203A';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:24px;color:var(--ink-faint);font-weight:700;}
-  .lesson{background:linear-gradient(135deg,rgba(63,140,119,.10),rgba(127,201,179,.08));border-radius:var(--radius-md);padding:16px 18px;margin-top:14px;border-left:4px solid var(--green);}
+  .lesson{background:linear-gradient(135deg,rgba(63,140,119,.10),rgba(127,201,179,.08));border-radius:var(--radius-md);padding:16px 18px;margin:14px 20px 4px;border-left:4px solid var(--green);}
   .lesson .lt{font-weight:700;color:var(--green-dark);margin-bottom:5px;}
   .lesson p{margin:0;font-size:16px;}
 
   /* ---------- Story popup (carousel) ---------- */
-  .story-modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:18px;}
-  .story-modal.open{display:flex;}
+  .story-modal{position:fixed;inset:0;z-index:80;display:none;}
+  .story-modal.open{display:block;}
   .story-modal-backdrop{position:absolute;inset:0;background:rgba(40,54,48,.55);backdrop-filter:blur(2px);animation:fadein .2s var(--ease-out);}
+  /* อ่านเต็มจอเหมือนหนังสือนิทาน: หัวเรื่องอยู่บน ภาพ+ข้อความเลื่อนตรงกลาง ปุ่มเปิดหน้าอยู่ล่างเสมอ */
   .story-modal-card{
-    position:relative;width:100%;max-width:440px;max-height:92vh;overflow-y:auto;
-    background:linear-gradient(180deg,var(--cream-2),var(--white));border-radius:var(--radius-xl);
-    box-shadow:var(--shadow-lg);border:1px solid var(--line);padding:20px;
-    animation:popIn .3s var(--ease);touch-action:pan-y;
-    scrollbar-width:none;-ms-overflow-style:none;
+    position:relative;width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;
+    background:linear-gradient(180deg,var(--cream-2),var(--white));
+    animation:bookIn .3s var(--ease-out);touch-action:pan-y;
   }
-  .story-modal-card::-webkit-scrollbar{display:none;width:0;height:0;}
-  @keyframes popIn{from{opacity:0;transform:scale(.9) translateY(10px)}to{opacity:1;transform:none}}
+  @keyframes bookIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
   .story-modal-close{
-    position:absolute;top:14px;right:14px;z-index:2;border:none;background:var(--white);
-    width:36px;height:36px;border-radius:50%;box-shadow:var(--shadow-sm);cursor:pointer;
+    position:absolute;top:calc(10px + env(safe-area-inset-top));right:12px;z-index:5;border:none;background:var(--white);
+    width:38px;height:38px;border-radius:50%;box-shadow:var(--shadow-sm);cursor:pointer;
     display:flex;align-items:center;justify-content:center;color:var(--ink-soft);
   }
   .story-modal-close:active{transform:scale(.9);}
-  .story-modal-head{display:flex;align-items:center;gap:12px;padding-right:34px;margin-bottom:14px;}
-  .smh-emoji{font-size:38px;flex:0 0 auto;}
+  .story-modal-head{display:flex;align-items:center;gap:11px;flex:0 0 auto;
+    padding:calc(12px + env(safe-area-inset-top)) 58px 11px 18px;border-bottom:1px solid var(--line);}
+  .smh-emoji{font-size:32px;flex:0 0 auto;}
   .smh-title{font-weight:700;font-size:19px;color:var(--green-dark);}
   .smh-arabic{direction:rtl;color:var(--gold-deep);font-size:14px;font-weight:600;margin-top:1px;}
+  .story-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    display:flex;flex-direction:column;scrollbar-width:none;-ms-overflow-style:none;}
+  .story-scroll::-webkit-scrollbar{display:none;width:0;}
   .slide-art{
-    position:relative;aspect-ratio:4/3;border-radius:var(--radius-md);overflow:hidden;margin-bottom:14px;
+    position:relative;aspect-ratio:4/3;overflow:hidden;margin-bottom:0;
     display:flex;align-items:center;justify-content:center;
     background:linear-gradient(135deg,rgba(127,201,179,.22),rgba(239,206,134,.22));
-    border:1px solid var(--line);
   }
   .slide-art-emoji{font-size:64px;}
   .slide-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-  .slide-text{font-family:'Sarabun',sans-serif;font-size:17px;line-height:1.85;color:var(--ink);margin:0;animation:fadein .25s var(--ease-out);}
-  .story-stage{position:relative;perspective:1400px;}
+  .slide-text{font-family:'Sarabun',sans-serif;font-size:18px;line-height:1.95;color:var(--ink);
+    margin:0;padding:18px 20px 4px;animation:fadein .25s var(--ease-out);}
+  .story-stage{position:relative;perspective:1400px;flex:1 0 auto;display:flex;flex-direction:column;}
+  .story-page{flex:1 0 auto;display:flex;flex-direction:column;}
+  .slide-body{flex:1 0 auto;display:flex;flex-direction:column;justify-content:center;padding-bottom:12px;}
   .story-page.flip-page{
-    position:absolute;top:0;left:0;right:0;background:var(--cream-2);border-radius:var(--radius-sm);
+    position:absolute;top:0;left:0;right:0;bottom:0;background:var(--cream-2);
     backface-visibility:hidden;transform-style:preserve-3d;box-shadow:0 10px 30px rgba(0,0,0,.18);
     transition:transform .5s cubic-bezier(.45,0,.2,1);z-index:3;
   }
@@ -374,10 +377,12 @@
   .flip-page.flip-next::after{background:linear-gradient(to right, transparent 45%, rgba(0,0,0,.28));}
   .flip-page.flip-prev::after{background:linear-gradient(to left, transparent 45%, rgba(0,0,0,.28));}
   .flip-page.turning::after{opacity:1;}
-  .story-modal-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px;}
+  .story-modal-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;flex:0 0 auto;
+    padding:11px 18px calc(11px + env(safe-area-inset-bottom));border-top:1px solid var(--line);
+    background:var(--cream-2);}
   .story-nav-btn{
     border:1px solid var(--line);background:var(--white);color:var(--green-dark);
-    width:44px;height:44px;border-radius:50%;box-shadow:var(--shadow-sm);cursor:pointer;
+    width:50px;height:50px;border-radius:50%;box-shadow:var(--shadow-sm);cursor:pointer;
     display:flex;align-items:center;justify-content:center;transition:transform .15s var(--ease-out);flex:0 0 auto;
   }
   .story-nav-btn.primary{background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;border-color:transparent;box-shadow:var(--shadow-green);}
@@ -470,7 +475,8 @@
     .cat-grid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));}
     .game-wrap{max-width:480px;margin-left:auto;margin-right:auto;}
     .color-editor{max-width:520px;margin-left:auto;margin-right:auto;}
-    .story-modal-card{max-width:560px;}
+    .story-modal-card{max-width:720px;margin:0 auto;box-shadow:var(--shadow-lg);}
+    .slide-text,.lesson{max-width:52ch;margin-left:auto;margin-right:auto;}
     .brand{font-size:32px;}
     .tagline{font-size:16px;}
   }
@@ -527,14 +533,14 @@
 
   <!-- ===== IQ HUB ===== -->
   <section id="iqhub" class="screen">
-    <div class="topbar"><button class="back-btn" onclick="go('home')"><i data-lucide="chevron-left"></i><span>กลับ</span></button><h2>ฝึกไอคิว</h2></div>
+    <div class="topbar"><button class="back-btn" onclick="go('home')"><svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span>กลับ</span></button><h2>ฝึกไอคิว</h2></div>
     <div class="hub-grid" id="iqGrid"></div>
   </section>
 
   <!-- ===== GAME SCREEN ===== -->
   <section id="game" class="screen">
     <div class="topbar">
-      <button class="back-btn" onclick="go('iqhub')"><i data-lucide="chevron-left"></i><span>กลับ</span></button>
+      <button class="back-btn" onclick="go('iqhub')"><svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span>กลับ</span></button>
       <h2 id="gameTitle"></h2>
       <div class="spacer"></div>
       <div class="score-pill"><img src="/icon-web/ui/01_star_filled.png" alt="" style="width:18px;height:18px;object-fit:contain;"> <span id="gameScore">0</span></div>
@@ -546,7 +552,7 @@
 
   <!-- ===== COLOR HUB ===== -->
   <section id="colorhub" class="screen">
-    <div class="topbar"><button class="back-btn" onclick="colorBack()"><i data-lucide="chevron-left"></i><span>กลับ</span></button><h2 id="colorTitle">ระบายสี</h2></div>
+    <div class="topbar"><button class="back-btn" onclick="colorBack()"><svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span>กลับ</span></button><h2 id="colorTitle">ระบายสี</h2></div>
     <div class="cat-grid" id="colorCats"></div>
     <div class="color-editor" id="colorEditor" style="display:none">
       <div class="pic-grid" id="picGrid" style="display:none"></div>
@@ -580,7 +586,7 @@
 
   <!-- ===== STORY HUB ===== -->
   <section id="storyhub" class="screen">
-    <div class="topbar"><button class="back-btn" onclick="storyBack()"><i data-lucide="chevron-left"></i><span>กลับ</span></button><h2 id="storyTitle">นิทาน</h2></div>
+    <div class="topbar"><button class="back-btn" onclick="storyBack()"><svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span>กลับ</span></button><h2 id="storyTitle">นิทาน</h2></div>
     <div class="cat-grid" id="storyCats"></div>
     <div id="storyListWrap" style="display:none">
       <div id="storyList"></div>
@@ -594,7 +600,7 @@
 <div class="story-modal" id="storyModal">
   <div class="story-modal-backdrop" onclick="closeStoryModal()"></div>
   <div class="story-modal-card" id="storyModalCard">
-    <button class="story-modal-close" onclick="closeStoryModal()"><i data-lucide="x"></i></button>
+    <button class="story-modal-close" onclick="closeStoryModal()"><svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     <div class="story-modal-head">
       <span class="smh-emoji" id="storyModalEmoji"></span>
       <div>
@@ -602,13 +608,15 @@
         <div class="smh-arabic" id="storyModalArabic"></div>
       </div>
     </div>
-    <div class="story-stage" id="storyStage">
-      <div class="story-page" id="storyPageBase"></div>
+    <div class="story-scroll" id="storyScroll">
+      <div class="story-stage" id="storyStage">
+        <div class="story-page" id="storyPageBase"></div>
+      </div>
     </div>
     <div class="story-modal-nav">
-      <button class="story-nav-btn" id="storyPrevBtn" onclick="storyPrev()"><i data-lucide="chevron-left"></i><span>กลับ</span></button>
+      <button class="story-nav-btn" id="storyPrevBtn" onclick="storyPrev()" aria-label="หน้าก่อน"><svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
       <div class="story-dots progress-dots" id="storyModalDots"></div>
-      <button class="story-nav-btn primary" id="storyNextBtn" onclick="storyNext()"><i data-lucide="chevron-right"></i></button>
+      <button class="story-nav-btn primary" id="storyNextBtn" onclick="storyNext()"><svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
     </div>
   </div>
 </div>
@@ -1908,10 +1916,11 @@ function openStory(cat,id){
   renderStorySlide();
   for(let n=1;n<=STORY_MODAL.total;n++){new Image().src=storyImgPath(cat,id,n);}
   document.getElementById('storyModal').classList.add('open');
-  if(window.lucide)lucide.createIcons();
+  document.body.style.overflow='hidden'; // กันหน้าเว็บข้างหลังเลื่อนตามนิ้ว
 }
 function closeStoryModal(){
   document.getElementById('storyModal').classList.remove('open');
+  document.body.style.overflow='';
 }
 function buildSlideHTML(i){
   const s=STORY_MODAL.story;const art=i+1;
@@ -1920,20 +1929,21 @@ function buildSlideHTML(i){
       <span class="slide-art-emoji">${s.scene}</span>
       <img src="${storyImgPath(STORY_MODAL.cat,STORY_MODAL.id,art)}" alt="" decoding="async" onerror="this.style.display='none'">
     </div>
-    <p class="slide-text">${s.body[i]}</p>
-    ${i===STORY_MODAL.total-1?`<div class="lesson"><div class="lt">💡 บทเรียนสำหรับหนู</div><p>${s.lesson}</p></div>`:''}`;
+    <div class="slide-body">
+      <p class="slide-text">${s.body[i]}</p>
+      ${i===STORY_MODAL.total-1?`<div class="lesson"><div class="lt">💡 บทเรียนสำหรับหนู</div><p>${s.lesson}</p></div>`:''}
+    </div>`;
 }
 function renderStorySlide(){
   const i=STORY_MODAL.slide;
   document.getElementById('storyPageBase').innerHTML=buildSlideHTML(i);
   document.getElementById('storyPrevBtn').style.visibility=i===0?'hidden':'visible';
-  document.getElementById('storyNextBtn').innerHTML=i===STORY_MODAL.total-1?'<i data-lucide="check"></i>':'<i data-lucide="chevron-right"></i>';
+  document.getElementById('storyNextBtn').innerHTML=i===STORY_MODAL.total-1?'<svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>':'<svg class="lucide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
   const dots=document.getElementById('storyModalDots');dots.innerHTML='';
   for(let d=0;d<STORY_MODAL.total;d++){
     const dot=document.createElement('span');dot.className='dot'+(d===i?' on':d<i?' done':'');
     dots.appendChild(dot);
   }
-  if(window.lucide)lucide.createIcons();
 }
 function flipStory(newIndex,dir){
   if(STORY_MODAL.flipping)return;
@@ -2012,7 +2022,6 @@ go=function(id){
   _go(id);
   if(id==='colorhub')initColorHub();
   if(id==='storyhub')initStoryHub();
-  if(window.lucide)lucide.createIcons();
 };
 
 /* init */
@@ -2022,7 +2031,6 @@ buildRails();
 setupPaintCanvas();
 setupFillCanvas();
 setupZoom();
-if(window.lucide)lucide.createIcons();
 </script>
 </body>
 </html>
