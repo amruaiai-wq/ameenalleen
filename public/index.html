@@ -293,20 +293,22 @@
 
   .tool-row{display:flex;gap:8px;margin-top:14px;}
   .tool-btn{flex:1;border:1px solid var(--line);background:var(--white);border-radius:var(--radius-md);
-    padding:10px 6px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;
-    box-shadow:var(--shadow-xs);transition:all .15s var(--ease-out);}
-  .tool-btn:active{transform:scale(.95);}
-  .tool-btn .tico{font-size:22px;}
-  .tool-btn .tlabel{font-size:12px;font-weight:700;color:var(--ink-soft);}
-  .tool-btn.sel{background:linear-gradient(135deg,var(--green),var(--green-dark));border-color:transparent;box-shadow:var(--shadow-green);}
-  .tool-btn.sel .tlabel{color:#fff;}
-  .size-row{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:12px;}
-  .size-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--white);
-    cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-xs);transition:all .15s var(--ease-out);}
-  .size-btn:active{transform:scale(.9);}
-  .size-btn .sdot{border-radius:50%;background:var(--ink-soft);display:block;}
-  .size-btn.sel{border-color:var(--gold-deep);background:rgba(239,206,134,.18);box-shadow:var(--shadow-gold);}
-  .size-btn.sel .sdot{background:var(--green-dark);}
+    padding:13px 6px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    color:var(--ink-soft);box-shadow:var(--shadow-xs);transition:all .15s var(--ease-out);}
+  .tool-btn:active{transform:scale(.93);}
+  .tool-btn.sel{background:linear-gradient(135deg,var(--green),var(--green-dark));border-color:transparent;
+    box-shadow:var(--shadow-green);color:#fff;}
+  .tool-ico{width:26px;height:26px;display:block;}
+  /* ถาดปากกา — อันที่เลือกจะยกขึ้นมาเหมือนหยิบออกจากกล่องสี */
+  .tip-row{display:flex;gap:12px;justify-content:center;align-items:flex-end;margin-top:14px;
+    padding:12px 14px 0;overflow:hidden;border-radius:var(--radius-md) var(--radius-md) 0 0;
+    background:linear-gradient(180deg,transparent,rgba(63,140,119,.09));}
+  .tip-btn{border:none;background:none;padding:0;cursor:pointer;line-height:0;color:inherit;
+    transform:translateY(12px);transition:transform .2s var(--ease);}
+  .tip-btn.sel{transform:translateY(-3px);}
+  .tip-btn:active{transform:translateY(-3px) scale(.94);}
+  .tip-btn .pen{width:38px;height:63px;display:block;fill:currentColor;
+    filter:drop-shadow(0 3px 5px rgba(58,96,82,.28));}
 
   /* ---------- Stories ---------- */
   .story-card{
@@ -571,7 +573,7 @@
         <button class="zoom-btn wide" onclick="zoomReset()">↺ เต็มรูป</button>
       </div>
       <div class="tool-row" id="toolRow"></div>
-      <div class="size-row" id="sizeRow"></div>
+      <div class="tip-row" id="tipRow"></div>
       <div class="palette" id="palette"></div>
       <div class="color-actions" id="colorActions">
         <button class="ghost-btn" onclick="clearColors()">🧽 เริ่มใหม่</button>
@@ -1349,12 +1351,43 @@ const colors=[
   '#F7DFC8','#E0AE7E','#B5793F','#8B5A2B','#4E3116',
   '#FFFFFF','#D7DCD8','#9AA8A0','#5E6E66','#2A3B36',
 ];
-const brushSizes=[10,20,34];
+const brushTips=[
+  {k:'fine',size:7,rough:false,bw:7.5,nib:2,label:'ปากกาเส้นเล็ก ละเอียด'},
+  {k:'normal',size:17,rough:false,bw:11,nib:3.4,label:'ปากกาธรรมดา'},
+  {k:'thick',size:32,rough:false,bw:15.5,nib:5.4,label:'ปากกาหัวใหญ่'},
+  {k:'crayon',size:24,rough:true,bw:13,nib:4.6,label:'สีเทียน ผิวหยาบ'},
+];
+const TOOL_SVG={
+  bucket:'<path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0z"/><path d="m5 2 5 5"/><path d="M2 13h15"/><path d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.4 2-4 .3 1.6 2 2.4 2 4"/>',
+  brush:'<path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/><path d="m15 5 4 4"/>',
+  eraser:'<path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/>',
+  pan:'<path d="M18 11V6a2 2 0 0 0-4 0"/><path d="M14 10V4a2 2 0 0 0-4 0v2"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>',
+};
+function toolSvg(k){return `<svg class="tool-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${TOOL_SVG[k]}</svg>`;}
+function penSvg(t){
+  const x=(24-t.bw)/2, r=(v)=>v.toFixed(1);
+  if(t.rough){ // สีเทียน — ตัวอ้วน ปลายตัด มีเม็ดหยาบ ๆ
+    return `<svg class="pen" viewBox="0 0 24 40" aria-hidden="true">
+      <rect x="${r(x)}" y="5" width="${r(t.bw)}" height="19" rx="2"/>
+      <path d="M${r(x)} 24h${r(t.bw)}l-2.6 5.6h-${r(t.bw-5.2)}z"/>
+      <rect x="${r(12-t.nib)}" y="29.6" width="${r(t.nib*2)}" height="3.6" rx="1.2"/>
+      <circle cx="9.2" cy="35.4" r=".95" opacity=".7"/>
+      <circle cx="14.6" cy="36.4" r=".8" opacity=".55"/>
+      <circle cx="12" cy="34.6" r=".65" opacity=".5"/>
+    </svg>`;
+  }
+  return `<svg class="pen" viewBox="0 0 24 40" aria-hidden="true">
+    <rect x="${r(x)}" y="3" width="${r(t.bw)}" height="19" rx="${r(t.bw/3)}"/>
+    <rect x="${r(x)}" y="19.6" width="${r(t.bw)}" height="3" opacity=".3"/>
+    <path d="M${r(x+0.8)} 23h${r(t.bw-1.6)}L12 31.4z"/>
+    <circle cx="12" cy="32" r="${t.nib}"/>
+  </svg>`;
+}
 let selColor='#FF9F43';
 let curCat='wild';
 let curPic=null;
-let PAINT={tool:'bucket',size:1,drawing:false,lastX:0,lastY:0,inkMask:null,
-  zoom:1,panX:0,panY:0,gesture:false,loadToken:0};
+let PAINT={tool:'bucket',tip:1,drawing:false,lastX:0,lastY:0,
+  regions:null,region:0,zoom:1,panX:0,panY:0,gesture:false,loadToken:0};
 
 function initColorHub(){
   document.getElementById('colorEditor').style.display='none';
@@ -1381,14 +1414,14 @@ function openCategory(key){
   const hasPics=Object.keys(picLib[key]).length>0;
   document.getElementById('colorEmpty').style.display=hasPics?'none':'block';
   document.getElementById('picGrid').style.display=hasPics?'grid':'none';
-  ['colorStage','zoomRow','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
+  ['colorStage','zoomRow','toolRow','tipRow','palette','colorActions'].forEach(id=>{
     document.getElementById(id).style.display='none';
   });
   if(!hasPics)return;
   renderPicGrid();
   renderPalette();
   renderToolRow();
-  renderSizeRow();
+  renderTipRow();
 }
 function colorBack(){
   const onStage=document.getElementById('colorEditor').style.display!=='none' && document.getElementById('picGrid').style.display==='none';
@@ -1408,13 +1441,13 @@ function renderPicGrid(){
 }
 function showPicGrid(){
   document.getElementById('picGrid').style.display='grid';
-  ['colorStage','zoomRow','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
+  ['colorStage','zoomRow','toolRow','tipRow','palette','colorActions'].forEach(id=>{
     document.getElementById(id).style.display='none';
   });
 }
 function showEditorStage(){
   document.getElementById('picGrid').style.display='none';
-  ['colorStage','zoomRow','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
+  ['colorStage','zoomRow','toolRow','tipRow','palette','colorActions'].forEach(id=>{
     document.getElementById(id).style.display='';
   });
   updateToolUI();
@@ -1424,32 +1457,32 @@ function renderPalette(){
   colors.forEach(c=>{
     const s=document.createElement('div');s.className='swatch'+(c===selColor?' sel':'');s.style.background=c;
     if(c==='#FFFFFF')s.style.border='3px solid #ddd';
-    s.onclick=()=>{selColor=c;document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('sel'));s.classList.add('sel');};
+    s.onclick=()=>{selColor=c;document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('sel'));s.classList.add('sel');updateToolUI();};
     pal.appendChild(s);
   });
 }
 function renderToolRow(){
   const tr=document.getElementById('toolRow');tr.innerHTML='';
-  const tools=[{k:'bucket',ico:'🪣',label:'เทสี'},{k:'brush',ico:'🖌️',label:'แปรง'},{k:'eraser',ico:'🧹',label:'ยางลบ'},{k:'pan',ico:'✋',label:'เลื่อนรูป'}];
+  const tools=[{k:'bucket',label:'เทสี'},{k:'brush',label:'ระบายสี'},{k:'eraser',label:'ยางลบ'},{k:'pan',label:'เลื่อน/ซูม'}];
   tools.forEach(t=>{
     const b=document.createElement('button');b.className='tool-btn'+(PAINT.tool===t.k?' sel':'');b.dataset.tool=t.k;
-    b.innerHTML=`<span class="tico">${t.ico}</span><span class="tlabel">${t.label}</span>`;
+    b.innerHTML=toolSvg(t.k);b.title=t.label;b.setAttribute('aria-label',t.label);
     b.onclick=()=>{PAINT.tool=t.k;updateToolUI();};
     tr.appendChild(b);
   });
 }
-function renderSizeRow(){
-  const sr=document.getElementById('sizeRow');sr.innerHTML='';
-  [8,14,20].forEach((d,i)=>{
-    const b=document.createElement('button');b.className='size-btn'+(PAINT.size===i?' sel':'');
-    b.innerHTML=`<span class="sdot" style="width:${d}px;height:${d}px"></span>`;
-    b.onclick=()=>{PAINT.size=i;updateToolUI();};
-    sr.appendChild(b);
+function renderTipRow(){
+  const tr=document.getElementById('tipRow');tr.innerHTML='';
+  brushTips.forEach((t,i)=>{
+    const b=document.createElement('button');b.className='tip-btn'+(PAINT.tip===i?' sel':'');
+    b.innerHTML=penSvg(t);b.title=t.label;b.setAttribute('aria-label',t.label);
+    b.onclick=()=>{PAINT.tip=i;updateToolUI();};
+    tr.appendChild(b);
   });
 }
 function updateToolUI(){
   document.querySelectorAll('#toolRow .tool-btn').forEach(b=>b.classList.toggle('sel',b.dataset.tool===PAINT.tool));
-  document.querySelectorAll('#sizeRow .size-btn').forEach((b,i)=>b.classList.toggle('sel',i===PAINT.size));
+  document.querySelectorAll('#tipRow .tip-btn').forEach((b,i)=>b.classList.toggle('sel',i===PAINT.tip));
   const draws=PAINT.tool==='brush'||PAINT.tool==='eraser';
   const paint=document.getElementById('paintCanvas');
   if(paint)paint.style.pointerEvents=draws?'auto':'none';
@@ -1457,8 +1490,11 @@ function updateToolUI(){
   if(fill)fill.style.pointerEvents=PAINT.tool==='bucket'?'auto':'none';
   const palette=document.getElementById('palette');
   if(palette)palette.style.display=(PAINT.tool==='eraser'||PAINT.tool==='pan')?'none':'flex';
-  const sizeRow=document.getElementById('sizeRow');
-  if(sizeRow)sizeRow.style.display=draws?'flex':'none';
+  const tipRow=document.getElementById('tipRow');
+  if(tipRow){
+    tipRow.style.display=draws?'flex':'none';
+    tipRow.style.color=PAINT.tool==='eraser'?'#9AA8A0':selColor; // ปากกาในถาดเป็นสีที่เลือกอยู่
+  }
 }
 function loadPic(){
   const pic=picLib[curCat][curPic];
@@ -1485,7 +1521,8 @@ function loadPic(){
       ink[p]=v?1:0; // 1 = ระบายได้, 0 = เส้นขอบสีดำ (ห้ามทับ)
     }
     fctx.putImageData(id,0,0);
-    PAINT.inkMask=ink;
+    PAINT.regions=buildRegions(ink,cw,ch);
+    PAINT.region=0;
     const paint=document.getElementById('paintCanvas');
     paint.width=cw;paint.height=ch;
     paint.getContext('2d').clearRect(0,0,cw,ch);
@@ -1500,54 +1537,55 @@ function hexToRgb(hex){
   const n=parseInt(hex.slice(1),16);
   return [(n>>16)&255,(n>>8)&255,n&255];
 }
-function isWallPixel(r,g,b){ return (r+g+b)/3 < 128; }
-/* นิ้วเด็กกดโดนเส้นขอบดำบ่อย — ถ้ากดโดนเส้น ให้หาจุดระบายได้ที่ใกล้ที่สุดแทน จะได้ไม่รู้สึกว่า "กดแล้วไม่ติด" */
-function nearestFillable(data,w,h,x,y,maxR){
-  const free=(px,py)=>{
-    if(px<0||py<0||px>=w||py>=h)return false;
-    const i=(py*w+px)*4;
-    return !isWallPixel(data[i],data[i+1],data[i+2]);
-  };
-  if(free(x,y))return{x,y};
-  for(let r=2;r<=maxR;r+=2){
-    const steps=r*6;
-    for(let s=0;s<steps;s++){
-      const t=s/steps*Math.PI*2;
-      const px=Math.round(x+Math.cos(t)*r),py=Math.round(y+Math.sin(t)*r);
-      if(free(px,py))return{x:px,y:py};
+/* แบ่งรูปเป็น "ช่อง" ทีเดียวตอนโหลด โดยใช้เส้นดำเป็นขอบเขต
+   ทั้งถังเทสีและแปรงใช้ช่องชุดเดียวกัน สีจึงไม่มีทางล้นออกนอกเส้น */
+function buildRegions(ink,w,h){
+  const reg=new Int32Array(w*h);
+  const stack=new Int32Array(w*h);
+  let next=1;
+  for(let seed=0;seed<reg.length;seed++){
+    if(!ink[seed]||reg[seed])continue;
+    const id=next++;
+    let sp=0;stack[sp++]=seed;reg[seed]=id;
+    while(sp){
+      const q=stack[--sp],x=q%w;
+      if(x>0&&ink[q-1]&&!reg[q-1]){reg[q-1]=id;stack[sp++]=q-1;}
+      if(x<w-1&&ink[q+1]&&!reg[q+1]){reg[q+1]=id;stack[sp++]=q+1;}
+      if(q>=w&&ink[q-w]&&!reg[q-w]){reg[q-w]=id;stack[sp++]=q-w;}
+      if(q+w<reg.length&&ink[q+w]&&!reg[q+w]){reg[q+w]=id;stack[sp++]=q+w;}
     }
   }
-  return null;
+  return reg;
+}
+/* นิ้วเด็กแตะโดนเส้นบ่อย — ถ้าแตะโดนเส้น ให้หาช่องที่ใกล้ที่สุดแทน */
+function regionAt(x,y){
+  const reg=PAINT.regions,c=document.getElementById('fillCanvas');
+  if(!reg||!c)return 0;
+  const w=c.width,h=c.height;
+  const at=(px,py)=>(px<0||py<0||px>=w||py>=h)?0:reg[py*w+px];
+  const hit=at(x,y);
+  if(hit)return hit;
+  for(let r=2;r<=16;r+=2){
+    const steps=r*6;
+    for(let i=0;i<steps;i++){
+      const t=i/steps*Math.PI*2;
+      const id=at(Math.round(x+Math.cos(t)*r),Math.round(y+Math.sin(t)*r));
+      if(id)return id;
+    }
+  }
+  return 0;
 }
 function floodFillAt(ctx,x,y,hexColor){
+  const id=regionAt(Math.round(x),Math.round(y));
+  if(!id)return;
+  const reg=PAINT.regions;
   const w=ctx.canvas.width,h=ctx.canvas.height;
-  if(x<0||y<0||x>=w||y>=h)return;
   const imgData=ctx.getImageData(0,0,w,h);
   const data=imgData.data;
-  const seed=nearestFillable(data,w,h,x,y,16);
-  if(!seed)return;
-  x=seed.x;y=seed.y;
-  const startIdx=(y*w+x)*4;
   const [fr,fg,fb]=hexToRgb(hexColor);
-  const sr=data[startIdx],sg=data[startIdx+1],sb=data[startIdx+2];
-  if(sr===fr&&sg===fg&&sb===fb)return;
-  // exact-match fill: the base image is pure black/white (or a previous flat fill color),
-  // so this can never bleed past the black outline into a neighboring area
-  const visited=new Uint8Array(w*h);
-  const stack=[y*w+x];
-  while(stack.length){
-    const p=stack.pop();
-    if(visited[p])continue;
-    const i=p*4;
-    if(isWallPixel(data[i],data[i+1],data[i+2]))continue;
-    if(data[i]!==sr||data[i+1]!==sg||data[i+2]!==sb)continue;
-    visited[p]=1;
-    data[i]=fr;data[i+1]=fg;data[i+2]=fb;data[i+3]=255;
-    const px=p%w, py=(p-px)/w;
-    if(px>0)stack.push(p-1);
-    if(px<w-1)stack.push(p+1);
-    if(py>0)stack.push(p-w);
-    if(py<h-1)stack.push(p+w);
+  for(let p=0;p<reg.length;p++){
+    if(reg[p]!==id)continue;
+    const i=p*4;data[i]=fr;data[i+1]=fg;data[i+2]=fb;data[i+3]=255;
   }
   ctx.putImageData(imgData,0,0);
 }
@@ -1638,55 +1676,80 @@ function setupPaintCanvas(){
     const r=canvas.getBoundingClientRect();
     return {x:(e.clientX-r.left)*(canvas.width/r.width), y:(e.clientY-r.top)*(canvas.height/r.height)};
   }
-  /* กันไม่ให้สีทับเส้นขอบดำ แต่ยังลากแปรงข้ามส่วนต่าง ๆ ของรูปได้อิสระ */
-  function clipToMask(minX,minY,maxX,maxY){
-    if(!PAINT.inkMask)return;
+  /* ลบสีทุกจุดที่อยู่นอก "ช่อง" ที่เริ่มลงแปรง — เส้นดำจึงเป็นขอบเขตจริง ๆ */
+  function clipToRegion(minX,minY,maxX,maxY){
+    const reg=PAINT.regions;
+    if(!reg||!PAINT.region)return;
     minX=Math.max(0,Math.floor(minX));minY=Math.max(0,Math.floor(minY));
     maxX=Math.min(canvas.width-1,Math.ceil(maxX));maxY=Math.min(canvas.height-1,Math.ceil(maxY));
     const w=maxX-minX+1,h=maxY-minY+1;
     if(w<=0||h<=0)return;
     const imgData=ctx.getImageData(minX,minY,w,h);
     const data=imgData.data;
-    const cw=canvas.width, mask=PAINT.inkMask;
+    const cw=canvas.width,id=PAINT.region;
     for(let yy=0;yy<h;yy++){
+      const row=(minY+yy)*cw+minX;
       for(let xx=0;xx<w;xx++){
-        if(!mask[(minY+yy)*cw+(minX+xx)]) data[(yy*w+xx)*4+3]=0;
+        if(reg[row+xx]!==id)data[(yy*w+xx)*4+3]=0;
       }
     }
     ctx.putImageData(imgData,minX,minY);
   }
-  function dot(p){
+  function tipNow(){return brushTips[PAINT.tip]||brushTips[1];}
+  function solid(x1,y1,x2,y2,rad){
     ctx.save();
     ctx.globalCompositeOperation=PAINT.tool==='eraser'?'destination-out':'source-over';
-    ctx.fillStyle=selColor;
-    const rad=brushSizes[PAINT.size]/2;
-    ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();
+    if(x1===x2&&y1===y2){
+      ctx.fillStyle=selColor;
+      ctx.beginPath();ctx.arc(x1,y1,rad,0,Math.PI*2);ctx.fill();
+    } else {
+      ctx.strokeStyle=selColor;ctx.lineWidth=rad*2;
+      ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    }
     ctx.restore();
-    if(PAINT.tool==='brush')clipToMask(p.x-rad-1,p.y-rad-1,p.x+rad+1,p.y+rad+1);
   }
-  function line(x1,y1,x2,y2){
+  /* สีเทียน: โปรยจุดเล็ก ๆ แบบสุ่มตามแนวลาก ให้ได้ผิวหยาบ ๆ */
+  function rough(x1,y1,x2,y2,rad){
+    const steps=Math.max(1,Math.round(Math.hypot(x2-x1,y2-y1)/2.5));
+    const dots=Math.max(2,Math.round(rad/4));
     ctx.save();
-    ctx.globalCompositeOperation=PAINT.tool==='eraser'?'destination-out':'source-over';
-    ctx.strokeStyle=selColor;ctx.lineWidth=brushSizes[PAINT.size];
-    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    ctx.fillStyle=selColor;
+    for(let i=0;i<=steps;i++){
+      const t=i/steps,cx=x1+(x2-x1)*t,cy=y1+(y2-y1)*t;
+      for(let k=0;k<dots;k++){
+        const a=Math.random()*Math.PI*2,r=Math.sqrt(Math.random())*rad;
+        ctx.globalAlpha=.35+Math.random()*.4;
+        ctx.beginPath();ctx.arc(cx+Math.cos(a)*r,cy+Math.sin(a)*r,rad*.22,0,Math.PI*2);ctx.fill();
+      }
+    }
     ctx.restore();
+  }
+  function stroke(x1,y1,x2,y2){
+    const t=tipNow(),rad=t.size/2;
+    if(t.rough&&PAINT.tool!=='eraser')rough(x1,y1,x2,y2,rad);
+    else solid(x1,y1,x2,y2,rad);
     if(PAINT.tool==='brush'){
-      const lw=brushSizes[PAINT.size]/2+1;
-      clipToMask(Math.min(x1,x2)-lw,Math.min(y1,y2)-lw,Math.max(x1,x2)+lw,Math.max(y1,y2)+lw);
+      const pad=rad+2;
+      clipToRegion(Math.min(x1,x2)-pad,Math.min(y1,y2)-pad,Math.max(x1,x2)+pad,Math.max(y1,y2)+pad);
     }
   }
   canvas.addEventListener('pointerdown',e=>{
     if(PAINT.tool!=='brush'&&PAINT.tool!=='eraser')return;
     if(PAINT.gesture)return;
+    const p=posFromEvent(e);
+    if(PAINT.tool==='brush'){
+      PAINT.region=regionAt(Math.round(p.x),Math.round(p.y));
+      if(!PAINT.region)return; // แตะโดนเส้นล้วน ๆ หาช่องใกล้ ๆ ไม่เจอ
+    }
     canvas.setPointerCapture(e.pointerId);
     PAINT.drawing=true;
-    const p=posFromEvent(e);PAINT.lastX=p.x;PAINT.lastY=p.y;
-    dot(p);
+    PAINT.lastX=p.x;PAINT.lastY=p.y;
+    stroke(p.x,p.y,p.x,p.y);
   });
   canvas.addEventListener('pointermove',e=>{
     if(!PAINT.drawing)return;
     if(PAINT.gesture){PAINT.drawing=false;return;}
-    const p=posFromEvent(e);line(PAINT.lastX,PAINT.lastY,p.x,p.y);PAINT.lastX=p.x;PAINT.lastY=p.y;
+    const p=posFromEvent(e);stroke(PAINT.lastX,PAINT.lastY,p.x,p.y);PAINT.lastX=p.x;PAINT.lastY=p.y;
   });
   /* ไม่ดัก pointerleave เพราะจับ pointer capture ไว้แล้ว — เดิมทำให้เส้นขาดเวลานิ้วเลยขอบรูป */
   ['pointerup','pointercancel'].forEach(ev=>canvas.addEventListener(ev,()=>{PAINT.drawing=false;}));
