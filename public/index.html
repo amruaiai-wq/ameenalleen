@@ -111,50 +111,48 @@
   }
   .tagline{color:var(--ink-soft);margin:4px 0 22px;font-size:15px;}
 
-  .menu{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  .card{
-    border:1px solid var(--line);cursor:pointer;text-align:center;
-    background:linear-gradient(180deg,var(--cream-2),var(--white));border-radius:var(--radius-lg);
-    padding:26px 14px 20px;box-shadow:var(--shadow-md);
-    font-family:inherit;color:var(--ink);
-    transition:transform .2s var(--ease-out), box-shadow .2s var(--ease-out);
-    position:relative;overflow:hidden;
-    animation:cardIn .5s var(--ease-out) both;
-  }
-  .menu .card:nth-child(1){animation-delay:.05s;}
-  .menu .card:nth-child(2){animation-delay:.12s;}
-  .menu .card:nth-child(3){animation-delay:.19s;}
-  @keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
-  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
-  .card:active{transform:scale(.96);box-shadow:var(--shadow-press);}
-  .card.big{grid-column:1 / -1;display:flex;align-items:center;gap:18px;text-align:left;padding:22px;}
-  .card .emoji{font-size:46px;display:block;line-height:1;}
-  .card.big .emoji{font-size:54px;flex:0 0 auto;}
-  .card .label{font-weight:700;font-size:18px;margin-top:12px;}
-  .card.big .label{margin-top:0;}
-  .card .sub{font-size:13px;color:var(--ink-soft);margin-top:3px;}
-  .card::before{content:"";position:absolute;top:0;left:0;right:0;height:60%;
-    background:linear-gradient(180deg,rgba(255,255,255,.55),transparent);pointer-events:none;}
-  .card::after{content:"";position:absolute;inset:0;border-radius:var(--radius-lg);border:2px solid transparent;transition:border-color .2s;}
-  .card:hover::after{border-color:rgba(217,169,62,.45);}
-  .tint{width:78px;height:78px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin:0 auto;box-shadow:inset 0 -3px 8px rgba(0,0,0,.05);position:relative;z-index:1;overflow:hidden;}
-  .tint img{height:66px;width:auto;display:block;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.12));}
-  .card.big .tint img{height:72px;}
-  .card.theme-blue{background:linear-gradient(165deg,rgba(169,221,240,.30),var(--white) 62%);}
-  .card.theme-coral{background:linear-gradient(165deg,rgba(233,169,138,.26),var(--white) 62%);}
-  .card.theme-gold{background:linear-gradient(165deg,rgba(239,206,134,.32),var(--white) 62%);}
-  .card .count-badge{position:absolute;top:12px;right:12px;z-index:2;background:var(--white);color:var(--green-dark);
-    font-size:11px;font-weight:700;padding:4px 10px;border-radius:var(--radius-pill);box-shadow:var(--shadow-xs);border:1px solid var(--line);}
-  .card.big .count-badge{top:14px;right:16px;}
-  .card .tint{animation:iconPulse 2.6s ease-in-out infinite;}
-  @keyframes iconPulse{0%,100%{transform:scale(1) rotate(0deg);}50%{transform:scale(1.07) rotate(-3deg);}}
-  .menu .card:nth-child(1) .tint{animation-delay:.1s;}
-  .menu .card:nth-child(2) .tint{animation-delay:.5s;}
-  .menu .card:nth-child(3) .tint{animation-delay:.9s;}
-  .card .cta{display:inline-flex;align-items:center;gap:2px;font-size:12px;font-weight:700;color:var(--green-dark);
-    background:rgba(63,140,119,.10);padding:5px 11px;border-radius:var(--radius-pill);margin-top:11px;}
-  .card .cta svg.lucide{width:14px;height:14px;stroke-width:3;}
-  .card.big .cta{margin-top:9px;}
+  /* ---------- Home rails (คอราเซล) ---------- */
+  .rail{margin-top:18px;}
+  .rail-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 2px;}
+  .rail-title{font-weight:700;font-size:16px;color:var(--green-dark);}
+  .rail-all{border:none;background:rgba(63,140,119,.10);color:var(--green-dark);font-family:inherit;
+    font-weight:700;font-size:12px;padding:5px 11px;border-radius:var(--radius-pill);cursor:pointer;}
+  .rail-all:active{transform:scale(.94);}
+  .rail-track{display:flex;gap:11px;overflow-x:auto;padding:11px 2px 6px;margin:0 -2px;
+    scrollbar-width:none;-ms-overflow-style:none;scroll-behavior:auto;overscroll-behavior-x:contain;}
+  .rail-track::-webkit-scrollbar{display:none;height:0;}
+  .rail-chip{flex:0 0 auto;width:92px;border:none;background:none;padding:0;cursor:pointer;
+    font-family:inherit;text-align:center;}
+  .rc-art{display:flex;align-items:center;justify-content:center;gap:2px;width:92px;height:80px;
+    border-radius:var(--radius-md);background:linear-gradient(160deg,var(--cream-2),var(--white));
+    border:1px solid var(--line);box-shadow:var(--shadow-sm);overflow:hidden;
+    transition:transform .15s var(--ease-out);}
+  .rc-art>img{width:100%;height:100%;object-fit:cover;display:block;}
+  .rail-chip.rc-photo .rc-art{background:linear-gradient(135deg,rgba(239,206,134,.35),rgba(127,201,179,.25));}
+  .rail-chip.rc-white .rc-art{background:var(--white);}
+  .rail-chip.rc-white .rc-art>img{object-fit:contain;padding:5px;}
+  .rail-chip:active .rc-art{transform:scale(.92);}
+  .rc-emoji{font-size:38px;}
+  .rc-game{display:flex;align-items:center;justify-content:center;gap:2px;transform:scale(.62);}
+  .rc-label{display:block;font-size:11.5px;font-weight:700;margin-top:6px;color:var(--ink);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+  /* ---------- Game art (ไอคอนเกมแบบรูปภาพ) ---------- */
+  .game-art{display:flex;align-items:center;justify-content:center;gap:3px;height:52px;}
+  .ga-i{width:30px;height:30px;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.12));}
+  .ga-card{width:25px;height:33px;border-radius:5px;object-fit:cover;box-shadow:var(--shadow-xs);}
+  .ga-shadow{filter:brightness(0) opacity(.72);}
+  .ga-pop{transform:scale(1.18) rotate(7deg);}
+  .ga-num{width:26px;height:26px;}
+  .ga-q{font-size:21px;font-weight:700;color:var(--gold-deep);}
+  .ga-op{font-size:16px;font-weight:700;color:var(--ink-soft);}
+  .ga-arrow{font-size:16px;color:var(--green-dark);}
+  .ga-pads{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+  .ga-pad{display:block;width:16px;height:16px;border-radius:5px;}
+  .ga-pad.p1{background:#7FC9B3;}
+  .ga-pad.p2{background:#EFCE86;}
+  .ga-pad.p3{background:#9BD1E8;}
+  .ga-pad.p4{background:#E0B48C;}
 
   /* ---------- Generic screens ---------- */
   .screen{display:none;animation:fadein .3s var(--ease-out);}
@@ -169,7 +167,6 @@
   }
   .hub-item:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
   .hub-item:active{transform:scale(.95);box-shadow:var(--shadow-press);}
-  .hub-item .ico{font-size:40px;}
   .hub-item .t{font-weight:700;margin-top:9px;font-size:16px;}
   .hub-item .d{font-size:12px;color:var(--ink-soft);margin-top:3px;}
 
@@ -267,11 +264,19 @@
 
   .color-editor{margin-top:2px;}
   .color-stage{background:var(--white);border-radius:var(--radius-lg);padding:12px;box-shadow:var(--shadow-md);border:1px solid var(--line);position:relative;}
-  #fillCanvas{width:100%;height:auto;display:block;border-radius:var(--radius-md);touch-action:none;}
-  .region{cursor:pointer;transition:fill .12s;}
-  #paintCanvas{position:absolute;inset:12px;width:calc(100% - 24px);height:calc(100% - 24px);border-radius:var(--radius-md);touch-action:none;}
-  .palette{display:flex;flex-wrap:wrap;gap:11px;justify-content:center;margin-top:16px;}
-  .swatch{width:40px;height:40px;border-radius:50%;border:3px solid var(--white);box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .15s var(--ease-out);}
+  .color-viewport{position:relative;overflow:hidden;border-radius:var(--radius-md);touch-action:none;}
+  .canvas-layer{position:relative;transform-origin:0 0;will-change:transform;}
+  #fillCanvas{width:100%;height:auto;display:block;}
+  #paintCanvas{position:absolute;inset:0;width:100%;height:100%;}
+  .zoom-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;}
+  .zoom-btn{border:1px solid var(--line);background:var(--white);border-radius:var(--radius-pill);
+    min-width:44px;height:38px;padding:0 12px;cursor:pointer;font-family:inherit;font-size:15px;font-weight:700;
+    color:var(--green-dark);box-shadow:var(--shadow-xs);transition:transform .12s var(--ease-out);}
+  .zoom-btn:active{transform:scale(.9);}
+  .zoom-btn.wide{font-size:13px;}
+  .zoom-label{font-size:13px;font-weight:700;color:var(--ink-soft);min-width:46px;text-align:center;}
+  .palette{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px;}
+  .swatch{width:32px;height:32px;border-radius:50%;border:3px solid var(--white);box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .15s var(--ease-out);}
   .swatch:hover{transform:scale(1.08);}
   .swatch:active{transform:scale(.85);}
   .swatch.sel{outline:3px solid var(--ink);outline-offset:2px;transform:scale(1.14);}
@@ -390,6 +395,46 @@
   .apad{border:none;background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;width:58px;height:52px;border-radius:var(--radius-sm);font-size:26px;cursor:pointer;box-shadow:var(--shadow-green);transition:transform .12s var(--ease-out);}
   .apad:hover{transform:translateY(-2px);}
   .apad:active{transform:scale(.9);}
+  .tile img{width:76%;height:76%;object-fit:contain;}
+  .tile.star-tile{background:linear-gradient(135deg,rgba(239,206,134,.28),rgba(255,255,255,.6));border-color:var(--gold);}
+  .inline-ico{width:22px;height:22px;object-fit:contain;vertical-align:-5px;}
+  .qchip b{font-size:15px;color:var(--green-dark);margin-left:1px;}
+  .lvl-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0 16px;}
+  .lvl-card{position:relative;aspect-ratio:1/1;border:2px solid var(--line-strong);border-radius:var(--radius-sm);
+    background:var(--white);cursor:pointer;font-family:inherit;padding:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:2px;box-shadow:var(--shadow-xs);
+    transition:transform .12s var(--ease-out),box-shadow .15s;}
+  .lvl-card:not(.locked):active{transform:scale(.92);}
+  .lvl-card.t1,.lvl-card.t2{border-color:rgba(127,201,179,.55);}
+  .lvl-card.t3{border-color:rgba(169,221,240,.75);}
+  .lvl-card.t4{border-color:rgba(239,206,134,.85);}
+  .lvl-card.t5{border-color:rgba(233,169,138,.85);}
+  .lvl-card.cleared{background:linear-gradient(160deg,rgba(127,201,179,.22),var(--white) 70%);}
+  .lvl-card.locked{background:#f1ece2;border-color:transparent;box-shadow:none;cursor:not-allowed;}
+  .lvl-card.locked .lvl-no,.lvl-card.locked .lvl-stars{opacity:.32;}
+  .lvl-no{font-weight:700;font-size:17px;color:var(--green-dark);line-height:1;}
+  .lvl-stars{display:flex;gap:1px;}
+  .lvl-stars img{width:8px;height:8px;object-fit:contain;}
+  .lvl-stars.sm img{width:13px;height:13px;}
+  .lvl-tick{position:absolute;top:-5px;right:-5px;width:20px;height:20px;object-fit:contain;}
+  .lvl-lock{position:absolute;top:3px;right:5px;font-size:12px;opacity:.55;}
+  .lvl-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px;}
+  .lvl-back{border:1px solid var(--line);background:var(--white);color:var(--green-dark);font-family:inherit;
+    font-weight:700;font-size:13px;padding:7px 13px;border-radius:var(--radius-pill);cursor:pointer;box-shadow:var(--shadow-xs);}
+  .lvl-back:active{transform:scale(.94);}
+  .code-goal{font-size:15px;font-weight:600;color:var(--green-dark);margin:2px 0 4px;}
+  .chip-meter{font-size:13px;font-weight:700;color:var(--ink-soft);margin-top:10px;}
+  .chip-meter.full{color:var(--coral-deep);}
+  .rep-row{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin:4px 0 2px;}
+  .rep-label{font-size:13px;font-weight:700;color:var(--ink-soft);}
+  .rep-btn{border:2px solid var(--line-strong);background:var(--white);color:var(--green-dark);font-family:inherit;
+    font-weight:700;font-size:14px;width:42px;height:36px;border-radius:12px;cursor:pointer;box-shadow:var(--shadow-xs);
+    transition:transform .12s var(--ease-out);}
+  .rep-btn:active{transform:scale(.9);}
+  .rep-btn.sel{background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:#5b4200;border-color:transparent;box-shadow:var(--shadow-gold);}
+  .code-actions{display:flex;gap:8px;margin-top:14px;align-items:stretch;}
+  .code-actions .ghost-btn,.code-actions .primary-btn{margin-top:0;flex:1;font-size:14px;padding:12px 6px;}
+  .code-actions .primary-btn{flex:1.3;}
   /* ---------- Sequence memory ---------- */
   .seq-pads{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:270px;margin:14px auto;}
   .spad{border:none;border-radius:var(--radius-lg);height:92px;font-size:42px;cursor:pointer;color:#fff;opacity:.55;transition:opacity .12s,transform .12s var(--ease-out),box-shadow .12s;box-shadow:var(--shadow-sm);}
@@ -397,8 +442,6 @@
   .spad:active{transform:scale(.95);}
 
   svg.lucide{width:24px;height:24px;stroke-width:2.1;vertical-align:middle;}
-  .hub-item .ico{color:var(--green-dark);}
-  .ico svg.lucide{width:34px;height:34px;}
   .hero-wrap{width:100%;max-width:330px;margin:4px auto 0;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 14px 20px rgba(63,140,119,.18));}
   .hero-wrap svg{width:100%;height:auto;display:block;}
   .hero-duo{display:flex;align-items:flex-end;justify-content:center;}
@@ -412,19 +455,6 @@
   .hero-duo{position:relative;z-index:1;}
   .suhail-peek{position:absolute;right:-6px;bottom:8px;z-index:2;animation:float 2.8s ease-in-out infinite .4s;}
   .suhail-peek img{height:50px;width:auto;filter:drop-shadow(0 6px 10px rgba(63,140,119,.25));}
-
-  .feature-strip{margin-top:26px;text-align:left;}
-  .feature-title{font-weight:700;font-size:16px;color:var(--green-dark);}
-  .feature-scroll{display:flex;gap:12px;overflow-x:auto;padding:12px 2px 6px;margin:0 -2px;scrollbar-width:none;-ms-overflow-style:none;}
-  .feature-scroll::-webkit-scrollbar{display:none;height:0;}
-  .feature-chip{flex:0 0 auto;width:88px;border:none;background:none;cursor:pointer;font-family:inherit;text-align:center;padding:0;}
-  .feature-chip .thumb{display:block;width:88px;height:88px;border-radius:var(--radius-md);overflow:hidden;
-    box-shadow:var(--shadow-sm);border:2px solid var(--white);background:linear-gradient(135deg,rgba(239,206,134,.35),rgba(127,201,179,.25));
-    transition:transform .15s var(--ease-out);}
-  .feature-chip .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
-  .feature-chip:active .thumb{transform:scale(.9);}
-  .feature-chip .fname{display:block;font-size:12px;font-weight:700;margin-top:6px;color:var(--ink);
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
   .confetti{position:fixed;top:-10px;font-size:22px;pointer-events:none;z-index:60;animation:fall 2.4s linear forwards;}
   @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0;}}
@@ -468,34 +498,26 @@
       <h1 class="brand">อามีน กับ อัลลีน</h1>
       <p class="tagline">เล่นเกม ระบายสี อ่านนิทาน สนุกทุกวัน ✨</p>
     </div>
-    <div class="menu">
-      <button class="card theme-blue c-iq" onclick="go('iqhub')">
-        <span class="count-badge">12 เกม</span>
-        <div class="tint" style="background:rgba(169,221,240,.35)"><img src="/Suhail_Sprites/02_Expressions/10_think.png" alt="ซูฮัยล์"></div>
-        <div class="label">ฝึกไอคิว</div>
-        <div class="sub">12 เกมพัฒนาสมอง</div>
-        <span class="cta">เล่นเลย <i data-lucide="chevron-right"></i></span>
-      </button>
-      <button class="card theme-coral" onclick="go('colorhub')">
-        <span class="count-badge">120 รูป</span>
-        <div class="tint" style="background:rgba(233,169,138,.30)"><img src="/Moomoo_Sprites/02_Expressions/13_delighted.png" alt="มูมู"></div>
-        <div class="label">ระบายสี</div>
-        <div class="sub">6 หมวด • 120 รูปให้แต่งแต้มสี</div>
-        <span class="cta">เล่นเลย <i data-lucide="chevron-right"></i></span>
-      </button>
-      <button class="card big theme-gold" onclick="go('storyhub')">
-        <span class="count-badge">18 เรื่อง</span>
-        <div class="tint" style="background:rgba(239,206,134,.42)"><img src="/Alleen_Sprites/02_Expressions/07_happy.png" alt="อัลลีน"></div>
-        <div>
-          <div class="label">นิทาน</div>
-          <div class="sub">2 หมวด • เรื่องเล่านบี และนิทานเด็กดี</div>
-          <span class="cta">อ่านเลย <i data-lucide="chevron-right"></i></span>
-        </div>
-      </button>
+    <div class="rail">
+      <div class="rail-head">
+        <span class="rail-title">🧠 เกมฝึกไอคิว</span>
+        <button class="rail-all" onclick="go('iqhub')">ดูทั้งหมด ›</button>
+      </div>
+      <div class="rail-track" id="railGames"></div>
     </div>
-    <div class="feature-strip">
-      <div class="feature-title">📖 นิทานนบี แตะเพื่ออ่านได้เลย</div>
-      <div class="feature-scroll" id="featuredStories"></div>
+    <div class="rail">
+      <div class="rail-head">
+        <span class="rail-title">📖 นิทาน</span>
+        <button class="rail-all" onclick="go('storyhub')">ดูทั้งหมด ›</button>
+      </div>
+      <div class="rail-track" id="railStories"></div>
+    </div>
+    <div class="rail">
+      <div class="rail-head">
+        <span class="rail-title">🎨 ภาพระบายสี</span>
+        <button class="rail-all" onclick="go('colorhub')">ดูทั้งหมด ›</button>
+      </div>
+      <div class="rail-track" id="railColor"></div>
     </div>
     <div class="moomoo-peek"><img src="/Moomoo_Sprites/03_Poses/14_sit.png" alt="มูมู"></div>
     <p class="footer-note">สำหรับเด็ก 3–10 ปี • เล่นได้ทุกอุปกรณ์</p>
@@ -504,20 +526,7 @@
   <!-- ===== IQ HUB ===== -->
   <section id="iqhub" class="screen">
     <div class="topbar"><button class="back-btn" onclick="go('home')"><i data-lucide="chevron-left"></i><span>กลับ</span></button><h2>ฝึกไอคิว</h2></div>
-    <div class="hub-grid">
-      <button class="hub-item" onclick="startGame('memory')"><div class="ico"><i data-lucide="layout-grid"></i></div><div class="t">จับคู่ความจำ</div><div class="d">พลิกการ์ดหาคู่</div></button>
-      <button class="hub-item" onclick="startGame('odd')"><div class="ico"><i data-lucide="search"></i></div><div class="t">หาสิ่งที่ต่าง</div><div class="d">อันไหนไม่เหมือน</div></button>
-      <button class="hub-item" onclick="startGame('pattern')"><div class="ico"><i data-lucide="puzzle"></i></div><div class="t">ต่อลำดับ</div><div class="d">อะไรมาต่อไป</div></button>
-      <button class="hub-item" onclick="startGame('count')"><div class="ico"><i data-lucide="hash"></i></div><div class="t">นับจำนวน</div><div class="d">นับให้ถูก</div></button>
-      <button class="hub-item" onclick="startGame('shadow')"><div class="ico"><i data-lucide="moon"></i></div><div class="t">จับคู่เงา</div><div class="d">หาเงาที่ใช่</div></button>
-      <button class="hub-item" onclick="startGame('coding')"><div class="ico"><i data-lucide="bot"></i></div><div class="t">หัดเขียนโค้ด</div><div class="d">สั่งทางอามีน</div></button>
-      <button class="hub-item" onclick="startGame('seq')"><div class="ico"><i data-lucide="music"></i></div><div class="t">จำลำดับ</div><div class="d">จำแล้วแตะตาม</div></button>
-      <button class="hub-item" onclick="startGame('math')"><div class="ico"><i data-lucide="calculator"></i></div><div class="t">คณิตคิดเร็ว</div><div class="d">บวก ลบ คูณ</div></button>
-      <button class="hub-item" onclick="startGame('missing')"><div class="ico"><i data-lucide="eye"></i></div><div class="t">อะไรหายไป</div><div class="d">จับสังเกต</div></button>
-      <button class="hub-item" onclick="startGame('moreless')"><div class="ico"><i data-lucide="scale"></i></div><div class="t">มากหรือน้อย</div><div class="d">เทียบจำนวน</div></button>
-      <button class="hub-item" onclick="startGame('numbers')"><div class="ico"><i data-lucide="list-ordered"></i></div><div class="t">จับคู่ตัวเลข</div><div class="d">พลิกหาเลขคู่</div></button>
-      <button class="hub-item" onclick="startGame('hijaiyah')"><div class="ico"><i data-lucide="languages"></i></div><div class="t">จับคู่ฮิญาอียะฮ์</div><div class="d">รู้จักอักษรอาหรับ</div></button>
-    </div>
+    <div class="hub-grid" id="iqGrid"></div>
   </section>
 
   <!-- ===== GAME SCREEN ===== -->
@@ -540,8 +549,18 @@
     <div class="color-editor" id="colorEditor" style="display:none">
       <div class="pic-grid" id="picGrid" style="display:none"></div>
       <div class="color-stage" id="colorStage">
-        <canvas id="fillCanvas"></canvas>
-        <canvas id="paintCanvas"></canvas>
+        <div class="color-viewport" id="colorViewport">
+          <div class="canvas-layer" id="canvasLayer">
+            <canvas id="fillCanvas"></canvas>
+            <canvas id="paintCanvas"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="zoom-row" id="zoomRow">
+        <button class="zoom-btn" onclick="zoomBy(1/1.45)" aria-label="ย่อ">➖</button>
+        <span class="zoom-label" id="zoomLabel">100%</span>
+        <button class="zoom-btn" onclick="zoomBy(1.45)" aria-label="ขยาย">➕</button>
+        <button class="zoom-btn wide" onclick="zoomReset()">↺ เต็มรูป</button>
       </div>
       <div class="tool-row" id="toolRow"></div>
       <div class="size-row" id="sizeRow"></div>
@@ -660,6 +679,47 @@ const simGroups=[
 ];
 const numbersSet=['numbers/01_1.png','numbers/02_2.png','numbers/03_3.png','numbers/04_4.png','numbers/05_5.png','numbers/06_6.png','numbers/07_7.png','numbers/08_8.png','numbers/09_9.png','numbers/10_10.png'];
 const hijaiyahSet=['hijaiyah/01_alif.png','hijaiyah/02_ba.png','hijaiyah/03_ta.png','hijaiyah/04_tha.png','hijaiyah/05_jim.png','hijaiyah/06_ha.png','hijaiyah/07_kha.png','hijaiyah/08_dal.png','hijaiyah/09_dhal.png','hijaiyah/10_ra.png','hijaiyah/11_zay.png','hijaiyah/12_sin.png','hijaiyah/13_shin.png','hijaiyah/14_sad.png','hijaiyah/15_dad.png','hijaiyah/16_ta.png','hijaiyah/17_za.png','hijaiyah/18_ain.png','hijaiyah/19_ghain.png','hijaiyah/20_fa.png','hijaiyah/21_qaf.png','hijaiyah/22_kaf.png','hijaiyah/23_lam.png','hijaiyah/24_mim.png','hijaiyah/25_nun.png','hijaiyah/26_ha.png','hijaiyah/27_waw.png','hijaiyah/28_ya.png'];
+
+/* ---- ไอคอนเกม: วาดเป็น "ภาพเล่าเกม" จากไอคอนที่มีอยู่ ให้เด็กที่ยังอ่านไม่ออกดูรู้เรื่อง ---- */
+function gimg(p,cls){return `<img src="${ICON_BASE}${p}" class="ga-i${cls?' '+cls:''}" alt="">`;}
+const gameArt={
+  memory:`${gimg('ui/01_card_back_pattern.png','ga-card')}${gimg('shapes/05_heart.png')}${gimg('ui/01_card_back_pattern.png','ga-card')}`,
+  odd:`${gimg('fruits/07_apple.png')}${gimg('fruits/07_apple.png')}${gimg('fruits/11_watermelon.png','ga-pop')}`,
+  pattern:`${gimg('shapes/04_star.png')}${gimg('shapes/01_circle.png')}${gimg('shapes/04_star.png')}<span class="ga-q">?</span>`,
+  count:`${gimg('fruits/08_orange.png')}${gimg('fruits/08_orange.png')}${gimg('fruits/08_orange.png')}${gimg('numbers/03_3.png','ga-num')}`,
+  shadow:`${gimg('islamic/06_ramadan_lantern_fanous.png')}${gimg('islamic/06_ramadan_lantern_fanous.png','ga-shadow')}`,
+  coding:`${ameen(32,'03_Poses/18_walk.png')}<span class="ga-arrow">➡</span>${gimg('islamic/01_mosque.png')}`,
+  seq:`<span class="ga-pads"><i class="ga-pad p1"></i><i class="ga-pad p2"></i><i class="ga-pad p3"></i><i class="ga-pad p4"></i></span>`,
+  math:`${gimg('fruits/04_grape.png')}<span class="ga-op">+</span>${gimg('fruits/04_grape.png')}<span class="ga-op">=</span><span class="ga-q">?</span>`,
+  missing:`${gimg('shapes/04_star.png')}<span class="ga-q">?</span>${gimg('shapes/04_star.png')}`,
+  moreless:`${gimg('fruits/03_fig.png')}<span class="ga-op">↔</span>${gimg('fruits/03_fig.png')}${gimg('fruits/03_fig.png')}`,
+  numbers:`${gimg('numbers/05_5.png')}${gimg('ui/01_card_back_pattern.png','ga-card')}`,
+  hijaiyah:`${gimg('hijaiyah/01_alif.png')}${gimg('ui/01_card_back_pattern.png','ga-card')}`,
+};
+const iqGames=[
+  {k:'memory',n:'จับคู่ความจำ',d:'พลิกการ์ดหาคู่'},
+  {k:'odd',n:'หาสิ่งที่ต่าง',d:'อันไหนไม่เหมือน'},
+  {k:'pattern',n:'ต่อลำดับ',d:'อะไรมาต่อไป'},
+  {k:'count',n:'นับจำนวน',d:'นับให้ถูก'},
+  {k:'shadow',n:'จับคู่เงา',d:'หาเงาที่ใช่'},
+  {k:'coding',n:'หัดเขียนโค้ด',d:'25 ด่าน · 1-5 ดาว'},
+  {k:'seq',n:'จำลำดับ',d:'จำแล้วแตะตาม'},
+  {k:'math',n:'คณิตคิดเร็ว',d:'บวก ลบ คูณ'},
+  {k:'missing',n:'อะไรหายไป',d:'จับสังเกต'},
+  {k:'moreless',n:'มากหรือน้อย',d:'เทียบจำนวน'},
+  {k:'numbers',n:'จับคู่ตัวเลข',d:'พลิกหาเลขคู่'},
+  {k:'hijaiyah',n:'จับคู่ฮิญาอียะฮ์',d:'รู้จักอักษรอาหรับ'},
+];
+function renderIqHub(){
+  const wrap=document.getElementById('iqGrid');
+  if(!wrap)return;
+  wrap.innerHTML=iqGames.map(g=>`
+    <button class="hub-item" onclick="startGame('${g.k}')">
+      <div class="game-art">${gameArt[g.k]||''}</div>
+      <div class="t">${g.n}</div>
+      <div class="d">${g.d}</div>
+    </button>`).join('');
+}
 
 function startGame(type){
   if(type==='coding'){startCoding();return;}
@@ -870,47 +930,115 @@ function renderMemory(pool){
 }
 
 /* ============ CODING GAME (หัดเขียนโค้ด) ============ */
+/* t = ระดับความยาก 1-5 ดาว, max = จำนวนบล็อกที่ใช้ได้ (ด่าน 4-5 ดาวบีบให้ต้องใช้ "ทำซ้ำ")
+   ทุกด่านผ่านการตรวจด้วยตัวแก้อัตโนมัติแล้วว่าเล่นจบได้จริงภายในจำนวนบล็อกที่ให้ */
 const codeLevels=[
-  {w:3,h:1,start:{x:0,y:0},goal:{x:2,y:0},walls:[]},
-  {w:3,h:3,start:{x:0,y:2},goal:{x:2,y:0},walls:[]},
-  {w:4,h:3,start:{x:0,y:1},goal:{x:3,y:1},walls:[{x:2,y:1}]},
-  {w:4,h:4,start:{x:0,y:3},goal:{x:3,y:0},walls:[]},
-  {w:5,h:4,start:{x:0,y:3},goal:{x:4,y:0},walls:[{x:2,y:2},{x:2,y:1}]},
-  {w:5,h:5,start:{x:0,y:4},goal:{x:4,y:0},walls:[{x:1,y:3},{x:3,y:1},{x:2,y:2}]},
-  {w:5,h:4,start:{x:0,y:0},goal:{x:4,y:3},walls:[{x:2,y:0},{x:2,y:1},{x:2,y:2}]},
-  {w:5,h:5,start:{x:0,y:0},goal:{x:4,y:0},walls:[{x:1,y:0},{x:1,y:1},{x:3,y:0},{x:3,y:1}]},
-  {w:5,h:5,start:{x:0,y:0},goal:{x:4,y:4},walls:[{x:1,y:1},{x:2,y:1},{x:3,y:1},{x:1,y:3},{x:2,y:3},{x:3,y:3}]},
-  {w:5,h:5,start:{x:0,y:4},goal:{x:4,y:0},walls:[{x:1,y:4},{x:1,y:3},{x:3,y:2},{x:3,y:1},{x:2,y:2}]},
+  {t:1,w:3,h:1,start:{x:0,y:0},goal:{x:2,y:0},max:6,walls:[]},
+  {t:1,w:3,h:3,start:{x:0,y:2},goal:{x:2,y:0},max:8,walls:[]},
+  {t:1,w:3,h:3,start:{x:0,y:0},goal:{x:2,y:2},max:8,walls:[]},
+  {t:1,w:4,h:3,start:{x:0,y:1},goal:{x:3,y:1},max:7,walls:[]},
+  {t:1,w:4,h:4,start:{x:0,y:3},goal:{x:3,y:0},max:10,walls:[]},
+  {t:2,w:4,h:3,start:{x:0,y:1},goal:{x:3,y:1},max:9,walls:[{x:2,y:1}]},
+  {t:2,w:4,h:4,start:{x:0,y:3},goal:{x:3,y:0},max:10,walls:[{x:1,y:2},{x:2,y:1}]},
+  {t:2,w:5,h:4,start:{x:0,y:3},goal:{x:4,y:0},max:11,walls:[{x:2,y:2},{x:2,y:1}]},
+  {t:2,w:5,h:4,start:{x:0,y:0},goal:{x:4,y:3},max:11,walls:[{x:2,y:0},{x:2,y:1}]},
+  {t:2,w:5,h:5,start:{x:0,y:4},goal:{x:4,y:0},max:12,walls:[{x:1,y:3},{x:3,y:1},{x:2,y:2}]},
+  {t:3,w:5,h:5,start:{x:0,y:0},goal:{x:4,y:0},max:11,walls:[{x:1,y:0},{x:1,y:1},{x:3,y:0},{x:3,y:1}]},
+  {t:3,w:5,h:5,start:{x:0,y:0},goal:{x:4,y:4},max:11,walls:[{x:1,y:1},{x:2,y:1},{x:3,y:1},{x:1,y:3},{x:2,y:3},{x:3,y:3}]},
+  {t:3,w:6,h:5,start:{x:0,y:4},goal:{x:5,y:0},max:12,walls:[{x:1,y:4},{x:1,y:3},{x:3,y:2},{x:3,y:1},{x:2,y:2}]},
+  {t:3,w:6,h:5,start:{x:0,y:0},goal:{x:5,y:4},max:16,walls:[{x:2,y:0},{x:2,y:1},{x:2,y:2},{x:4,y:2},{x:4,y:3},{x:4,y:4}]},
+  {t:3,w:6,h:6,start:{x:0,y:5},goal:{x:5,y:0},max:13,walls:[{x:1,y:5},{x:1,y:4},{x:3,y:3},{x:3,y:2},{x:4,y:1}]},
+  {t:4,w:7,h:3,start:{x:0,y:1},goal:{x:6,y:1},max:3,walls:[]},
+  {t:4,w:7,h:5,start:{x:0,y:4},goal:{x:6,y:0},max:4,walls:[]},
+  {t:4,w:7,h:6,start:{x:0,y:5},goal:{x:6,y:0},max:4,walls:[{x:2,y:4},{x:2,y:3},{x:4,y:2},{x:4,y:1}]},
+  {t:4,w:8,h:6,start:{x:0,y:0},goal:{x:7,y:5},max:6,walls:[{x:3,y:0},{x:3,y:1},{x:3,y:2},{x:5,y:3},{x:5,y:4},{x:5,y:5}]},
+  {t:4,w:8,h:6,start:{x:0,y:5},goal:{x:7,y:0},max:6,walls:[{x:2,y:5},{x:2,y:4},{x:2,y:3},{x:5,y:2},{x:5,y:1},{x:5,y:0}]},
+  {t:5,w:7,h:5,start:{x:0,y:4},goal:{x:6,y:4},max:5,walls:[],stars:[{x:3,y:0},{x:6,y:0}]},
+  {t:5,w:7,h:6,start:{x:0,y:5},goal:{x:6,y:5},max:5,walls:[{x:3,y:4},{x:3,y:3}],stars:[{x:0,y:0},{x:6,y:0}]},
+  {t:5,w:8,h:6,start:{x:0,y:0},goal:{x:7,y:5},max:6,walls:[{x:4,y:1},{x:4,y:2}],stars:[{x:7,y:0},{x:0,y:5},{x:4,y:5}]},
+  {t:5,w:8,h:6,start:{x:0,y:5},goal:{x:7,y:5},max:7,walls:[{x:3,y:5},{x:3,y:4},{x:5,y:1},{x:5,y:0}],stars:[{x:0,y:0},{x:7,y:0},{x:4,y:3}]},
+  {t:5,w:8,h:7,start:{x:0,y:6},goal:{x:7,y:6},max:9,walls:[{x:2,y:5},{x:2,y:4},{x:5,y:5},{x:5,y:4},{x:4,y:2}],stars:[{x:0,y:0},{x:7,y:0},{x:4,y:6}]},
 ];
-let CODE={lvl:0,queue:[],running:false};
+const CODE_KEY='ameen_code_progress';
+function codeProgress(){
+  try{const n=parseInt(localStorage.getItem(CODE_KEY)||'0',10);return Math.max(0,Math.min(codeLevels.length,n||0));}catch(e){return 0;}
+}
+function saveCodeProgress(n){
+  try{if(n>codeProgress())localStorage.setItem(CODE_KEY,String(n));}catch(e){}
+}
+let CODE={lvl:0,queue:[],running:false,rep:1};
+const MOSQUE_ICO='<img src="/icon-web/islamic/01_mosque.png" class="inline-ico" alt="">';
+const STAR_ICO='<img src="/icon-web/ui/01_star_filled.png" class="inline-ico" alt="">';
+
 function startCoding(){
-  CODE={lvl:0,queue:[],running:false};
   G={type:'coding',round:0,total:codeLevels.length,score:0,rounds:[]};
   document.getElementById('gameTitle').textContent='หัดเขียนโค้ด';
-  document.getElementById('gameScore').textContent='1';
   document.getElementById('dots').innerHTML='';
   document.getElementById('noorSay').style.display='none';
   go('game');
-  codingIntro();
+  renderLevelSelect();
+}
+function starRow(t){
+  let s='';
+  for(let i=0;i<t;i++)s+='<img src="/icon-web/ui/01_star_filled.png" alt="">';
+  return s;
+}
+function renderLevelSelect(){
+  const done=codeProgress();
+  document.getElementById('gameScore').textContent=done+'/'+codeLevels.length;
+  document.getElementById('noorSay').style.display='none';
+  const area=document.getElementById('gameArea');area.style.textAlign='center';
+  const cards=codeLevels.map((L,i)=>{
+    const unlocked=i<=done, cleared=i<done;
+    return `<button class="lvl-card t${L.t}${unlocked?'':' locked'}${cleared?' cleared':''}"
+      ${unlocked?`onclick="openLevel(${i})"`:'disabled'}>
+      <span class="lvl-no">${i+1}</span>
+      <span class="lvl-stars">${starRow(L.t)}</span>
+      ${cleared?'<img class="lvl-tick" src="/icon-web/ui/03_correct_sticker.png" alt="">':''}
+      ${unlocked?'':'<span class="lvl-lock">🔒</span>'}
+    </button>`;
+  }).join('');
+  area.innerHTML=`
+    <div class="prompt">เลือกด่านที่อยากเล่น 🤖</div>
+    <div class="lvl-grid">${cards}</div>
+    <button class="ghost-btn" onclick="codingIntro()">❓ วิธีเล่น</button>`;
+}
+function openLevel(i){
+  CODE={lvl:i,queue:[],running:false,rep:1};
+  if(i===0&&codeProgress()===0){codingIntro();return;}
+  renderCoding();
 }
 function codingIntro(){
   const area=document.getElementById('gameArea');area.style.textAlign='center';
   area.innerHTML=`${suhail(80,'03_Poses/18_teach.png')}
     <div class="prompt" style="margin-top:6px">มาช่วยสอนอามีนเดินกัน! 🤖</div>
     <p style="font-family:'Sarabun',sans-serif;font-size:16px;line-height:1.85;color:var(--ink);max-width:340px;margin:0 auto 6px">
-    กด <b>ปุ่มลูกศร</b> เพื่อสั่งทางให้อามีนทีละก้าว แล้วกด <b>▶️ เริ่ม</b> ให้เดินไปหา <b>มัสยิด 🕌</b><br><br>
+    กด <b>ปุ่มลูกศร</b> เพื่อสั่งทางให้อามีนทีละก้าว แล้วกด <b>▶️ เริ่ม</b> ให้เดินไปหา ${MOSQUE_ICO}<br><br>
+    ด่านยาก ๆ จะมีปุ่ม <b>ทำซ้ำ ×2…×5</b> ให้สั่งหลายก้าวด้วยบล็อกเดียว<br>
+    และมีดาว ${STAR_ICO} ที่ต้องเก็บให้ครบก่อนถึงมัสยิด<br><br>
     นี่แหละคือ "การเขียนโค้ด" — บอกคอมพิวเตอร์ให้ทำทีละขั้นตอน!</p>
-    <button class="primary-btn" onclick="renderCoding()">เริ่มเลย!</button>`;
+    <button class="primary-btn" onclick="renderCoding()">เริ่มเลย!</button>
+    <button class="ghost-btn" onclick="renderLevelSelect()">🔙 เลือกด่าน</button>`;
 }
 function renderCoding(){
   const L=codeLevels[CODE.lvl];
-  CODE.queue=[];CODE.running=false;
-  document.getElementById('gameScore').textContent=(CODE.lvl+1);
+  CODE.queue=[];CODE.running=false;CODE.rep=1;
+  document.getElementById('gameScore').textContent='ด่าน '+(CODE.lvl+1);
   const area=document.getElementById('gameArea');area.style.textAlign='center';
+  const hasStars=(L.stars||[]).length>0;
   area.innerHTML=`
-    <div class="prompt">ด่าน ${CODE.lvl+1}/${codeLevels.length} — พาอามีนไปหามัสยิด 🕌</div>
+    <div class="lvl-head">
+      <button class="lvl-back" onclick="renderLevelSelect()">◀ ด่าน</button>
+      <span class="lvl-stars sm">${starRow(L.t)}</span>
+    </div>
+    <div class="code-goal">${hasStars?`เก็บ ${STAR_ICO} ให้ครบ แล้วไปที่ ${MOSQUE_ICO}`:`พาอามีนไปที่ ${MOSQUE_ICO}`}</div>
     <div id="codeGrid" class="code-grid"></div>
+    <div class="chip-meter"><span id="chipCount">0</span> / ${L.max} บล็อก</div>
     <div class="queue" id="queue"></div>
+    ${L.t>=4?`<div class="rep-row" id="repRow">
+      <span class="rep-label">🔁 ทำซ้ำ</span>
+      ${[1,2,3,4,5].map(n=>`<button class="rep-btn${n===1?' sel':''}" data-rep="${n}" onclick="setRep(${n})">×${n}</button>`).join('')}
+    </div>`:''}
     <div class="arrow-pad">
       <button class="apad" onclick="addCmd('up')">⬆️</button>
       <div>
@@ -919,66 +1047,101 @@ function renderCoding(){
         <button class="apad" onclick="addCmd('right')">➡️</button>
       </div>
     </div>
-    <div class="color-actions">
+    <div class="code-actions">
+      <button class="ghost-btn" onclick="undoCmd()">↩️ ถอย</button>
       <button class="ghost-btn" onclick="clearQueue()">🗑️ ล้าง</button>
-      <button class="primary-btn" style="margin-top:0" onclick="runCode()">▶️ เริ่ม</button>
+      <button class="primary-btn" onclick="runCode()">▶️ เริ่ม</button>
     </div>`;
-  drawGrid(L,L.start);
+  drawGrid(L,L.start,[]);
   renderQueue();
 }
-function drawGrid(L,pos){
+function drawGrid(L,pos,got){
   const g=document.getElementById('codeGrid');
-  g.style.gridTemplateColumns=`repeat(${L.w},52px)`;
+  if(!g)return;
+  const gap=L.w>=7?4:6;
+  const size=Math.max(30,Math.min(52,Math.floor((290-gap*(L.w-1))/L.w)));
+  g.style.gap=gap+'px';
+  g.style.gridTemplateColumns=`repeat(${L.w},${size}px)`;
   g.innerHTML='';
   for(let y=0;y<L.h;y++)for(let x=0;x<L.w;x++){
     const t=document.createElement('div');t.className='tile';
+    t.style.width=size+'px';t.style.height=size+'px';t.style.fontSize=Math.round(size*0.5)+'px';
     if(L.walls.some(w=>w.x===x&&w.y===y)){t.classList.add('wall');t.textContent='🧱';}
-    else if(L.goal.x===x&&L.goal.y===y){t.classList.add('goal');t.textContent='🕌';}
-    if(pos.x===x&&pos.y===y)t.innerHTML=ameen(38,'03_Poses/18_walk.png');
+    else if(L.goal.x===x&&L.goal.y===y){t.classList.add('goal');t.innerHTML='<img src="/icon-web/islamic/01_mosque.png" alt="">';}
+    else if((L.stars||[]).some(s=>s.x===x&&s.y===y)){
+      const taken=got.some(s=>s.x===x&&s.y===y);
+      t.classList.add('star-tile');
+      t.innerHTML=`<img src="/icon-web/ui/${taken?'02_star_empty':'01_star_filled'}.png" alt="">`;
+    }
+    if(pos.x===x&&pos.y===y)t.innerHTML=ameen(Math.round(size*0.74),'03_Poses/18_walk.png');
     g.appendChild(t);
   }
 }
-function addCmd(d){if(CODE.running)return;if(CODE.queue.length>=14)return;CODE.queue.push(d);renderQueue();}
-function clearQueue(){if(CODE.running)return;CODE.queue=[];renderQueue();drawGrid(codeLevels[CODE.lvl],codeLevels[CODE.lvl].start);}
+function setRep(n){
+  CODE.rep=n;
+  document.querySelectorAll('#repRow .rep-btn').forEach(b=>b.classList.toggle('sel',+b.dataset.rep===n));
+}
+function addCmd(d){
+  if(CODE.running)return;
+  const L=codeLevels[CODE.lvl];
+  if(CODE.queue.length>=L.max){noor(L.t>=4?'บล็อกเต็มแล้ว! ลองใช้ 🔁 ทำซ้ำ ช่วยนะ':'บล็อกเต็มแล้ว ลองล้างแล้ววางแผนใหม่นะ');return;}
+  CODE.queue.push({d,n:CODE.rep});
+  renderQueue();
+}
+function undoCmd(){if(CODE.running)return;CODE.queue.pop();renderQueue();}
+function clearQueue(){
+  if(CODE.running)return;
+  CODE.queue=[];renderQueue();
+  drawGrid(codeLevels[CODE.lvl],codeLevels[CODE.lvl].start,[]);
+}
 function renderQueue(){
   const q=document.getElementById('queue');const m={up:'⬆️',down:'⬇️',left:'⬅️',right:'➡️'};
-  q.innerHTML=CODE.queue.length?CODE.queue.map(c=>`<span class="qchip">${m[c]}</span>`).join(''):'<span class="queue-empty">กดลูกศรเพื่อสั่งทาง…</span>';
+  q.innerHTML=CODE.queue.length
+    ?CODE.queue.map(c=>`<span class="qchip">${m[c.d]}${c.n>1?`<b>×${c.n}</b>`:''}</span>`).join('')
+    :'<span class="queue-empty">กดลูกศรเพื่อสั่งทาง…</span>';
+  const cc=document.getElementById('chipCount');
+  if(cc){cc.textContent=CODE.queue.length;cc.parentElement.classList.toggle('full',CODE.queue.length>=codeLevels[CODE.lvl].max);}
 }
 function runCode(){
   if(CODE.running||!CODE.queue.length)return;
   CODE.running=true;
-  const L=codeLevels[CODE.lvl];let pos={x:L.start.x,y:L.start.y};let i=0;
+  const L=codeLevels[CODE.lvl];
+  const steps=[];
+  CODE.queue.forEach(c=>{for(let k=0;k<c.n;k++)steps.push(c.d);});
+  let pos={x:L.start.x,y:L.start.y};const got=[];let i=0;
   noor('อามีนกำลังเดิน… 👣');
   const step=()=>{
-    if(i>=CODE.queue.length){finishCoding(pos,L);return;}
-    const c=CODE.queue[i];let nx=pos.x,ny=pos.y;
+    if(i>=steps.length){finishCoding(pos,L,got);return;}
+    const c=steps[i];let nx=pos.x,ny=pos.y;
     if(c==='up')ny--;else if(c==='down')ny++;else if(c==='left')nx--;else if(c==='right')nx++;
     if(nx<0||ny<0||nx>=L.w||ny>=L.h||L.walls.some(w=>w.x===nx&&w.y===ny)){
       CODE.running=false;noor('อุ๊ย ชนกำแพง! ลองวางแผนใหม่นะ 🧱');
-      setTimeout(()=>drawGrid(L,L.start),700);return;
+      setTimeout(()=>drawGrid(L,L.start,[]),700);return;
     }
-    pos={x:nx,y:ny};drawGrid(L,pos);i++;setTimeout(step,420);
+    pos={x:nx,y:ny};
+    if((L.stars||[]).some(s=>s.x===nx&&s.y===ny)&&!got.some(s=>s.x===nx&&s.y===ny))got.push({x:nx,y:ny});
+    drawGrid(L,pos,got);i++;setTimeout(step,340);
   };
-  setTimeout(step,350);
+  setTimeout(step,300);
 }
-function finishCoding(pos,L){
+function finishCoding(pos,L,got){
   CODE.running=false;
-  if(pos.x===L.goal.x&&pos.y===L.goal.y){
-    confetti();noor(praises[Math.floor(Math.random()*praises.length)]);
-    if(CODE.lvl>=codeLevels.length-1){
-      setTimeout(()=>{
-        const area=document.getElementById('gameArea');
-        area.innerHTML=`${suhail(90,'02_Expressions/13_proud.png')}<div class="prompt" style="text-align:center;margin-top:8px">เก่งมาก! ผ่านครบทุกด่าน 🎉</div>
-          <p style="text-align:center;font-family:'Sarabun',sans-serif;font-size:16px;line-height:1.8">หนูสั่งงานทีละขั้นตอนได้แล้ว<br>นี่คือพื้นฐานสำคัญของการเขียนโค้ด! 💚</p>
-          <button class="primary-btn" onclick="startCoding()">🔁 เล่นใหม่</button>
-          <button class="ghost-btn" onclick="go('iqhub')">🔙 เลือกเกมอื่น</button>`;
-        document.getElementById('noorSay').style.display='none';
-      },1100);
-    } else {
-      setTimeout(()=>{CODE.lvl++;renderCoding();},1200);
-    }
+  const need=(L.stars||[]).length;
+  if(pos.x!==L.goal.x||pos.y!==L.goal.y){noor('เกือบแล้ว! อามีนยังไม่ถึงมัสยิด ลองใหม่นะ 😊');return;}
+  if(got.length<need){noor('ยังเก็บดาวไม่ครบนะ ⭐ ลองใหม่!');return;}
+  confetti();noor(praises[Math.floor(Math.random()*praises.length)]);
+  saveCodeProgress(CODE.lvl+1);
+  if(CODE.lvl>=codeLevels.length-1){
+    setTimeout(()=>{
+      const area=document.getElementById('gameArea');
+      area.innerHTML=`${suhail(90,'02_Expressions/13_proud.png')}<div class="prompt" style="text-align:center;margin-top:8px">เก่งมาก! ผ่านครบ ${codeLevels.length} ด่าน 🎉</div>
+        <p style="text-align:center;font-family:'Sarabun',sans-serif;font-size:16px;line-height:1.8">หนูสั่งงานทีละขั้นตอนและใช้ "ทำซ้ำ" ได้แล้ว<br>นี่คือพื้นฐานสำคัญของการเขียนโค้ด! 💚</p>
+        <button class="primary-btn" onclick="renderLevelSelect()">🗺️ เลือกด่าน</button>
+        <button class="ghost-btn" onclick="go('iqhub')">🔙 เลือกเกมอื่น</button>`;
+      document.getElementById('noorSay').style.display='none';
+    },1100);
   } else {
-    noor('เกือบแล้ว! อามีนยังไม่ถึงมัสยิด ลองใหม่นะ 😊');
+    setTimeout(()=>{CODE.lvl++;renderCoding();},1200);
   }
 }
 
@@ -1167,12 +1330,21 @@ const picLib = {
     ['16_zamzam_water_bottle','ขวดน้ำซัมซัม'],['17_quran_stand_rehal','ขาตั้งอัลกุรอาน'],['18_ihram_clothes','ชุดอิห์รอม'],['19_ramadan_calendar','ปฏิทินรอมฎอน'],['20_mecca_clock_tower','หอนาฬิกามักกะห์']
   ])
 };
-const colors=['#FF6B6B','#FF9F43','#F5B92E','#2ECC71','#178F6B','#4FB0E8','#5B7CFA','#8B6FC9','#EE5A9B','#8B5A2B','#2A3B36','#FFFFFF'];
+const colors=[
+  '#FFC9C9','#FF9AA2','#FF6B6B','#E23D3D','#A11B1B',
+  '#FFE3B0','#FFD166','#F5B92E','#FF9F43','#E8701A',
+  '#DCF2B0','#8FD97A','#2ECC71','#178F6B','#0E5C44',
+  '#CDEBF7','#9BD1E8','#4FB0E8','#2176AE','#123F73',
+  '#E3D4F5','#C9A7E8','#8B6FC9','#5E3FA0','#EE5A9B',
+  '#F7DFC8','#E0AE7E','#B5793F','#8B5A2B','#4E3116',
+  '#FFFFFF','#D7DCD8','#9AA8A0','#5E6E66','#2A3B36',
+];
 const brushSizes=[10,20,34];
-let selColor=colors[3];
+let selColor='#FF9F43';
 let curCat='wild';
 let curPic=null;
-let PAINT={tool:'bucket',size:1,drawing:false,lastX:0,lastY:0,mask:null};
+let PAINT={tool:'bucket',size:1,drawing:false,lastX:0,lastY:0,inkMask:null,
+  zoom:1,panX:0,panY:0,gesture:false,loadToken:0};
 
 function initColorHub(){
   document.getElementById('colorEditor').style.display='none';
@@ -1199,7 +1371,7 @@ function openCategory(key){
   const hasPics=Object.keys(picLib[key]).length>0;
   document.getElementById('colorEmpty').style.display=hasPics?'none':'block';
   document.getElementById('picGrid').style.display=hasPics?'grid':'none';
-  ['colorStage','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
+  ['colorStage','zoomRow','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
     document.getElementById(id).style.display='none';
   });
   if(!hasPics)return;
@@ -1226,13 +1398,13 @@ function renderPicGrid(){
 }
 function showPicGrid(){
   document.getElementById('picGrid').style.display='grid';
-  ['colorStage','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
+  ['colorStage','zoomRow','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
     document.getElementById(id).style.display='none';
   });
 }
 function showEditorStage(){
   document.getElementById('picGrid').style.display='none';
-  ['colorStage','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
+  ['colorStage','zoomRow','toolRow','sizeRow','palette','colorActions'].forEach(id=>{
     document.getElementById(id).style.display='';
   });
   updateToolUI();
@@ -1248,7 +1420,7 @@ function renderPalette(){
 }
 function renderToolRow(){
   const tr=document.getElementById('toolRow');tr.innerHTML='';
-  const tools=[{k:'bucket',ico:'🪣',label:'เทสี'},{k:'brush',ico:'🖌️',label:'แปรง'},{k:'eraser',ico:'🧹',label:'ยางลบ'}];
+  const tools=[{k:'bucket',ico:'🪣',label:'เทสี'},{k:'brush',ico:'🖌️',label:'แปรง'},{k:'eraser',ico:'🧹',label:'ยางลบ'},{k:'pan',ico:'✋',label:'เลื่อนรูป'}];
   tools.forEach(t=>{
     const b=document.createElement('button');b.className='tool-btn'+(PAINT.tool===t.k?' sel':'');b.dataset.tool=t.k;
     b.innerHTML=`<span class="tico">${t.ico}</span><span class="tlabel">${t.label}</span>`;
@@ -1268,17 +1440,23 @@ function renderSizeRow(){
 function updateToolUI(){
   document.querySelectorAll('#toolRow .tool-btn').forEach(b=>b.classList.toggle('sel',b.dataset.tool===PAINT.tool));
   document.querySelectorAll('#sizeRow .size-btn').forEach((b,i)=>b.classList.toggle('sel',i===PAINT.size));
-  const canvas=document.getElementById('paintCanvas');
-  if(canvas)canvas.style.pointerEvents=PAINT.tool==='bucket'?'none':'auto';
+  const draws=PAINT.tool==='brush'||PAINT.tool==='eraser';
+  const paint=document.getElementById('paintCanvas');
+  if(paint)paint.style.pointerEvents=draws?'auto':'none';
+  const fill=document.getElementById('fillCanvas');
+  if(fill)fill.style.pointerEvents=PAINT.tool==='bucket'?'auto':'none';
   const palette=document.getElementById('palette');
-  if(palette)palette.style.display=PAINT.tool==='eraser'?'none':'flex';
+  if(palette)palette.style.display=(PAINT.tool==='eraser'||PAINT.tool==='pan')?'none':'flex';
   const sizeRow=document.getElementById('sizeRow');
-  if(sizeRow)sizeRow.style.display=PAINT.tool==='bucket'?'none':'flex';
+  if(sizeRow)sizeRow.style.display=draws?'flex':'none';
 }
 function loadPic(){
   const pic=picLib[curCat][curPic];
+  if(!pic)return;
+  const token=++PAINT.loadToken;
   const img=new Image();
   img.onload=()=>{
+    if(token!==PAINT.loadToken)return; // เด็กกดเปลี่ยนรูประหว่างโหลด — ทิ้งรูปเก่าไป
     const maxSide=900;
     const scale=Math.min(1,maxSide/Math.max(img.naturalWidth,img.naturalHeight));
     const cw=Math.max(1,Math.round(img.naturalWidth*scale));
@@ -1290,14 +1468,18 @@ function loadPic(){
     // binarize to pure black/white so the outline is a solid, gap-free wall for the flood fill
     const id=fctx.getImageData(0,0,cw,ch);
     const d=id.data;
-    for(let i=0;i<d.length;i+=4){
+    const ink=new Uint8Array(cw*ch);
+    for(let i=0,p=0;i<d.length;i+=4,p++){
       const v=(d[i]+d[i+1]+d[i+2])/3<180?0:255;
       d[i]=v;d[i+1]=v;d[i+2]=v;d[i+3]=255;
+      ink[p]=v?1:0; // 1 = ระบายได้, 0 = เส้นขอบสีดำ (ห้ามทับ)
     }
     fctx.putImageData(id,0,0);
+    PAINT.inkMask=ink;
     const paint=document.getElementById('paintCanvas');
     paint.width=cw;paint.height=ch;
     paint.getContext('2d').clearRect(0,0,cw,ch);
+    zoomReset();
   };
   img.src=pic.src;
 }
@@ -1309,13 +1491,33 @@ function hexToRgb(hex){
   return [(n>>16)&255,(n>>8)&255,n&255];
 }
 function isWallPixel(r,g,b){ return (r+g+b)/3 < 128; }
+/* นิ้วเด็กกดโดนเส้นขอบดำบ่อย — ถ้ากดโดนเส้น ให้หาจุดระบายได้ที่ใกล้ที่สุดแทน จะได้ไม่รู้สึกว่า "กดแล้วไม่ติด" */
+function nearestFillable(data,w,h,x,y,maxR){
+  const free=(px,py)=>{
+    if(px<0||py<0||px>=w||py>=h)return false;
+    const i=(py*w+px)*4;
+    return !isWallPixel(data[i],data[i+1],data[i+2]);
+  };
+  if(free(x,y))return{x,y};
+  for(let r=2;r<=maxR;r+=2){
+    const steps=r*6;
+    for(let s=0;s<steps;s++){
+      const t=s/steps*Math.PI*2;
+      const px=Math.round(x+Math.cos(t)*r),py=Math.round(y+Math.sin(t)*r);
+      if(free(px,py))return{x:px,y:py};
+    }
+  }
+  return null;
+}
 function floodFillAt(ctx,x,y,hexColor){
   const w=ctx.canvas.width,h=ctx.canvas.height;
   if(x<0||y<0||x>=w||y>=h)return;
   const imgData=ctx.getImageData(0,0,w,h);
   const data=imgData.data;
+  const seed=nearestFillable(data,w,h,x,y,16);
+  if(!seed)return;
+  x=seed.x;y=seed.y;
   const startIdx=(y*w+x)*4;
-  if(isWallPixel(data[startIdx],data[startIdx+1],data[startIdx+2]))return;
   const [fr,fg,fb]=hexToRgb(hexColor);
   const sr=data[startIdx],sg=data[startIdx+1],sb=data[startIdx+2];
   if(sr===fr&&sg===fg&&sb===fb)return;
@@ -1339,36 +1541,78 @@ function floodFillAt(ctx,x,y,hexColor){
   }
   ctx.putImageData(imgData,0,0);
 }
-function computeRegionMask(fillCtx,x,y){
-  const w=fillCtx.canvas.width,h=fillCtx.canvas.height;
-  if(x<0||y<0||x>=w||y>=h)return null;
-  const imgData=fillCtx.getImageData(0,0,w,h);
-  const data=imgData.data;
-  const startIdx=(y*w+x)*4;
-  if(isWallPixel(data[startIdx],data[startIdx+1],data[startIdx+2]))return null;
-  const sr=data[startIdx],sg=data[startIdx+1],sb=data[startIdx+2];
-  const mask=new Uint8Array(w*h);
-  const visited=new Uint8Array(w*h);
-  const stack=[y*w+x];
-  while(stack.length){
-    const p=stack.pop();
-    if(visited[p])continue;
-    const i=p*4;
-    if(isWallPixel(data[i],data[i+1],data[i+2]))continue;
-    if(data[i]!==sr||data[i+1]!==sg||data[i+2]!==sb)continue;
-    visited[p]=1;mask[p]=1;
-    const px=p%w, py=(p-px)/w;
-    if(px>0)stack.push(p-1);
-    if(px<w-1)stack.push(p+1);
-    if(py>0)stack.push(p-w);
-    if(py<h-1)stack.push(p+w);
-  }
-  return mask;
+/* ---- ซูม/เลื่อนรูป ---- */
+function clampZoom(z){return Math.min(4,Math.max(1,z));}
+function applyZoom(){
+  const vp=document.getElementById('colorViewport');
+  const layer=document.getElementById('canvasLayer');
+  if(!vp||!layer)return;
+  const W=vp.clientWidth,H=vp.clientHeight,z=PAINT.zoom;
+  PAINT.panX=Math.min(0,Math.max(Math.min(0,W-W*z),PAINT.panX));
+  PAINT.panY=Math.min(0,Math.max(Math.min(0,H-H*z),PAINT.panY));
+  layer.style.transform=`translate(${PAINT.panX}px,${PAINT.panY}px) scale(${z})`;
+  const label=document.getElementById('zoomLabel');
+  if(label)label.textContent=Math.round(z*100)+'%';
+}
+function zoomAround(cx,cy,z){
+  const k=z/PAINT.zoom;
+  PAINT.panX=cx-(cx-PAINT.panX)*k;
+  PAINT.panY=cy-(cy-PAINT.panY)*k;
+  PAINT.zoom=z;
+  applyZoom();
+}
+function zoomBy(f){
+  const vp=document.getElementById('colorViewport');
+  if(!vp)return;
+  zoomAround(vp.clientWidth/2,vp.clientHeight/2,clampZoom(PAINT.zoom*f));
+}
+function zoomReset(){PAINT.zoom=1;PAINT.panX=0;PAINT.panY=0;applyZoom();}
+function setupZoom(){
+  const vp=document.getElementById('colorViewport');
+  if(!vp)return;
+  const pts=new Map();
+  let pinch=null,pan=null;
+  vp.addEventListener('pointerdown',e=>{
+    pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===2){
+      PAINT.drawing=false;PAINT.gesture=true;pan=null;
+      const[a,b]=[...pts.values()];
+      const r=vp.getBoundingClientRect();
+      pinch={dist:Math.hypot(a.x-b.x,a.y-b.y)||1,zoom:PAINT.zoom,
+        mx:(a.x+b.x)/2-r.left,my:(a.y+b.y)/2-r.top,px:PAINT.panX,py:PAINT.panY};
+    } else if(pts.size===1&&PAINT.tool==='pan'){
+      PAINT.gesture=true;
+      pan={x:e.clientX,y:e.clientY,px:PAINT.panX,py:PAINT.panY};
+      vp.setPointerCapture(e.pointerId);
+    }
+  });
+  vp.addEventListener('pointermove',e=>{
+    if(!pts.has(e.pointerId))return;
+    pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size>=2&&pinch){
+      const[a,b]=[...pts.values()];
+      const z=clampZoom(pinch.zoom*(Math.hypot(a.x-b.x,a.y-b.y)/pinch.dist));
+      const k=z/pinch.zoom;
+      PAINT.panX=pinch.mx-(pinch.mx-pinch.px)*k;
+      PAINT.panY=pinch.my-(pinch.my-pinch.py)*k;
+      PAINT.zoom=z;
+      applyZoom();
+    } else if(pan&&PAINT.tool==='pan'){
+      PAINT.panX=pan.px+(e.clientX-pan.x);
+      PAINT.panY=pan.py+(e.clientY-pan.y);
+      applyZoom();
+    }
+  });
+  ['pointerup','pointercancel'].forEach(ev=>vp.addEventListener(ev,e=>{
+    pts.delete(e.pointerId);
+    if(pts.size<2)pinch=null;
+    if(pts.size===0){pan=null;setTimeout(()=>{PAINT.gesture=false;},80);}
+  }));
 }
 function setupFillCanvas(){
   const canvas=document.getElementById('fillCanvas');
   canvas.addEventListener('pointerdown',e=>{
-    if(PAINT.tool!=='bucket')return;
+    if(PAINT.tool!=='bucket'||PAINT.gesture)return;
     const r=canvas.getBoundingClientRect();
     const x=Math.floor((e.clientX-r.left)*(canvas.width/r.width));
     const y=Math.floor((e.clientY-r.top)*(canvas.height/r.height));
@@ -1384,15 +1628,16 @@ function setupPaintCanvas(){
     const r=canvas.getBoundingClientRect();
     return {x:(e.clientX-r.left)*(canvas.width/r.width), y:(e.clientY-r.top)*(canvas.height/r.height)};
   }
+  /* กันไม่ให้สีทับเส้นขอบดำ แต่ยังลากแปรงข้ามส่วนต่าง ๆ ของรูปได้อิสระ */
   function clipToMask(minX,minY,maxX,maxY){
-    if(!PAINT.mask)return;
+    if(!PAINT.inkMask)return;
     minX=Math.max(0,Math.floor(minX));minY=Math.max(0,Math.floor(minY));
     maxX=Math.min(canvas.width-1,Math.ceil(maxX));maxY=Math.min(canvas.height-1,Math.ceil(maxY));
     const w=maxX-minX+1,h=maxY-minY+1;
     if(w<=0||h<=0)return;
     const imgData=ctx.getImageData(minX,minY,w,h);
     const data=imgData.data;
-    const cw=canvas.width, mask=PAINT.mask;
+    const cw=canvas.width, mask=PAINT.inkMask;
     for(let yy=0;yy<h;yy++){
       for(let xx=0;xx<w;xx++){
         if(!mask[(minY+yy)*cw+(minX+xx)]) data[(yy*w+xx)*4+3]=0;
@@ -1421,23 +1666,20 @@ function setupPaintCanvas(){
     }
   }
   canvas.addEventListener('pointerdown',e=>{
-    if(PAINT.tool==='bucket')return;
+    if(PAINT.tool!=='brush'&&PAINT.tool!=='eraser')return;
+    if(PAINT.gesture)return;
     canvas.setPointerCapture(e.pointerId);
     PAINT.drawing=true;
     const p=posFromEvent(e);PAINT.lastX=p.x;PAINT.lastY=p.y;
-    if(PAINT.tool==='brush'){
-      const fillCanvas=document.getElementById('fillCanvas');
-      PAINT.mask=computeRegionMask(fillCanvas.getContext('2d'),Math.round(p.x),Math.round(p.y));
-    } else {
-      PAINT.mask=null;
-    }
     dot(p);
   });
   canvas.addEventListener('pointermove',e=>{
     if(!PAINT.drawing)return;
+    if(PAINT.gesture){PAINT.drawing=false;return;}
     const p=posFromEvent(e);line(PAINT.lastX,PAINT.lastY,p.x,p.y);PAINT.lastX=p.x;PAINT.lastY=p.y;
   });
-  ['pointerup','pointercancel','pointerleave'].forEach(ev=>canvas.addEventListener(ev,()=>{PAINT.drawing=false;PAINT.mask=null;}));
+  /* ไม่ดัก pointerleave เพราะจับ pointer capture ไว้แล้ว — เดิมทำให้เส้นขาดเวลานิ้วเลยขอบรูป */
+  ['pointerup','pointercancel'].forEach(ev=>canvas.addEventListener(ev,()=>{PAINT.drawing=false;}));
 }
 
 /* ============ STORIES ============ */
@@ -1726,14 +1968,72 @@ function storyPrev(){
   });
 })();
 
-function renderFeaturedStories(){
-  const wrap=document.getElementById('featuredStories');
-  if(!wrap)return;
-  wrap.innerHTML=stories.map(s=>`
-    <button class="feature-chip" onclick="openStory('prophets','${s.id}')">
-      <span class="thumb"><img src="${storyImgPath('prophets',s.id,1)}" alt="${s.title}" loading="lazy" onerror="this.style.display='none'"></span>
-      <span class="fname">${s.title}</span>
-    </button>`).join('');
+/* ============ HOME RAILS (คอราเซลลอยเลื่อน) ============ */
+function railChip(art,label,onclick,cls){
+  return `<button class="rail-chip${cls?' '+cls:''}" onclick="${onclick}">
+    <span class="rc-art">${art}</span><span class="rc-label">${label}</span></button>`;
+}
+function openPicFromHome(cat,key){
+  go('colorhub');
+  openCategory(cat);
+  curPic=key;
+  loadPic();
+  showEditorStage();
+}
+function buildRails(){
+  const gamesHtml=iqGames.map(g=>
+    railChip(`<span class="rc-game">${gameArt[g.k]||''}</span>`,g.n,`startGame('${g.k}')`)).join('');
+
+  const allStories=[...stories.map(s=>({cat:'prophets',s})),...goodKidStories.map(s=>({cat:'goodkid',s}))];
+  const storiesHtml=allStories.map(o=>{
+    const art=o.cat==='prophets'
+      ?`<img src="${storyImgPath('prophets',o.s.id,1)}" loading="lazy" alt="" onerror="this.style.display='none'">`
+      :`<span class="rc-emoji">${o.s.scene}</span>`;
+    return railChip(art,o.s.title,`openStory('${o.cat}','${o.s.id}')`,'rc-photo');
+  }).join('');
+
+  const picks=[];
+  colorCategories.forEach(c=>{
+    shuffle(Object.keys(picLib[c.key])).slice(0,4).forEach(k=>picks.push({cat:c.key,k,pic:picLib[c.key][k]}));
+  });
+  const colorHtml=shuffle(picks).map(p=>
+    railChip(`<img src="${p.pic.src}" loading="lazy" alt="">`,p.pic.name,`openPicFromHome('${p.cat}','${p.k}')`,'rc-white')).join('');
+
+  initRail('railGames',gamesHtml,0.34);
+  initRail('railStories',storiesHtml,-0.30);
+  initRail('railColor',colorHtml,0.38);
+}
+function initRail(id,html,speed){
+  const el=document.getElementById(id);
+  if(!el||!html)return;
+  el.innerHTML=html+html; // ชุดที่สองไว้ให้วนต่อเนื่องแบบไม่มีรอยต่อ
+  let paused=false,resumeT=null,pos=null,written=null;
+  const pause=()=>{paused=true;clearTimeout(resumeT);};
+  const later=()=>{clearTimeout(resumeT);resumeT=setTimeout(()=>{paused=false;},2600);};
+  el.addEventListener('pointerdown',pause);
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>el.addEventListener(ev,later));
+  el.addEventListener('touchstart',pause,{passive:true});
+  el.addEventListener('touchend',later,{passive:true});
+  const home=document.getElementById('home');
+  function tick(){
+    const half=el.scrollWidth/2;
+    if(half>0){
+      if(pos===null){pos=speed<0?half:0;el.scrollLeft=pos;written=el.scrollLeft;}
+      if(paused){
+        pos=el.scrollLeft; // ตามนิ้วเด็กไปก่อน
+        if(pos>=half){pos-=half;el.scrollLeft=pos;}
+        else if(pos<=0){pos+=half;el.scrollLeft=pos;}
+        written=el.scrollLeft;
+      } else {
+        if(written!==null&&Math.abs(el.scrollLeft-written)>1.5)pos=el.scrollLeft;
+        if(home.classList.contains('active')&&!document.hidden)pos+=speed;
+        if(pos>=half)pos-=half;else if(pos<0)pos+=half;
+        el.scrollLeft=pos;written=el.scrollLeft;
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 }
 
 /* ============ Hook up hub inits ============ */
@@ -1747,9 +2047,11 @@ go=function(id){
 
 /* init */
 initStoryHub();
-renderFeaturedStories();
+renderIqHub();
+buildRails();
 setupPaintCanvas();
 setupFillCanvas();
+setupZoom();
 if(window.lucide)lucide.createIcons();
 </script>
 </body>
